@@ -1,0 +1,125 @@
+import { createClient } from '@/lib/supabase/server'
+import type { Product } from '@/types'
+
+export async function getProducts(filters?: {
+  category?: string
+  tarp_type?: string
+  thickness_mil?: number
+  width_ft?: number
+  length_ft?: number
+  active?: boolean
+}): Promise<Product[]> {
+  const supabase = await createClient()
+
+  let query = supabase
+    .from('products')
+    .select('*, product_line:product_lines(*)')
+    .eq('active', filters?.active ?? true)
+    .order('width_ft', { ascending: true })
+    .order('length_ft', { ascending: true })
+
+  if (filters?.category) {
+    query = query.contains('categories', [filters.category])
+  }
+  if (filters?.tarp_type) {
+    query = query.eq('tarp_type', filters.tarp_type)
+  }
+  if (filters?.thickness_mil) {
+    query = query.eq('thickness_mil', filters.thickness_mil)
+  }
+  if (filters?.width_ft) {
+    query = query.eq('width_ft', filters.width_ft)
+  }
+  if (filters?.length_ft) {
+    query = query.eq('length_ft', filters.length_ft)
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error('getProducts error:', error)
+    return []
+  }
+
+  return (data as Product[]) ?? []
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, product_line:product_lines(*)')
+    .eq('slug', slug)
+    .eq('active', true)
+    .single()
+
+  if (error || !data) return null
+  return data as Product
+}
+
+export async function getProductBySku(sku: string): Promise<Product | null> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, product_line:product_lines(*)')
+    .eq('xpose_sku', sku)
+    .single()
+
+  if (error || !data) return null
+  return data as Product
+}
+
+export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('products')
+    .select('*, product_line:product_lines(*)')
+    .eq('active', true)
+    .eq('in_stock', true)
+    .in('product_line_id', ['16mil-super', '10mil-heavy'])
+    .order('coverage_sqft', { ascending: false })
+    .limit(limit)
+
+  return (data as Product[]) ?? []
+}
+
+export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('products')
+    .select('*, product_line:product_lines(*)')
+    .eq('active', true)
+    .eq('product_line_id', product.product_line_id)
+    .neq('id', product.id)
+    .limit(limit)
+
+  return (data as Product[]) ?? []
+}
+
+// For AI agent — returns lightweight product data
+export async function getProductsForAI(): Promise<object[]> {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('products')
+    .select(`
+      xpose_sku, name, tarp_type, thickness_mil,
+      width_ft, length_ft, coverage_sqft,
+      color, retail_price_cents, in_stock,
+      categories,
+      product_line:product_lines(
+        name, material, grommet_type, grommet_spacing_inches,
+        uv_resistant, waterproof, mildew_resistant, fire_retardant,
+        reinforced_corners, description
+      )
+    `)
+    .eq('active', true)
+    .order('thickness_mil', { ascending: true })
+    .order('coverage_sqft', { ascending: true })
+
+  return data ?? []
+}
