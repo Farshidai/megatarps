@@ -3,7 +3,7 @@ import { getProductBySlug, getRelatedProducts } from '@/lib/products'
 import { AddToCartOrRFQ } from '@/components/products/AddToCartOrRFQ'
 import { ProductCard } from '@/components/products/ProductCard'
 import { formatPrice } from '@/lib/utils'
-import { CheckCircle, Package } from 'lucide-react'
+import { CheckCircle, Package, Truck, Shield, RotateCcw } from 'lucide-react'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await getProductBySlug(slug)
   if (!product) return {}
   return {
-    title: product.name,
-    description: `${product.name}. ${product.width_ft}x${product.length_ft} ft, ${product.thickness_mil ? `${product.thickness_mil}-mil, ` : ''}${product.color}. ${product.product_line?.description?.slice(0, 120) ?? ''}`,
+    title: `${product.name} | MegaTarps`,
+    description: `${product.name}. ${product.width_ft}x${product.length_ft} ft${product.thickness_mil ? `, ${product.thickness_mil}-mil` : ''}, ${product.color}. ${product.product_line?.description?.slice(0, 120) ?? ''}`,
   }
 }
 
@@ -51,107 +51,158 @@ export default async function ProductPage({ params }: PageProps) {
     pl?.sewn_in_rope ? 'Sewn-In Rope' : null,
   ].filter(Boolean) as string[]
 
-  const image = product.image_urls?.[0]
+  const images = product.image_urls ?? []
+  const mainImage = images[0]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
-      <nav className="text-sm text-slate-500 mb-6">
-        <a href="/" className="hover:text-orange-600">Home</a>
-        <span className="mx-2">/</span>
-        <a href="/products" className="hover:text-orange-600">Products</a>
-        <span className="mx-2">/</span>
-        <span className="text-slate-900 font-medium truncate">{product.name}</span>
-      </nav>
+      <div className="bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <nav className="text-sm text-slate-500 flex items-center gap-1.5 flex-wrap">
+            <a href="/" className="hover:text-orange-600 transition-colors">Home</a>
+            <span>/</span>
+            <a href="/products" className="hover:text-orange-600 transition-colors">Products</a>
+            <span>/</span>
+            <span className="text-slate-800 font-medium truncate max-w-xs">{product.name}</span>
+          </nav>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-        {/* Image */}
-        <div>
-          <div className="aspect-square bg-slate-100 rounded-2xl overflow-hidden relative">
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt={product.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Package className="w-24 h-24 text-slate-300" />
-              </div>
-            )}
-            {pl?.fire_retardant && (
-              <div className="absolute top-4 left-4 bg-red-600 text-white font-bold px-3 py-1 rounded-lg">
-                FIRE RETARDANT
-              </div>
-            )}
-          </div>
-          {/* Thumbnail strip if multiple images */}
-          {product.image_urls && product.image_urls.length > 1 && (
-            <div className="flex gap-2 mt-3">
-              {product.image_urls.slice(0, 4).map((url, i) => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mb-16">
+
+          {/* ─── Images ─── */}
+          <div>
+            <div className="aspect-square bg-slate-100 rounded-2xl overflow-hidden relative shadow-md">
+              {mainImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={url} alt="" className="w-16 h-16 rounded-lg object-cover border-2 border-slate-200" />
+                <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-slate-300">
+                  <Package className="w-24 h-24" />
+                  <span className="text-sm text-slate-400">No image available</span>
+                </div>
+              )}
+              {pl?.fire_retardant && (
+                <div className="absolute top-4 left-4 bg-red-600 text-white font-bold px-3 py-1.5 rounded-xl text-sm">
+                  🔥 FIRE RETARDANT
+                </div>
+              )}
+            </div>
+            {/* Thumbnail strip */}
+            {images.length > 1 && (
+              <div className="flex gap-2 mt-3">
+                {images.slice(0, 5).map((url, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={i}
+                    src={url}
+                    alt=""
+                    className="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-orange-400 transition-colors cursor-pointer"
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ─── Product Info ─── */}
+          <div>
+            {/* Product line label */}
+            {pl?.name && (
+              <p className="text-orange-600 text-sm font-bold uppercase tracking-wide mb-2">{pl.name}</p>
+            )}
+
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-1 leading-tight">
+              {product.name}
+            </h1>
+            <p className="text-slate-400 text-sm mb-4">SKU: {product.xpose_sku}</p>
+
+            {/* Price */}
+            {product.retail_price_cents > 0 ? (
+              <div className="mb-5">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-slate-900">
+                    {formatPrice(product.retail_price_cents)}
+                  </span>
+                  <span className="text-slate-500 text-base">/ unit</span>
+                </div>
+                <p className="text-sm text-orange-600 font-semibold mt-1">
+                  5+ units? Request bulk pricing →
+                </p>
+              </div>
+            ) : (
+              <div className="mb-5 bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <p className="font-bold text-slate-900">Bulk / Quote Only</p>
+                <p className="text-sm text-slate-500 mt-0.5">Contact us for pricing on this item</p>
+              </div>
+            )}
+
+            {/* Feature badges */}
+            {features.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-5">
+                {features.map((f) => (
+                  <span
+                    key={f}
+                    className="flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 text-xs font-semibold px-3 py-1.5 rounded-full"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5" /> {f}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Description */}
+            {pl?.description && (
+              <p className="text-slate-600 mb-6 leading-relaxed text-sm">{pl.description}</p>
+            )}
+
+            {/* Add to cart / RFQ */}
+            <AddToCartOrRFQ product={product} />
+
+            {/* Shipping info */}
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {[
+                { icon: <Truck className="w-4 h-4" />, label: 'Ships Nationwide' },
+                { icon: <Shield className="w-4 h-4" />, label: 'Genuine Product' },
+                { icon: <RotateCcw className="w-4 h-4" />, label: 'Hassle-free Returns' },
+              ].map(({ icon, label }) => (
+                <div key={label} className="flex flex-col items-center text-center gap-1.5 bg-slate-50 rounded-xl p-3">
+                  <span className="text-orange-500">{icon}</span>
+                  <span className="text-xs font-medium text-slate-600">{label}</span>
+                </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Info */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">{product.name}</h1>
-          <p className="text-slate-500 text-sm mb-4">SKU: {product.xpose_sku}</p>
-
-          {product.retail_price_cents > 0 && (
-            <p className="text-4xl font-black text-slate-900 mb-6">
-              {formatPrice(product.retail_price_cents)}
-              <span className="text-base font-normal text-slate-500 ml-2">per unit</span>
-            </p>
-          )}
-
-          {/* Features badges */}
-          {features.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {features.map((f) => (
-                <span key={f} className="flex items-center gap-1 bg-green-50 text-green-700 border border-green-200 text-xs font-semibold px-3 py-1 rounded-full">
-                  <CheckCircle className="w-3 h-3" /> {f}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Description */}
-          {pl?.description && (
-            <p className="text-slate-600 mb-6 leading-relaxed">{pl.description}</p>
-          )}
-
-          {/* Add to cart / RFQ */}
-          <AddToCartOrRFQ product={product} />
-        </div>
-      </div>
-
-      {/* Specs table */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-black text-slate-900 mb-6">Product Specifications</h2>
-        <div className="rounded-xl border border-slate-200 overflow-hidden">
-          <table className="w-full">
-            <tbody>
-              {specs.map(([label, value], i) => (
-                <tr key={label} className={i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}>
-                  <td className="py-3 px-6 text-sm font-semibold text-slate-700 w-48">{label}</td>
-                  <td className="py-3 px-6 text-sm text-slate-900">{String(value)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Related products */}
-      {related.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-black text-slate-900 mb-6">More from this Line</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {related.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         </div>
-      )}
+
+        {/* ─── Specs Table ─── */}
+        <div className="mb-16">
+          <h2 className="text-xl font-black text-slate-900 mb-4">Product Specifications</h2>
+          <div className="rounded-2xl border border-slate-200 overflow-hidden">
+            <table className="w-full">
+              <tbody>
+                {specs.map(([label, value], i) => (
+                  <tr key={label} className={i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}>
+                    <td className="py-3 px-5 text-sm font-semibold text-slate-600 w-44">{label}</td>
+                    <td className="py-3 px-5 text-sm text-slate-900 font-medium">{String(value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ─── Related Products ─── */}
+        {related.length > 0 && (
+          <div>
+            <h2 className="text-xl font-black text-slate-900 mb-5">More from this Line</h2>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {related.map((p) => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
