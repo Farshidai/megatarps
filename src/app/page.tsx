@@ -14,11 +14,11 @@ export default async function HomePage() {
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/hero-tarp.jpg"
-            alt="Heavy duty blue poly tarp"
+            src="/images/hero-jobsite.png"
+            alt="Heavy duty tarps on a commercial jobsite"
             fill
             priority
-            className="object-cover opacity-40"
+            className="object-cover opacity-45"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
         </div>
@@ -86,28 +86,28 @@ export default async function HomePage() {
                 href: '/products/construction-roofing',
                 title: 'Construction & Roofing',
                 desc: 'Emergency roof cover, scaffold protection',
-                img: 'https://cdn.shopify.com/s/files/1/0788/9040/2049/files/40-x-60-heavy-duty-poly-tarp-7-mil-bulk-pallet40-x-60-heavy-duty-poly-tarp-7-mil-bulk-palletconstruction-tarpsmega-tarpsmega-tarps-8824121.jpg?v=1764826690',
+                img: '/images/category-construction.png',
                 color: 'from-blue-900/70',
               },
               {
                 href: '/products/agriculture-farming',
                 title: 'Agriculture & Farming',
                 desc: 'Hay cover, grain storage, equipment',
-                img: 'https://cdn.shopify.com/s/files/1/0788/9040/2049/files/30-x-40-extreme-duty-poly-tarp-12-mil30-x-40-extreme-duty-poly-tarp-12-milextreme-duty-tarpmega-tarpsmega-tarps-7675509.jpg?v=1764826687',
+                img: '/images/category-agriculture.png',
                 color: 'from-green-900/70',
               },
               {
                 href: '/products/industrial-warehouse',
                 title: 'Industrial & Warehouse',
                 desc: 'Equipment covers, pallet protection',
-                img: 'https://cdn.shopify.com/s/files/1/0788/9040/2049/files/40-x-60-heavy-duty-poly-tarp-10-mil-bulk-pallet40-x-60-heavy-duty-poly-tarp-10-mil-bulk-palletconstruction-tarpsmega-tarpsmega-tarps-9947945.jpg?v=1764826689',
+                img: '/images/category-industrial.png',
                 color: 'from-slate-900/70',
               },
               {
                 href: '/products/general-purpose',
                 title: 'General Purpose',
                 desc: 'Camping, painting, temporary cover',
-                img: 'https://cdn.shopify.com/s/files/1/0788/9040/2049/files/20-x-30-ultra-duty-poly-tarp-20-mil20-x-30-ultra-duty-poly-tarp-20-milultra-duty-tarpmega-tarpsmega-tarps-4599513.jpg?v=1764826689',
+                img: '/images/category-general.png',
                 color: 'from-orange-900/70',
               },
             ].map((cat) => (
@@ -254,8 +254,11 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Bulk pricing CTA */}
           <div className="relative rounded-2xl overflow-hidden bg-orange-500 p-8 text-white">
-            <div className="absolute right-0 top-0 w-32 h-32 bg-orange-400/30 rounded-full -translate-y-8 translate-x-8" />
-            <div className="absolute right-6 bottom-0 w-20 h-20 bg-orange-600/30 rounded-full translate-y-6" />
+            <div className="absolute inset-0 opacity-20">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/bulk-cta.png" alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute inset-0 bg-orange-500/70" />
             <div className="relative">
               <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Buying 5+ units?</p>
               <h3 className="text-2xl font-black mb-3">Get Wholesale Pricing</h3>
