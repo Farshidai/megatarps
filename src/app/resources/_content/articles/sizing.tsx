@@ -1,8 +1,10 @@
 import type { Article } from '../types'
 import { H2, P, UL, OL, A, Table, Callout } from '../prose'
-import { STANDARD_SIZES, finishedFt, formatFtIn, FINISHED_RATIO } from '../../_lib/tarp-sizes'
+import { STANDARD_SIZES, formatFtIn, FINISHED_RATIO, TYPICAL_CUT_SIZE_SHRINK_PCT } from '../../_lib/tarp-sizes'
 
-const shrinkPct = Math.round((1 - FINISHED_RATIO) * 100)
+const cutFinished = (ft: number) => Math.round(ft * (1 - TYPICAL_CUT_SIZE_SHRINK_PCT / 100) * 12) / 12
+
+const shrinkPct = Math.round((1 - FINISHED_RATIO) * 100) || TYPICAL_CUT_SIZE_SHRINK_PCT
 const tableSizes: Array<[number, number]> = [[10, 12], [12, 16], [16, 20], [20, 20], [20, 30], [20, 40], [30, 40], [30, 50], [40, 60]]
 
 export const sizing: Article = {
@@ -11,7 +13,7 @@ export const sizing: Article = {
   shortTitle: 'How to size a tarp',
   metaTitle: 'How to Size a Tarp with Overhang',
   description:
-    'A simple formula for sizing a tarp: measure, add the height on each side plus overhang and tie-down, then allow for finished size running smaller than the label.',
+    'A simple formula for sizing a tarp: measure, add the height on each side plus overhang and tie-down, then check whether the tarp is sold by finished or cut size.',
   excerpt:
     'Most tarps that fail were bought too small. Use this formula to size a tarp for a flat area, a stacked load or a building, and learn why a 20×30 tarp is not really 20 by 30 feet.',
   topic: 'Sizing',
@@ -59,37 +61,41 @@ export const sizing: Article = {
 
       <H2 id="finished-size">Nominal vs finished size</H2>
       <P>
-        Tarps are labeled with their nominal or &quot;cut&quot; size: the size of the material before the edges are
-        folded and hemmed around a rope and the grommets are set. The finished tarp is typically about 3–5% smaller in
-        each direction. We use {shrinkPct}% as a planning figure, so a 20&times;30 finishes at roughly{' '}
-        {formatFtIn(finishedFt(20))} &times; {formatFtIn(finishedFt(30))}. Check the product spec when it matters.
+        Many tarps are labeled with their nominal or &quot;cut&quot; size: the size of the material before the edges
+        are folded and hemmed around a rope and the grommets are set. Those finish about 3–5% smaller in each
+        direction, so a cut-size 20&times;30 ends up roughly {formatFtIn(cutFinished(20))} &times;{' '}
+        {formatFtIn(cutFinished(30))}. The Xpose Safety tarps we stock are sold <strong>true to size</strong>: the
+        label is the finished size. When comparing suppliers, always ask which one you
+        are being quoted.
       </P>
       <Table
-        caption="Nominal size versus approximate finished size"
-        head={['Nominal (ft)', 'Approx. finished', 'Coverage (sq ft, finished)']}
+        caption={`True-to-size vs typical cut-size tarp (about ${shrinkPct}% smaller)`}
+        head={['Label (ft)', 'True to size (Xpose)', 'Typical cut-size finish', 'Coverage lost (sq ft)']}
         rows={tableSizes.map(([w, l]) => [
           `${w} × ${l}`,
-          `${formatFtIn(finishedFt(w))} × ${formatFtIn(finishedFt(l))}`,
-          Math.round(finishedFt(w) * finishedFt(l)).toLocaleString('en-US'),
+          `${w} × ${l} ft`,
+          `${formatFtIn(cutFinished(w))} × ${formatFtIn(cutFinished(l))}`,
+          Math.round(w * l - cutFinished(w) * cutFinished(l)).toLocaleString('en-US'),
         ])}
       />
       <Callout title="Why this matters">
-        If you need exactly 20 ft of coverage, a 20-ft tarp will come up short. Size up to the next standard width.
+        With a cut-size tarp, a &quot;20-ft&quot; tarp can come up short of 20 ft of coverage. With a true-to-size tarp it
+        does not, but you still need the overhang and tie-down allowance above.
       </Callout>
 
       <H2 id="examples">Worked examples</H2>
       <P>
         <strong>1. Lumber stack, 8 ft wide &times; 16 ft long &times; 4 ft high, with 1 ft to tie down.</strong>
         <br />
-        Width: 8 + (2 &times; 4) + (2 &times; 1) = 18 ft. Length: 16 + 8 + 2 = 26 ft. An 18&times;24 finishes around{' '}
-        {formatFtIn(finishedFt(18))} &times; {formatFtIn(finishedFt(24))}, which is too small. A 20&times;30 (about{' '}
-        {formatFtIn(finishedFt(20))} &times; {formatFtIn(finishedFt(30))}) covers it with a little margin.
+        Width: 8 + (2 &times; 4) + (2 &times; 1) = 18 ft. Length: 16 + 8 + 2 = 26 ft. An 18&times;24 is too short on the
+        length. A 20&times;30 covers it with a little margin (true to size; with a cut-size brand it would finish about{' '}
+        {formatFtIn(cutFinished(20))} &times; {formatFtIn(cutFinished(30))}, still enough here).
       </P>
       <P>
         <strong>2. Concrete slab, 20 &times; 30 ft, 2 ft past each edge.</strong>
         <br />
-        Width: 20 + 0 + 4 = 24 ft. Length: 30 + 0 + 4 = 34 ft. A 24&times;36 finishes just under 24 ft wide, so the
-        right pick is a 25&times;40, or a 30&times;40 if you want extra lap at the edges.
+        Width: 20 + 0 + 4 = 24 ft. Length: 30 + 0 + 4 = 34 ft. A true-to-size 24&times;36 just covers it with no
+        margin, so the safer pick is a 25&times;40, or a 30&times;40 if you want extra lap at the edges.
       </P>
       <P>
         <strong>3. Round hay bales in a row, 6 ft diameter, 5 bales.</strong>
@@ -115,7 +121,7 @@ export const sizing: Article = {
       <H2 id="mistakes">Common sizing mistakes</H2>
       <OL>
         <li>Forgetting the height counts twice, once for each side.</li>
-        <li>Sizing to the nominal label instead of the finished size.</li>
+        <li>Comparing a cut-size quote against a true-to-size quote as if they were the same tarp.</li>
         <li>Leaving no tie-down margin, so straps pull directly on the top corners.</li>
         <li>Buying one huge tarp a crew cannot handle in wind. Two overlapping tarps are often safer to install.</li>
         <li>Ordering every job&apos;s size separately. Standardize on a few sizes and buy them by the case.</li>

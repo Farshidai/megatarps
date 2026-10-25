@@ -72,9 +72,9 @@ export const roofingTarp: Article = {
         <li><strong>Wrap allowance:</strong> add about 1 ft on each fastened edge to roll around a batten board.</li>
       </UL>
       <P>
-        Remember that tarps are sold by nominal (cut) size and the finished size after hemming typically runs about
-        3–5% smaller, so a 20&times;30 finishes closer to 19&times;29. The{' '}
-        <A href="/resources/tarp-size-calculator">tarp size calculator</A> accounts for that.
+        Many brands sell by cut size, which finishes 3–5% smaller after hemming (a 20&times;30 closer to 19&times;29).
+        The Xpose tarps we stock are true to size, so the label is the coverage you get. The{' '}
+        <A href="/resources/tarp-size-calculator">tarp size calculator</A> adds the overhang for you.
       </P>
       <Table
         caption="Typical roof tarp sizes by damage area"

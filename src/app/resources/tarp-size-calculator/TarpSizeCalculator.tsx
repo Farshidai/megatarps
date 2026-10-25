@@ -111,8 +111,8 @@ export function TarpSizeCalculator({ products }: { products: CalcProduct[] }) {
 
         <p id={`${id}-help`} className="flex gap-2 text-xs text-slate-500 leading-relaxed">
           <Info className="w-4 h-4 flex-shrink-0 text-slate-400" aria-hidden="true" />
-          Required size = footprint + 2 × height + 2 × allowance. Tarps are labeled by cut size and finish about {shrinkPct}% smaller,
-          so we compare against the finished size.
+          Required size = footprint + 2 × height + 2 × allowance. The Xpose tarps we stock are true to size (finished size = labeled size),
+          so the size on the label is the coverage you get{shrinkPct > 0 ? ` (we allow ${shrinkPct}% for hemming)` : ''}.
         </p>
       </form>
 

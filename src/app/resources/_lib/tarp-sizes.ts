@@ -1,10 +1,11 @@
 // Tarp sizing math shared by the size calculator and the sizing article.
 //
-// Tarps are sold by nominal ("cut") size. Hemming the edges and setting the rope
-// and grommets makes the finished tarp smaller, typically about 3–5% per side
-// dimension. We use 4% as a planning figure and round to the nearest inch.
-// CONFIRM (Farshid): replace with the supplier's real finished-size spec if it differs.
-export const FINISHED_RATIO = 0.96
+// Many tarp brands are labeled by nominal ("cut") size and finish 3–5% smaller after
+// hemming. The Xpose Safety tarps MegaTarps stocks are sold TRUE TO SIZE (finished
+// size = labeled size), confirmed by the supplier (All In Safety, Nov 2025).
+export const FINISHED_RATIO = 1
+/** Typical shrink for cut-size brands, used only in explanatory copy. */
+export const TYPICAL_CUT_SIZE_SHRINK_PCT = 4
 
 /** Common standard (nominal) sizes in feet, width ≤ length. */
 export const STANDARD_SIZES: ReadonlyArray<readonly [number, number]> = [
