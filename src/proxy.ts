@@ -2,6 +2,12 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
+  // DEMO MODE (no Supabase configured): skip auth/session handling entirely.
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  if (process.env.DEMO_MODE === '1' || !sbUrl || sbUrl.includes('placeholder')) {
+    return NextResponse.next({ request })
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   // Refresh the Supabase session on every request (required by @supabase/ssr)
