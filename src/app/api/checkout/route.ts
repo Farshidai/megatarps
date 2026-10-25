@@ -1,97 +1,167 @@
+// POST /api/checkout  { items: [{ sku, quantity }, ...] }
+// Multi-line cart checkout. The browser's job ends at "which SKUs, how many": every price is
+// recomputed here from the product rows, the active pricing rules and the buyer's account
+// (getAccountPricing). Any price/discount/total fields in the request are ignored.
 import Stripe from 'stripe'
-import { createClient } from '@/lib/supabase/server'
-import { generateOrderNumber } from '@/lib/utils'
+import { randomBytes } from 'crypto'
+import { getPricingRules } from '@/lib/products'
+import { getAccountPricing } from '@/lib/accounts'
+import { isDemoMode } from '@/lib/demo'
+import { createAdminClient } from '@/lib/supabase/server'
+import { getProductsBySkus, stripeConfigured } from '@/lib/cart/server'
+import {
+  buildStripeLineItems,
+  CheckoutError,
+  compactItemsMetadata,
+  parseCheckoutBody,
+  priceCheckoutLines,
+  type PricedLine,
+} from '@/lib/cart/checkout-pricing'
+import { FREE_FREIGHT_THRESHOLD_CENTS, STANDARD_FREIGHT_CENTS } from '@/lib/cart/constants'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+type SessionCreateParams = NonNullable<Parameters<Stripe['checkout']['sessions']['create']>[0]>
 
-interface CheckoutItem {
-  product_id?: string
-  sku?: string
-  quantity: number
+function newOrderNumber() {
+  return `MO-${new Date().getFullYear()}-${randomBytes(4).toString('hex').toUpperCase()}`
+}
+
+function appOrigin(request: Request) {
+  const env = process.env.NEXT_PUBLIC_APP_URL
+  if (env && /^https?:\/\//.test(env)) return env.replace(/\/$/, '')
+  return new URL(request.url).origin
 }
 
 export async function POST(request: Request) {
-  const body = await request.json()
-  const { items }: { items: CheckoutItem[] } = body
-
-  if (!items?.length) {
-    return Response.json({ error: 'No items provided' }, { status: 400 })
-  }
-
-  // Validate quantities (retail only: 1–4 units)
-  const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
-  if (totalQty >= 5) {
-    return Response.json({ error: 'Use bulk quote for 5+ units' }, { status: 400 })
-  }
-
-  const supabase = await createClient()
-
-  // Fetch product details
-  const productIds = items.map(i => i.product_id).filter(Boolean) as string[]
-  const skus = items.map(i => i.sku).filter(Boolean) as string[]
-
-  const { data: products } = productIds.length
-    ? await supabase.from('products').select('id, xpose_sku, name, retail_price_cents, image_urls, in_stock').in('id', productIds)
-    : await supabase.from('products').select('id, xpose_sku, name, retail_price_cents, image_urls, in_stock').in('xpose_sku', skus)
-
-  if (!products?.length) {
-    return Response.json({ error: 'Products not found' }, { status: 400 })
-  }
-
-  // Build Stripe line items
-  let lineItems
+  let body: unknown
   try {
-    lineItems = items.map(item => {
-      const product = products.find(p => p.id === item.product_id || p.xpose_sku === item.sku)
-      if (!product) throw new Error(`Product not found: ${item.product_id ?? item.sku}`)
-      if (!product.in_stock) throw new Error(`${product.name} is out of stock`)
-      return {
-        price_data: {
-          currency: 'usd' as const,
-          product_data: {
-            name: product.name,
-            images: product.image_urls?.[0] ? [product.image_urls[0]] : [],
-          },
-          unit_amount: product.retail_price_cents,
-        },
-        quantity: item.quantity,
-      }
-    })
-  } catch (err) {
-    return Response.json({ error: (err as Error).message }, { status: 400 })
+    body = await request.json()
+  } catch {
+    return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const orderNumber = generateOrderNumber()
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
+  let priced: { lines: PricedLine[]; subtotal_cents: number }
+  let account: Awaited<ReturnType<typeof getAccountPricing>>
+  try {
+    const lines = parseCheckoutBody(body)
+    const [products, rules, acct] = await Promise.all([
+      getProductsBySkus(lines.map((l) => l.sku)),
+      getPricingRules(),
+      getAccountPricing(),
+    ])
+    account = acct
+    const wholesaleDiscountPercent = acct.status === 'approved' ? Math.min(Math.max(acct.wholesaleDiscountPercent || 0, 0), 90) : 0
+    priced = priceCheckoutLines(lines, products, rules, { wholesaleDiscountPercent })
+  } catch (e) {
+    if (e instanceof CheckoutError) return Response.json({ error: e.message, details: e.details }, { status: e.status })
+    console.error('checkout pricing error', e)
+    return Response.json({ error: 'Could not price your cart. Please try again.' }, { status: 500 })
+  }
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: lineItems,
+  const shipping_cents = priced.subtotal_cents >= FREE_FREIGHT_THRESHOLD_CENTS ? 0 : STANDARD_FREIGHT_CENTS
+  const orderNumber = newOrderNumber()
+  const summary = {
+    order_number: orderNumber,
+    lines: priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unit_price_cents: l.unit_price_cents, line_total_cents: l.line_total_cents })),
+    subtotal_cents: priced.subtotal_cents,
+    shipping_cents,
+    total_cents: priced.subtotal_cents + shipping_cents,
+  }
+
+  // DEMO MODE: no Stripe / Supabase. Same validation and pricing, mock redirect.
+  if (isDemoMode() || !stripeConfigured()) {
+    return Response.json({
+      ...summary,
+      demo: true,
+      url: `/checkout/success?demo=1&order=${orderNumber}`,
+      // exactly what would be sent to Stripe (lets QA / scripts verify server pricing)
+      stripe_line_items: buildStripeLineItems(priced.lines).map((li) => ({ sku: li.price_data.product_data.metadata.sku, quantity: li.quantity, unit_amount: li.price_data.unit_amount })),
+    })
+  }
+
+  // 1) Pending order row holds the full line detail (Stripe metadata values cap at 500 chars).
+  const supabase = await createAdminClient()
+  const orderRow = {
+    order_number: orderNumber,
+    contractor_id: account.userId && account.status !== 'guest' ? account.userId : null,
+    items: priced.lines.map((l) => ({
+      product_id: l.product_id,
+      sku: l.sku,
+      name: l.name,
+      quantity: l.quantity,
+      unit_price_cents: l.unit_price_cents,
+      line_total: l.line_total_cents,
+    })),
+    subtotal_cents: priced.subtotal_cents,
+    shipping_cents,
+    tax_cents: 0,
+    total_cents: priced.subtotal_cents + shipping_cents,
+    status: 'pending',
+    payment_status: 'pending',
+    payment_method: 'stripe_checkout',
+    shipping_address: {},
+  }
+  let ins = await supabase.from('orders').insert(orderRow).select('id').single()
+  if (ins.error && orderRow.contractor_id) {
+    // e.g. signed-in user without a contractor_profiles row (FK) — keep the sale, drop the link
+    ins = await supabase.from('orders').insert({ ...orderRow, contractor_id: null }).select('id').single()
+  }
+  if (ins.error || !ins.data) {
+    console.error('checkout: pending order insert failed', ins.error)
+    return Response.json({ error: 'Could not start checkout. Please try again.' }, { status: 500 })
+  }
+  const orderId: string = ins.data.id
+
+  // 2) Stripe Checkout Session with server prices only.
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+  const origin = appOrigin(request)
+  const params: SessionCreateParams = {
     mode: 'payment',
-    success_url: `${appUrl}/account/orders?success=1&order=${orderNumber}`,
-    cancel_url: `${appUrl}/products`,
+    payment_method_types: ['card', 'us_bank_account'],
+    line_items: buildStripeLineItems(priced.lines),
+    client_reference_id: orderId,
+    customer_email: account.email ?? undefined,
     metadata: {
+      order_id: orderId,
       order_number: orderNumber,
-      items: JSON.stringify(items),
+      source: 'cart',
+      ...compactItemsMetadata(priced.lines),
     },
-    shipping_address_collection: {
-      allowed_countries: ['US'],
-    },
+    payment_intent_data: { metadata: { order_id: orderId, order_number: orderNumber } },
+    shipping_address_collection: { allowed_countries: ['US'] },
     shipping_options: [
       {
         shipping_rate_data: {
           type: 'fixed_amount',
-          fixed_amount: { amount: 0, currency: 'usd' },
-          display_name: 'Standard Shipping (3–7 business days)',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 3 },
-            maximum: { unit: 'business_day', value: 7 },
-          },
+          fixed_amount: { amount: shipping_cents, currency: 'usd' },
+          display_name: shipping_cents ? 'Standard freight (3–7 business days)' : 'Free freight (3–7 business days)',
+          delivery_estimate: { minimum: { unit: 'business_day', value: 3 }, maximum: { unit: 'business_day', value: 7 } },
         },
       },
     ],
-    allow_promotion_codes: true,
-  })
+    phone_number_collection: { enabled: true },
+    success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/checkout/cancel?order=${orderNumber}`,
+  }
 
-  return Response.json({ url: session.url })
+  let session: Stripe.Checkout.Session
+  try {
+    session = await stripe.checkout.sessions.create(params)
+  } catch (e) {
+    // ACH not enabled on the Stripe account → retry card-only rather than failing the sale
+    const msg = (e as Error).message ?? ''
+    if (/us_bank_account|payment method type/i.test(msg)) {
+      console.warn('checkout: ACH unavailable, falling back to card only:', msg)
+      try {
+        session = await stripe.checkout.sessions.create({ ...params, payment_method_types: ['card'] })
+      } catch (e2) {
+        console.error('checkout: stripe error', e2)
+        return Response.json({ error: 'Payment provider error. Please try again.' }, { status: 502 })
+      }
+    } else {
+      console.error('checkout: stripe error', e)
+      return Response.json({ error: 'Payment provider error. Please try again.' }, { status: 502 })
+    }
+  }
+
+  return Response.json({ url: session.url, order_number: orderNumber })
 }

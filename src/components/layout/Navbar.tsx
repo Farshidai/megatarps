@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Menu, X, Phone, ChevronDown, ShoppingCart, Search } from 'lucide-react'
+import { Menu, X, Phone, ChevronDown, FileText, Search, Zap, BadgeCheck } from 'lucide-react'
+import { CartButton } from '@/components/cart/CartButton'
+import { CartDrawer } from '@/components/cart/CartDrawer'
 
 const categories = [
   { href: '/products/construction-roofing', label: 'Construction & Roofing', icon: '🏗️' },
@@ -53,7 +55,7 @@ export function Navbar() {
               onMouseEnter={() => setProductsOpen(true)}
               onMouseLeave={() => setProductsOpen(false)}
             >
-              <button className="flex items-center gap-1 text-slate-700 hover:text-orange-600 font-semibold px-4 py-5 text-sm transition-colors">
+              <button className="flex items-center gap-1 text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
                 Products <ChevronDown className={`w-4 h-4 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -99,16 +101,22 @@ export function Navbar() {
               )}
             </div>
 
-            <Link href="/bulk-quote" className="text-slate-700 hover:text-orange-600 font-semibold px-4 py-5 text-sm transition-colors">
+            <Link href="/quick-order" className="flex items-center gap-1 text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
+              <Zap className="w-3.5 h-3.5 text-orange-500" aria-hidden /> Quick Order
+            </Link>
+            <Link href="/bulk-quote" className="text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
               Bulk Pricing
             </Link>
-            <Link href="/resources" className="text-slate-700 hover:text-orange-600 font-semibold px-4 py-5 text-sm transition-colors">
+            <Link href="/apply" className="text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
+              Wholesale Account
+            </Link>
+            <Link href="/resources" className="text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
               Resources
             </Link>
-            <Link href="/about" className="text-slate-700 hover:text-orange-600 font-semibold px-4 py-5 text-sm transition-colors">
+            <Link href="/about" className="hidden xl:block text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
               About
             </Link>
-            <Link href="/contact" className="text-slate-700 hover:text-orange-600 font-semibold px-4 py-5 text-sm transition-colors">
+            <Link href="/contact" className="text-slate-700 hover:text-orange-600 font-semibold whitespace-nowrap px-2.5 xl:px-3 py-5 text-sm transition-colors">
               Contact
             </Link>
           </div>
@@ -123,11 +131,12 @@ export function Navbar() {
             </Link>
             <Link
               href="/bulk-quote"
-              className="hidden lg:inline-flex items-center gap-1.5 bg-gradient-to-b from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-sm px-4 h-9 rounded-lg transition-all shadow-md shadow-orange-500/25 hover:shadow-orange-500/40"
+              className="hidden lg:inline-flex items-center gap-1.5 whitespace-nowrap bg-gradient-to-b from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-sm px-4 h-9 rounded-lg transition-all shadow-md shadow-orange-500/25 hover:shadow-orange-500/40"
             >
-              <ShoppingCart className="w-4 h-4" />
+              <FileText className="w-4 h-4" aria-hidden />
               Get Quote
             </Link>
+            <CartButton />
 
             {/* Mobile hamburger */}
             <button
@@ -154,8 +163,14 @@ export function Navbar() {
               </Link>
             ))}
             <hr className="my-2 border-slate-100" />
+            <Link href="/quick-order" className="flex items-center gap-2 px-3 py-2.5 text-slate-800 font-semibold hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
+              <Zap className="w-4 h-4 text-orange-500" aria-hidden /> Quick Order
+            </Link>
             <Link href="/bulk-quote" className="flex items-center gap-2 px-3 py-2.5 text-slate-800 font-semibold hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
               Bulk Pricing / RFQ
+            </Link>
+            <Link href="/apply" className="flex items-center gap-2 px-3 py-2.5 text-slate-800 font-semibold hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
+              <BadgeCheck className="w-4 h-4 text-orange-500" aria-hidden /> Wholesale Account
             </Link>
             <Link href="/resources" className="flex items-center gap-2 px-3 py-2.5 text-slate-800 font-semibold hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
               Resources
@@ -171,7 +186,7 @@ export function Navbar() {
               className="flex items-center justify-center gap-2 mx-3 mt-3 bg-orange-500 text-white font-bold text-center py-3 rounded-xl"
               onClick={() => setMobileOpen(false)}
             >
-              <ShoppingCart className="w-4 h-4" /> Get Bulk Quote
+              <FileText className="w-4 h-4" aria-hidden /> Get Bulk Quote
             </Link>
           </div>
 
@@ -183,6 +198,7 @@ export function Navbar() {
           </div>
         </div>
       )}
+      <CartDrawer />
     </header>
   )
 }
