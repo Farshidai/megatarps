@@ -2,8 +2,7 @@
 // One place to change it.
 //
 // ⚠️ PLACEHOLDERS: Farshid must confirm every value marked `CONFIRM` before launch.
-// The email is confirmed (Oct 2026). The phone below is the value that was already
-// hard-coded in the old site and is still a PLACEHOLDER. Each can also be
+// Email and phone are confirmed by Farshid (Oct 2026). Each can also be
 // overridden with an env var (NEXT_PUBLIC_CONTACT_PHONE, etc.) without a code change.
 // No street address is published on purpose; add one only if you want walk-in or
 // will-call pickup and a Google Business Profile.
@@ -22,7 +21,7 @@ export const site = {
   description:
     'Wholesale heavy-duty tarps for contractors, roofers, farms and warehouses. 5 to 20 mil poly, canvas, mesh, clear vinyl and fire-retardant tarps with case and pallet pricing and LTL freight across the Midwest. Kansas City based.',
 
-  // PLACEHOLDER / CONFIRM: main sales phone. Display and E.164 forms must match.
+  // Confirmed by Farshid (Oct 2026): main sales phone. Display and E.164 forms must match.
   phoneDisplay: env(process.env.NEXT_PUBLIC_CONTACT_PHONE, '(913) 313-2691'),
   phoneE164: env(process.env.NEXT_PUBLIC_CONTACT_PHONE_E164, '+19133132691'),
   // Confirmed by Farshid (Oct 2026): public contact email, used on contact, footer, policies and JSON-LD.
