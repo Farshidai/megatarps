@@ -9,7 +9,7 @@ export const EMAIL_FROM =
 /** Primary admin inbox for notifications: ADMIN_EMAIL, else the first ADMIN_EMAILS entry. */
 export function adminNotificationEmail(): string {
   const first = (process.env.ADMIN_EMAILS ?? '').split(',').map((s) => s.trim()).find(Boolean)
-  return process.env.ADMIN_EMAIL?.trim() || first || 'farshid@megatarps.com'
+  return process.env.ADMIN_EMAIL?.trim() || first || 'mfirooz@megatarps.com'
 }
 
 function emailDisabled(): boolean {
