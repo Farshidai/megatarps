@@ -1,5 +1,23 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Product } from '@/types'
+import type { PricingRule } from '@/lib/pricing'
+import { isDemoMode, demoProducts, demoPricingRules } from '@/lib/demo'
+
+/** Active volume pricing rules (tier table source). */
+export async function getPricingRules(): Promise<PricingRule[]> {
+  if (isDemoMode()) return demoPricingRules
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('pricing_rules')
+    .select('*')
+    .eq('active', true)
+    .order('min_quantity', { ascending: true })
+  if (error) {
+    console.error('getPricingRules error:', error)
+    return []
+  }
+  return (data as PricingRule[]) ?? []
+}
 
 export async function getProducts(filters?: {
   category?: string
@@ -9,6 +27,15 @@ export async function getProducts(filters?: {
   length_ft?: number
   active?: boolean
 }): Promise<Product[]> {
+  if (isDemoMode()) {
+    return demoProducts.filter((p) =>
+      p.active === (filters?.active ?? true) &&
+      (!filters?.category || p.categories.includes(filters.category)) &&
+      (!filters?.tarp_type || p.tarp_type === filters.tarp_type) &&
+      (!filters?.thickness_mil || p.thickness_mil === filters.thickness_mil) &&
+      (!filters?.width_ft || p.width_ft === filters.width_ft) &&
+      (!filters?.length_ft || p.length_ft === filters.length_ft))
+  }
   const supabase = await createClient()
 
   let query = supabase
@@ -45,6 +72,7 @@ export async function getProducts(filters?: {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
+  if (isDemoMode()) return demoProducts.find((p) => p.slug === slug && p.active) ?? null
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -59,6 +87,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 }
 
 export async function getProductBySku(sku: string): Promise<Product | null> {
+  if (isDemoMode()) return demoProducts.find((p) => p.xpose_sku === sku) ?? null
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -72,6 +101,10 @@ export async function getProductBySku(sku: string): Promise<Product | null> {
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
+  if (isDemoMode()) {
+    return [...demoProducts].filter((p) => p.active && p.in_stock)
+      .sort((a, b) => b.coverage_sqft - a.coverage_sqft).slice(0, limit)
+  }
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -87,6 +120,9 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
+  if (isDemoMode()) {
+    return demoProducts.filter((p) => p.active && p.product_line_id === product.product_line_id && p.id !== product.id).slice(0, limit)
+  }
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -102,6 +138,7 @@ export async function getRelatedProducts(product: Product, limit = 4): Promise<P
 
 // For AI agent — returns lightweight product data
 export async function getProductsForAI(): Promise<object[]> {
+  if (isDemoMode()) return demoProducts.filter((p) => p.active).map(({ cost_price_cents: _c, ...p }) => p)
   const supabase = await createClient()
 
   const { data } = await supabase
