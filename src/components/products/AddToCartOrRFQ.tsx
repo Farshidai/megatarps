@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation'
 import { ShoppingCart, FileText, Minus, Plus } from 'lucide-react'
 import { formatPrice, BULK_THRESHOLD } from '@/lib/utils'
 import type { Product } from '@/types'
+import type { PricingRule } from '@/lib/pricing'
 
 interface Props {
   product: Product
+  rules?: PricingRule[]
 }
 
 export function AddToCartOrRFQ({ product }: Props) {

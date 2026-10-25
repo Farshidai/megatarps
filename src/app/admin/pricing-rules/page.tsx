@@ -1,89 +1,65 @@
-import { createAdminClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
+import { connection } from 'next/server'
+import { ShieldAlert } from 'lucide-react'
+import { createAdminClient } from '@/lib/supabase/server'
+import { demoPricingRules, demoProducts } from '@/lib/demo'
+import type { PricingRule } from '@/lib/pricing'
+import { checkAdmin } from '../products/_lib/admin-auth'
+import { RulesEditor, type SampleProduct } from './RulesEditor'
 
 export const metadata: Metadata = { title: 'Pricing Rules' }
 
 export default async function AdminPricingRulesPage() {
-  const supabase = await createAdminClient()
-
-  const { data: rules } = await supabase
-    .from('pricing_rules')
-    .select('*')
-    .order('priority', { ascending: false })
-    .order('min_quantity')
-
-  return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-black text-slate-900">Pricing Rules</h1>
-          <p className="text-sm text-slate-500 mt-1">Applied to bulk quotes. Higher priority rules win when multiple match.</p>
+  await connection() // always render per request: admin data must be fresh
+  const auth = await checkAdmin()
+  if (!auth.ok) {
+    return (
+      <div className="p-8 max-w-lg">
+        <div className="flex items-start gap-3 bg-white ring-1 ring-red-200 rounded-xl p-5">
+          <ShieldAlert className="w-5 h-5 text-red-600 shrink-0 mt-0.5" aria-hidden />
+          <div>
+            <h1 className="font-bold text-slate-900">Admin access required</h1>
+            <p className="text-sm text-slate-600 mt-1">{auth.reason}</p>
+          </div>
         </div>
       </div>
+    )
+  }
 
-      <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6 text-sm text-orange-800">
-        <strong>How it works:</strong> When you quote a bulk order, these rules calculate suggested pricing.
-        Rules are never auto-applied — you always review and send the final price manually.
-      </div>
+  let rules: PricingRule[] = []
+  let samples: SampleProduct[] = []
+  let loadError: string | null = null
+  if (auth.demo) {
+    rules = demoPricingRules
+    samples = demoProducts.filter((p) => p.retail_price_cents > 0).map((p) => ({ sku: p.xpose_sku, name: p.name, retail_price_cents: p.retail_price_cents, tarp_type: p.tarp_type, thickness_mil: p.thickness_mil }))
+  } else {
+    const supabase = await createAdminClient()
+    const [r, p] = await Promise.all([
+      supabase.from('pricing_rules').select('*').order('min_quantity'),
+      supabase.from('products').select('xpose_sku, name, retail_price_cents, tarp_type, thickness_mil').gt('retail_price_cents', 0).eq('active', true).order('name').limit(500),
+    ])
+    if (r.error) loadError = r.error.message
+    rules = (r.data as PricingRule[]) ?? []
+    samples = (p.data ?? []).map((x) => ({ sku: x.xpose_sku, name: x.name, retail_price_cents: x.retail_price_cents, tarp_type: x.tarp_type, thickness_mil: x.thickness_mil }))
+  }
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Tarp Type</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Mil</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Qty Range</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Margin %</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Discount from Retail</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Flat Markup</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Priority</th>
-              <th className="text-left px-4 py-3 font-semibold text-slate-700">Active</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {!rules?.length ? (
-              <tr>
-                <td colSpan={8} className="text-center py-12 text-slate-400">
-                  No pricing rules yet. Add rules via Supabase dashboard or SQL.
-                </td>
-              </tr>
-            ) : rules.map(r => (
-              <tr key={r.id} className={`hover:bg-slate-50 ${!r.active ? 'opacity-50' : ''}`}>
-                <td className="px-4 py-3 text-xs text-slate-700">{r.tarp_type ?? 'All types'}</td>
-                <td className="px-4 py-3 text-xs text-slate-700">{r.thickness_mil ? `${r.thickness_mil} mil` : 'Any'}</td>
-                <td className="px-4 py-3 text-xs text-slate-700">
-                  {r.min_quantity}–{r.max_quantity ?? '∞'}
-                </td>
-                <td className="px-4 py-3 text-xs font-bold text-green-700">
-                  {r.margin_percent ? `${r.margin_percent}%` : '—'}
-                </td>
-                <td className="px-4 py-3 text-xs font-bold text-blue-700">
-                  {r.discount_from_retail_percent ? `−${r.discount_from_retail_percent}%` : '—'}
-                </td>
-                <td className="px-4 py-3 text-xs text-slate-600">
-                  {r.flat_markup_cents ? `+$${(r.flat_markup_cents / 100).toFixed(2)}` : '—'}
-                </td>
-                <td className="px-4 py-3 text-xs text-slate-500">{r.priority}</td>
-                <td className="px-4 py-3">
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${r.active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
-                    {r.active ? 'Active' : 'Off'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  return (
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-5">
+        <h1 className="text-2xl font-black text-slate-900">Pricing rules</h1>
+        <p className="text-sm text-slate-500 mt-1 max-w-3xl">
+          Volume tiers are <strong>live</strong>: they set the tier table on every product page, the &ldquo;as low as&rdquo; price on cards,
+          and what checkout charges. Each rule takes a % off retail for a quantity range. Scope a rule to a tarp type and/or
+          thickness to override the &ldquo;All types&rdquo; tier with the same min quantity (more specific / higher priority wins).
+        </p>
       </div>
-
-      <div className="mt-6 bg-slate-800 rounded-xl p-5 text-sm">
-        <p className="text-slate-300 font-semibold mb-3">Example: Add a rule via Supabase SQL</p>
-        <pre className="text-green-400 text-xs font-mono overflow-auto whitespace-pre-wrap">{`INSERT INTO pricing_rules
-  (tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent, priority, active)
-VALUES
-  ('poly', NULL, 5, 24, 10, 1, true),   -- 5–24 units: 10% off retail
-  ('poly', NULL, 25, 99, 20, 2, true),  -- 25–99 units: 20% off retail
-  ('poly', NULL, 100, NULL, 30, 3, true); -- 100+ units: 30% off retail`}</pre>
-      </div>
+      {auth.demo && (
+        <div role="status" className="mb-5 rounded-xl bg-amber-50 ring-1 ring-amber-300 px-4 py-3 text-sm text-amber-900">
+          <strong>Demo mode — changes are not saved.</strong> Edits apply on this page so you can preview tiers, then reset on reload.
+        </div>
+      )}
+      {loadError && <div role="alert" className="mb-5 rounded-xl bg-red-50 ring-1 ring-red-200 px-4 py-3 text-sm text-red-800">Couldn&apos;t load rules: {loadError}</div>}
+      <RulesEditor initialRules={rules} samples={samples} />
     </div>
   )
 }
