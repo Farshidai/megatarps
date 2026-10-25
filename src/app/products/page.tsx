@@ -33,23 +33,29 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   return (
     <div className="bg-white min-h-screen">
       {/* Page header */}
-      <div className="bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <nav className="text-sm text-slate-400 mb-3">
+      <div className="relative bg-slate-950 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgb(249_115_22_/_0.12),_transparent_60%)]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <nav className="text-sm text-slate-400 mb-4 flex items-center gap-2">
             <a href="/" className="hover:text-white transition-colors">Home</a>
-            <span className="mx-2">/</span>
-            <span className="text-slate-200">{pageTitle}</span>
+            <span className="text-slate-600">/</span>
+            <span className="text-slate-200 font-medium">{pageTitle}</span>
           </nav>
-          <div className="flex items-end justify-between gap-4">
+          <div className="flex items-end justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black">{pageTitle}</h1>
-              <p className="text-slate-400 mt-1 text-sm">
-                {products.length} product{products.length !== 1 ? 's' : ''}
-                {activeFilters.length > 0 && ` · Filtered by: ${activeFilters.join(', ')}`}
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight">{pageTitle}</h1>
+              <p className="text-slate-400 mt-2 text-sm flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 bg-white/5 ring-1 ring-white/10 rounded-full px-2.5 py-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  {products.length} product{products.length !== 1 ? 's' : ''}
+                </span>
+                {activeFilters.length > 0 && (
+                  <span className="text-slate-500">Filtered by: <span className="text-slate-300 font-medium">{activeFilters.join(', ')}</span></span>
+                )}
               </p>
             </div>
             {activeFilters.length > 0 && (
-              <a href="/products" className="text-sm text-orange-400 hover:text-orange-300 font-semibold whitespace-nowrap transition-colors">
+              <a href="/products" className="text-sm text-orange-400 hover:text-orange-300 font-semibold whitespace-nowrap transition-colors bg-orange-500/10 hover:bg-orange-500/20 ring-1 ring-orange-500/30 px-3 py-1.5 rounded-lg">
                 Clear filters ×
               </a>
             )}

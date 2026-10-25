@@ -14,16 +14,15 @@ export function Footer() {
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-4">
               Premium heavy-duty tarps for contractors, farmers, and industry professionals.
-              Authorized Xpose Safety distributor.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-orange-400" />
-                <a href="tel:+18000000000" className="hover:text-white">(800) 000-0000</a>
+                <a href="tel:+19133132691" className="hover:text-white">(913) 313-2691</a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-orange-400" />
-                <a href="mailto:orders@megatarps.com" className="hover:text-white">orders@megatarps.com</a>
+                <a href="mailto:mfirooz@megatarps.com" className="hover:text-white">mfirooz@megatarps.com</a>
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-orange-400 mt-0.5" />
@@ -40,9 +39,9 @@ export function Footer() {
               <li><Link href="/products/agriculture-farming" className="hover:text-orange-400">Agriculture & Farming</Link></li>
               <li><Link href="/products/industrial-warehouse" className="hover:text-orange-400">Industrial & Warehouse</Link></li>
               <li><Link href="/products/general-purpose" className="hover:text-orange-400">General Purpose</Link></li>
-              <li><Link href="/products/type/fire-retardant-tarps" className="hover:text-orange-400">Fire Retardant Tarps</Link></li>
-              <li><Link href="/products/type/mesh-tarps" className="hover:text-orange-400">Mesh Tarps</Link></li>
-              <li><Link href="/products/type/canvas-tarps" className="hover:text-orange-400">Canvas Tarps</Link></li>
+              <li><Link href="/products?type=fire-retardant" className="hover:text-orange-400">Fire Retardant Tarps</Link></li>
+              <li><Link href="/products?type=mesh" className="hover:text-orange-400">Mesh Tarps</Link></li>
+              <li><Link href="/products?type=canvas" className="hover:text-orange-400">Canvas Tarps</Link></li>
             </ul>
           </div>
 
@@ -50,10 +49,10 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/resources/tarp-sizing-guide" className="hover:text-orange-400">Tarp Sizing Guide</Link></li>
-              <li><Link href="/resources/mil-thickness-explained" className="hover:text-orange-400">Mil Thickness Explained</Link></li>
-              <li><Link href="/resources/fire-retardant-ratings" className="hover:text-orange-400">Fire Retardant Ratings</Link></li>
-              <li><Link href="/resources/grommet-spacing-guide" className="hover:text-orange-400">Grommet Spacing Guide</Link></li>
+              <li><Link href="/resources#sizing" className="hover:text-orange-400">Tarp Sizing Guide</Link></li>
+              <li><Link href="/resources#mil-thickness" className="hover:text-orange-400">Mil Thickness Explained</Link></li>
+              <li><Link href="/resources#materials" className="hover:text-orange-400">Fire Retardant Ratings</Link></li>
+              <li><Link href="/resources#faq" className="hover:text-orange-400">Grommet Spacing Guide</Link></li>
               <li><Link href="/bulk-quote" className="hover:text-orange-400">Bulk Pricing / RFQ</Link></li>
               <li><Link href="/about" className="hover:text-orange-400">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-orange-400">Contact</Link></li>

@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     await Promise.all([
       // Admin notification
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'orders@megatarps.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'mfirooz@megatarps.com',
         to: process.env.ADMIN_EMAIL ?? 'farshid@megatarps.com',
         subject: `🧾 New Bulk Quote ${quoteNumber} — ${name}${company ? ` (${company})` : ''}`,
         html: `
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       }),
       // Customer confirmation
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'orders@megatarps.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'mfirooz@megatarps.com',
         to: email,
         subject: `Quote Request Received — ${quoteNumber}`,
         html: `
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
           <p>Thanks for reaching out to MegaTarps. We've received your bulk quote request <strong>${quoteNumber}</strong> and will respond within <strong>4 business hours</strong> (Mon–Fri).</p>
           <h3>What you requested:</h3>
           <ul>${itemList}</ul>
-          <p>Questions? Reply to this email or call us at (800) 000-0000.</p>
+          <p>Questions? Reply to this email or call us at (913) 313-2691.</p>
           <br>
           <p>— The MegaTarps Team</p>
         `,

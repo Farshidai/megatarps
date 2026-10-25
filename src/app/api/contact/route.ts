@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     }
 
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'orders@megatarps.com',
+      from: process.env.RESEND_FROM_EMAIL ?? 'mfirooz@megatarps.com',
       to: process.env.ADMIN_EMAIL ?? 'farshid@megatarps.com',
       replyTo: email,
       subject: `📬 Contact: ${subjectLabels[subject] ?? subject} — ${name}`,

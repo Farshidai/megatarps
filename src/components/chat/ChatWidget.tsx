@@ -64,7 +64,7 @@ export function ChatWidget() {
           const updated = [...prev]
           updated[updated.length - 1] = {
             role: 'assistant',
-            content: "Sorry, I'm having trouble connecting right now. Please try again or call us at (800) 000-0000.",
+            content: "Sorry, I'm having trouble connecting right now. Please try again or call us at (913) 313-2691.",
           }
           return updated
         })

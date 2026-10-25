@@ -24,11 +24,12 @@ export function Navbar() {
   const [productsOpen, setProductsOpen] = useState(false)
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white/85 backdrop-blur-lg border-b border-slate-200/70 sticky top-0 z-50">
       {/* Top announcement bar */}
-      <div className="bg-orange-500 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
-        Free shipping on orders over $199 &bull;{' '}
-        <Link href="/bulk-quote" className="underline underline-offset-2 hover:no-underline">
+      <div className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
+        <span className="font-semibold">Free shipping on orders over $199</span>
+        <span className="mx-2 opacity-50">•</span>
+        <Link href="/bulk-quote" className="underline underline-offset-2 hover:no-underline font-semibold">
           Bulk orders? Get a quote in 4 hours →
         </Link>
       </div>
@@ -113,16 +114,16 @@ export function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center gap-2">
-            <button className="hidden lg:flex p-2 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Search">
-              <Search className="w-5 h-5" />
+          <div className="flex items-center gap-1.5">
+            <button className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors" aria-label="Search">
+              <Search className="w-4 h-4" />
             </button>
-            <Link href="/account" className="hidden lg:flex p-2 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">
+            <Link href="/account" className="hidden lg:flex items-center px-3 h-9 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-sm font-semibold">
               Login
             </Link>
             <Link
               href="/bulk-quote"
-              className="hidden lg:inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors"
+              className="hidden lg:inline-flex items-center gap-1.5 bg-gradient-to-b from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-sm px-4 h-9 rounded-lg transition-all shadow-md shadow-orange-500/25 hover:shadow-orange-500/40"
             >
               <ShoppingCart className="w-4 h-4" />
               Get Quote
@@ -176,8 +177,8 @@ export function Navbar() {
 
           {/* Mobile contact bar */}
           <div className="bg-slate-50 px-4 py-3 flex items-center justify-center gap-4 text-sm text-slate-500 border-t border-slate-100">
-            <a href="tel:+18000000000" className="flex items-center gap-1.5 hover:text-orange-600">
-              <Phone className="w-4 h-4" /> (800) 000-0000
+            <a href="tel:+19133132691" className="flex items-center gap-1.5 hover:text-orange-600">
+              <Phone className="w-4 h-4" /> (913) 313-2691
             </a>
           </div>
         </div>

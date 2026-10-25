@@ -39,7 +39,7 @@ export default async function ContactPage({ searchParams }: PageProps) {
               </div>
               <div>
                 <p className="font-bold text-slate-900">Phone</p>
-                <a href="tel:+18000000000" className="text-orange-600 hover:underline">(800) 000-0000</a>
+                <a href="tel:+19133132691" className="text-orange-600 hover:underline">(913) 313-2691</a>
                 <p className="text-xs text-slate-400 mt-0.5">Mon–Fri, 8am–5pm CT</p>
               </div>
             </div>
@@ -49,7 +49,7 @@ export default async function ContactPage({ searchParams }: PageProps) {
               </div>
               <div>
                 <p className="font-bold text-slate-900">Email</p>
-                <a href="mailto:orders@megatarps.com" className="text-orange-600 hover:underline">orders@megatarps.com</a>
+                <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a>
                 <p className="text-xs text-slate-400 mt-0.5">Replies within 4 business hours</p>
               </div>
             </div>

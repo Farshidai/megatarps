@@ -56,12 +56,12 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="text-lg font-bold text-slate-900">Your Rights</h2>
-          <p>You may request access to, correction of, or deletion of your personal data by emailing <a href="mailto:orders@megatarps.com" className="text-orange-600 hover:underline">orders@megatarps.com</a>.</p>
+          <p>You may request access to, correction of, or deletion of your personal data by emailing <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a>.</p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-slate-900">Contact</h2>
-          <p>Privacy questions: <a href="mailto:orders@megatarps.com" className="text-orange-600 hover:underline">orders@megatarps.com</a></p>
+          <p>Privacy questions: <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a></p>
         </section>
       </div>
     </div>

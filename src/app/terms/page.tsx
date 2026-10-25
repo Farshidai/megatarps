@@ -30,7 +30,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="text-lg font-bold text-slate-900">4. Returns & Refunds</h2>
-          <p>Unused items in original packaging may be returned within 30 days of delivery for a refund minus shipping. Custom or bulk pallet orders are final sale unless defective. Contact orders@megatarps.com to initiate a return.</p>
+          <p>Unused items in original packaging may be returned within 30 days of delivery for a refund minus shipping. Custom or bulk pallet orders are final sale unless defective. Contact mfirooz@megatarps.com to initiate a return.</p>
         </section>
 
         <section>
@@ -45,7 +45,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="text-lg font-bold text-slate-900">7. Contact</h2>
-          <p>Questions about these terms? Email <a href="mailto:orders@megatarps.com" className="text-orange-600 hover:underline">orders@megatarps.com</a>.</p>
+          <p>Questions about these terms? Email <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a>.</p>
         </section>
       </div>
     </div>

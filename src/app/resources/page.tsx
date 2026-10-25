@@ -14,7 +14,7 @@ export default function ResourcesPage() {
       <div className="space-y-10">
 
         {/* Mil Thickness Guide */}
-        <section>
+        <section id="mil-thickness" className="scroll-mt-24">
           <h2 className="text-xl font-black text-slate-900 mb-4">Mil Thickness Guide</h2>
           <p className="text-slate-600 text-sm mb-4">
             &quot;Mil&quot; refers to thousandths of an inch. Higher mil = thicker, heavier, more durable.
@@ -37,7 +37,7 @@ export default function ResourcesPage() {
         </section>
 
         {/* Material Guide */}
-        <section>
+        <section id="materials" className="scroll-mt-24">
           <h2 className="text-xl font-black text-slate-900 mb-4">Material Types</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
@@ -74,7 +74,7 @@ export default function ResourcesPage() {
         </section>
 
         {/* Sizing Guide */}
-        <section>
+        <section id="sizing" className="scroll-mt-24">
           <h2 className="text-xl font-black text-slate-900 mb-4">How to Measure</h2>
           <div className="bg-white rounded-xl border border-slate-200 p-6 text-sm text-slate-600 space-y-3">
             <p>
@@ -96,7 +96,7 @@ export default function ResourcesPage() {
         </section>
 
         {/* FAQ */}
-        <section>
+        <section id="faq" className="scroll-mt-24">
           <h2 className="text-xl font-black text-slate-900 mb-4">Common Questions</h2>
           <div className="space-y-4">
             {[

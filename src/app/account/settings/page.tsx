@@ -78,8 +78,8 @@ export default async function AccountSettingsPage() {
         ) : (
           <p className="text-sm text-slate-400">
             No company profile on file. Contact us at{' '}
-            <a href="mailto:orders@megatarps.com" className="text-orange-600 hover:underline">
-              orders@megatarps.com
+            <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">
+              mfirooz@megatarps.com
             </a>{' '}
             to set up a contractor account.
           </p>

@@ -68,7 +68,7 @@ export function BulkQuoteForm() {
         <div className="text-6xl mb-4">✅</div>
         <h2 className="text-2xl font-black text-slate-900 mb-2">Quote Request Received!</h2>
         <p className="text-slate-600 mb-2">We&apos;ll review your request and send pricing to <strong>{form.email}</strong> within 4 business hours.</p>
-        <p className="text-slate-500 text-sm">Questions? Call us at (800) 000-0000</p>
+        <p className="text-slate-500 text-sm">Questions? Call us at (913) 313-2691</p>
         <a href="/products" className="mt-6 inline-block text-orange-600 font-semibold hover:underline">
           Continue browsing →
         </a>
