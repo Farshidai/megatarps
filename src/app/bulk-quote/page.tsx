@@ -1,46 +1,49 @@
 import { Suspense } from 'react'
 import { BulkQuoteForm } from '@/components/forms/BulkQuoteForm'
-import { Clock, Shield, Phone } from 'lucide-react'
+import { getPickerCatalog } from '@/lib/quotes/catalog'
+import { getAccountPricing } from '@/lib/accounts'
+import { Clock, Truck, BadgeDollarSign } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Request Bulk Tarp Pricing',
-  description: 'Get wholesale pricing on bulk tarp orders (5+ units). We respond within 4 business hours.',
+  title: 'Request a Wholesale Quote — Pallets & Bulk Tarps',
+  description:
+    'Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote within 4 business hours.',
 }
 
-export default function BulkQuotePage() {
+export default async function BulkQuotePage() {
+  const [{ products, rules }, account] = await Promise.all([getPickerCatalog(), getAccountPricing()])
+
   return (
-    <div className="bg-slate-50 min-h-screen py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-black text-slate-900 mb-3">Request Bulk Pricing</h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Ordering 5 or more units? Get wholesale pricing. We respond within 4 business hours.
+    <div className="bg-slate-50 min-h-screen py-10 sm:py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-orange-600 mb-2">Wholesale & pallet orders</p>
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 mb-2">Request a quote</h1>
+          <p className="text-lg text-slate-600 max-w-2xl">
+            Tell us what you need and where it&apos;s going. We&apos;ll send a priced quote, freight included, that you can accept and pay online.
           </p>
         </div>
 
-        {/* Trust bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           {[
-            { icon: <Clock className="w-5 h-5 text-orange-500" />, title: '4-Hour Response', desc: 'Business hours, Mon–Fri' },
-            { icon: <Shield className="w-5 h-5 text-orange-500" />, title: 'No Obligation', desc: 'Get a quote, decide later' },
-            { icon: <Phone className="w-5 h-5 text-orange-500" />, title: 'Personal Service', desc: 'Direct line to our team' },
-          ].map((t) => (
-            <div key={t.title} className="bg-white rounded-xl border border-slate-200 p-4 flex gap-3 items-start">
-              {t.icon}
+            { icon: Clock, title: '4-hour turnaround', desc: 'Business hours, Mon–Fri' },
+            { icon: Truck, title: 'LTL freight quoted', desc: 'Dock, liftgate or jobsite delivery' },
+            { icon: BadgeDollarSign, title: 'Accept & pay online', desc: 'Card, or Net terms for approved accounts' },
+          ].map(({ icon: Icon, title, desc }) => (
+            <li key={title} className="bg-white rounded-xl border border-slate-200 p-4 flex gap-3 items-start">
+              <Icon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" aria-hidden />
               <div>
-                <p className="font-bold text-slate-900 text-sm">{t.title}</p>
-                <p className="text-slate-500 text-xs">{t.desc}</p>
+                <p className="font-bold text-slate-900 text-sm">{title}</p>
+                <p className="text-slate-500 text-xs">{desc}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8">
           <Suspense>
-            <BulkQuoteForm />
+            <BulkQuoteForm products={products} rules={rules} defaultEmail={account.email} />
           </Suspense>
         </div>
       </div>
