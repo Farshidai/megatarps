@@ -32,3 +32,13 @@ CREATE INDEX IF NOT EXISTS idx_products_accessory_type ON products(accessory_typ
 DROP POLICY IF EXISTS "Public can read active pricing rules" ON pricing_rules;
 CREATE POLICY "Public can read active pricing rules" ON pricing_rules
   FOR SELECT USING (active = true);
+
+-- Market reference prices (public retail seen at TractorSupply / Walmart / eBay /
+-- WebstaurantStore). Reference for pricing decisions only; never used as the sell price.
+ALTER TABLE products ADD COLUMN IF NOT EXISTS market_price_cents INTEGER;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS market_price_source TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS market_price_url TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS market_price_checked_at DATE;
+DO $$ BEGIN
+  ALTER TABLE products ADD CONSTRAINT products_market_price_nonnegative CHECK (market_price_cents IS NULL OR market_price_cents >= 0);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;

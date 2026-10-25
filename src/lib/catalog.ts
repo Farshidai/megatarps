@@ -14,11 +14,12 @@ export type CatalogProduct = Product & {
   material?: string | null
 }
 
-/** Remove admin-only fields before a product is passed to a client component or JSON-LD. */
+/** Remove admin-only fields (cost, market research) before a product is passed to a client component or JSON-LD. */
+const PRIVATE_FIELDS = ['cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at']
 export function toPublicProduct<T extends Product>(p: T): T {
-  const { cost_price_cents: _cost, ...rest } = p
-  void _cost
-  return rest as T
+  const out = { ...p } as Record<string, unknown>
+  for (const k of PRIVATE_FIELDS) delete out[k]
+  return out as T
 }
 
 export const isAccessory = (p: Pick<Product, 'tarp_type'>) => p.tarp_type === 'accessory'
@@ -28,7 +29,7 @@ const GRADES: Record<number, string> = {
   5: 'Multipurpose',
   7: 'Standard Duty',
   10: 'Heavy Duty',
-  12: 'Extreme Duty',
+  12: 'Extra Heavy Duty',
   16: 'Super Heavy Duty',
   20: 'Ultra Heavy Duty',
   30: 'Super Heavy Duty',

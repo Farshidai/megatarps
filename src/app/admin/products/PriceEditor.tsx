@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useRef, useState, useTransition } from 'react'
-import { Download, Upload, Save, Undo2, Search, Percent, ImageOff, X } from 'lucide-react'
+import { Download, Upload, Save, Undo2, Search, Percent, ImageOff, X, ExternalLink, TrendingDown } from 'lucide-react'
 import { saveProductPrices, type ProductPatch, type SaveResult } from './actions'
-import { parsePriceCsv, toPriceCsv, dollarsToCents, type CsvUpdate } from './_lib/csv'
+import { parsePriceCsv, toPriceCsv, dollarsToCents, resolveSku, type CsvUpdate, type CsvParseResult } from './_lib/csv'
 
 export interface EditorRow {
   sku: string
@@ -17,6 +17,10 @@ export interface EditorRow {
   in_stock: boolean
   active: boolean
   has_image: boolean
+  market_cents: number | null
+  market_source: string | null
+  market_url: string | null
+  market_checked: string | null
 }
 
 type Edit = Partial<Pick<EditorRow, 'cost_cents' | 'retail_cents' | 'in_stock' | 'active'>>
@@ -27,10 +31,18 @@ const VIEWS: Record<string, string> = {
   'no-cost': 'Missing cost',
   'low-margin': 'Margin under 25%',
   changed: 'Unsaved changes',
+  'has-market': 'Has market price',
+  'market-no-retail': 'Market price, no retail yet',
   inactive: 'Hidden (inactive)',
 }
 
 const fmt = (c: number) => (c / 100).toFixed(2)
+const shortSource = (s: string | null) => (s ?? '').replace('.com', '').replace(/\s*\(.*\)$/, '')
+function vsMarket(retail: number, market: number) {
+  const d = ((retail - market) / market) * 100
+  if (Math.abs(d) < 0.05) return 'at market'
+  return `${Math.abs(d).toFixed(1)}% ${d < 0 ? 'below' : 'above'}`
+}
 function marginPct(cost: number, retail: number): number | null {
   if (!retail || !cost) return null
   return ((retail - cost) / retail) * 100
@@ -44,7 +56,10 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
   const [type, setType] = useState('')
   const [markup, setMarkup] = useState('60')
   const [result, setResult] = useState<SaveResult | null>(null)
-  const [csvPreview, setCsvPreview] = useState<{ updates: CsvUpdate[]; errors: string[]; unknown: string[]; fileName: string } | null>(null)
+  const [csvPreview, setCsvPreview] = useState<{ updates: CsvUpdate[]; errors: string[]; unknown: string[]; fileName: string; columns: CsvParseResult['columns'] } | null>(null)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [belowMarket, setBelowMarket] = useState('10')
+  const [charm, setCharm] = useState(false)
   const [pending, start] = useTransition()
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -63,6 +78,8 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
         case 'low-margin': { const m = marginPct(r.cost_cents, r.retail_cents); return m != null && m < 25 }
         case 'changed': return !!edits[r.sku]
         case 'inactive': return !r.active
+        case 'has-market': return r.market_cents != null
+        case 'market-no-retail': return r.market_cents != null && r.retail_cents === 0
         default: return true
       }
     })
@@ -102,6 +119,39 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
     }
   }
 
+  /** Stage retail = market − X% on the selected rows (or every visible row when none is selected). Nothing is saved until Save. */
+  function applyMarketDiscount() {
+    const pct = Number(belowMarket)
+    if (!Number.isFinite(pct) || pct < 0 || pct >= 100) return
+    const scope = selected.size ? visible.filter((r) => selected.has(r.sku)) : visible
+    const targets = scope.filter((r) => r.market_cents && r.market_cents > 0)
+    if (!targets.length) {
+      alert('None of these rows has a market price.')
+      return
+    }
+    const skipped = scope.length - targets.length
+    const msg = `Stage retail = market − ${pct}%${charm ? ' (rounded down to .99)' : ''} on ${targets.length} ${selected.size ? 'selected' : 'visible'} product${targets.length === 1 ? '' : 's'}?` +
+      (skipped ? `\n${skipped} row${skipped === 1 ? '' : 's'} without a market price will be left alone.` : '') +
+      '\n\nThe new prices are only staged: review them (view switches to "Unsaved changes"), then click Save.'
+    if (!confirm(msg)) return
+    for (const r of targets) {
+      let cents = Math.round(r.market_cents! * (1 - pct / 100))
+      if (charm && cents >= 100) cents = Math.floor((cents + 1) / 100) * 100 - 1
+      setField(r.sku, 'retail_cents', Math.max(1, cents))
+    }
+    setSelected(new Set())
+    setView('changed')
+  }
+
+  function toggleSelect(sku: string, on: boolean) {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (on) next.add(sku)
+      else next.delete(sku)
+      return next
+    })
+  }
+
   function save() {
     const patches: ProductPatch[] = Object.entries(edits).map(([sku, e]) => ({
       sku,
@@ -122,7 +172,7 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
   }
 
   function exportCsv() {
-    const csv = toPriceCsv(merged.map((r) => ({ sku: r.sku, name: r.name, cost_cents: r.cost_cents, retail_cents: r.retail_cents, in_stock: r.in_stock })))
+    const csv = toPriceCsv(merged.map((r) => ({ sku: r.sku, name: r.name, cost_cents: r.cost_cents, retail_cents: r.retail_cents, in_stock: r.in_stock, market_cents: r.market_cents })))
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
     const a = document.createElement('a')
     a.href = url
@@ -134,9 +184,18 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
   async function onFile(f: File | undefined) {
     if (!f) return
     const text = await f.text()
-    const { updates, errors } = parsePriceCsv(text)
-    const unknown = updates.filter((u) => !bySku.has(u.sku)).map((u) => u.sku)
-    setCsvPreview({ updates: updates.filter((u) => bySku.has(u.sku)), errors, unknown, fileName: f.name })
+    const { updates, errors, columns } = parsePriceCsv(text)
+    // Match SKUs case-insensitively and with/without the marketplace "-X" suffix
+    const index = new Map(rows.map((r) => [r.sku.toUpperCase(), r.sku]))
+    const keys = new Set(index.keys())
+    const matched: CsvUpdate[] = []
+    const unknown: string[] = []
+    for (const u of updates) {
+      const key = resolveSku(u.sku, keys)
+      if (key) matched.push({ ...u, sku: index.get(key)! })
+      else unknown.push(u.sku)
+    }
+    setCsvPreview({ updates: matched, errors, unknown, fileName: f.name, columns })
     if (fileRef.current) fileRef.current.value = ''
   }
 
@@ -198,6 +257,20 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
             Markup shown rows
           </button>
         </div>
+        <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2 ml-1">
+          <label className="text-xs text-slate-600 flex items-center gap-1">
+            <TrendingDown className="w-3.5 h-3.5" aria-hidden />
+            <span>Market −</span>
+            <input value={belowMarket} onChange={(e) => setBelowMarket(e.target.value)} inputMode="decimal" className="w-12 py-1.5 px-2 text-sm rounded-lg border border-slate-300 text-right" aria-label="Percent below market price" />
+            <span>%</span>
+          </label>
+          <label className="text-xs text-slate-600 flex items-center gap-1" title="Round down to the nearest $x.99">
+            <input type="checkbox" checked={charm} onChange={(e) => setCharm(e.target.checked)} className="w-3.5 h-3.5 accent-orange-500" /> .99
+          </label>
+          <button type="button" onClick={applyMarketDiscount} className="text-xs font-semibold px-2.5 py-2 rounded-lg bg-orange-50 text-orange-800 ring-1 ring-orange-300 hover:bg-orange-100" title="Set retail = market price minus X% (staged for review, not saved)">
+            Set retail = market − {belowMarket || 0}% ({selected.size ? `${selected.size} selected` : `${visible.length} shown`})
+          </button>
+        </div>
         <div className="flex items-center gap-1.5 ml-auto">
           <button type="button" onClick={exportCsv} className="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-lg ring-1 ring-slate-300 hover:bg-slate-50">
             <Download className="w-4 h-4" aria-hidden /> Export CSV
@@ -216,7 +289,11 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
             <div>
               <p className="font-bold text-slate-900">Import {csvPreview.fileName}</p>
               <p className="text-sm text-slate-600 mt-0.5">
-                {csvPreview.updates.length} SKU{csvPreview.updates.length === 1 ? '' : 's'} matched
+                Columns: <strong>sku, {csvPreview.columns.join(', ')}</strong>
+                {(['cost', 'retail', 'in_stock'] as const).filter((c) => !csvPreview.columns.includes(c)).length > 0 && (
+                  <> ({(['cost', 'retail', 'in_stock'] as const).filter((c) => !csvPreview.columns.includes(c)).join(', ')} left unchanged)</>
+                )}
+                {' · '}{csvPreview.updates.length} SKU{csvPreview.updates.length === 1 ? '' : 's'} matched
                 {csvPreview.unknown.length > 0 && <> · <span className="text-amber-700">{csvPreview.unknown.length} unknown SKU{csvPreview.unknown.length === 1 ? '' : 's'} skipped</span></>}
                 {csvPreview.errors.length > 0 && <> · <span className="text-red-700">{csvPreview.errors.length} problem{csvPreview.errors.length === 1 ? '' : 's'}</span></>}
               </p>
@@ -240,12 +317,22 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
 
       {/* Table */}
       <div className="bg-white rounded-xl ring-1 ring-slate-200 overflow-x-auto">
-        <table className="w-full text-sm min-w-[860px]">
+        <table className="w-full text-sm min-w-[1000px]">
           <caption className="sr-only">Product prices, editable</caption>
           <thead className="sticky top-0 z-10">
             <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-500">
+              <th scope="col" className="pl-3 py-2.5 w-8">
+                <input
+                  type="checkbox"
+                  aria-label="Select all shown rows"
+                  className="w-4 h-4 accent-orange-500"
+                  checked={visible.length > 0 && visible.every((r) => selected.has(r.sku))}
+                  onChange={(e) => setSelected(e.target.checked ? new Set(visible.map((r) => r.sku)) : new Set())}
+                />
+              </th>
               <th scope="col" className="px-3 py-2.5 font-semibold">SKU</th>
               <th scope="col" className="px-3 py-2.5 font-semibold">Product</th>
+              <th scope="col" className="px-3 py-2.5 font-semibold text-right">Market $</th>
               <th scope="col" className="px-3 py-2.5 font-semibold text-right">Cost $</th>
               <th scope="col" className="px-3 py-2.5 font-semibold text-right">Retail $</th>
               <th scope="col" className="px-3 py-2.5 font-semibold text-right">Margin</th>
@@ -255,13 +342,16 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
           </thead>
           <tbody className="divide-y divide-slate-100">
             {visible.length === 0 && (
-              <tr><td colSpan={7} className="text-center py-12 text-slate-400">No products match.</td></tr>
+              <tr><td colSpan={9} className="text-center py-12 text-slate-400">No products match.</td></tr>
             )}
             {visible.map((r) => {
               const e = edits[r.sku] ?? {}
               const m = marginPct(r.cost_cents, r.retail_cents)
               return (
                 <tr key={r.sku} className={e && Object.keys(e).length ? 'bg-orange-50/40' : 'hover:bg-slate-50'}>
+                  <td className="pl-3 py-1.5">
+                    <input type="checkbox" checked={selected.has(r.sku)} onChange={(ev) => toggleSelect(r.sku, ev.target.checked)} aria-label={`Select ${r.sku}`} className="w-4 h-4 accent-orange-500" />
+                  </td>
                   <td className="px-3 py-1.5 font-mono text-xs text-slate-600 whitespace-nowrap">{r.sku}</td>
                   <td className="px-3 py-1.5">
                     <a href={`/product/${r.slug}`} target="_blank" rel="noreferrer" className="font-semibold text-slate-900 hover:text-orange-600 text-xs leading-snug line-clamp-1 max-w-[22rem]">
@@ -271,6 +361,30 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
                       {r.line ?? r.type}
                       {!r.has_image && <span className="inline-flex items-center gap-0.5 text-slate-400" title="No photo — shows branded placeholder"><ImageOff className="w-3 h-3" aria-hidden /> no photo</span>}
                     </p>
+                  </td>
+                  <td className="px-3 py-1.5 text-right whitespace-nowrap">
+                    {r.market_cents ? (
+                      <div className="leading-tight">
+                        <a
+                          href={r.market_url ?? undefined}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-slate-800 hover:text-orange-600 tabular-nums"
+                          title={`${r.market_source ?? 'Source'}${r.market_checked ? ` · checked ${r.market_checked}` : ''}`}
+                        >
+                          {fmt(r.market_cents)} <ExternalLink className="w-3 h-3 text-slate-400" aria-hidden />
+                          <span className="sr-only">(opens {r.market_source})</span>
+                        </a>
+                        <p className="text-[10px] text-slate-400 truncate max-w-[8rem] ml-auto">{shortSource(r.market_source)}</p>
+                        {r.retail_cents > 0 && (
+                          <p className={`text-[10px] font-semibold ${r.retail_cents <= r.market_cents ? 'text-green-700' : 'text-amber-700'}`}>
+                            {vsMarket(r.retail_cents, r.market_cents)}
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-slate-300 text-xs">—</span>
+                    )}
                   </td>
                   <td className="px-3 py-1.5 text-right">
                     <MoneyInput label={`Cost for ${r.sku}`} cents={r.cost_cents} changed={'cost_cents' in e} onCommit={(c) => setField(r.sku, 'cost_cents', c)} />
