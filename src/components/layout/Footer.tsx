@@ -1,85 +1,119 @@
 import Link from 'next/link'
-import { Phone, Mail, MapPin } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react'
+import { site, telHref, mailHref, JOBS } from '@/lib/site'
+import { CATEGORY_LABELS } from '@/lib/utils'
+import { ARTICLES, CALCULATOR } from '@/app/resources/_content'
+
+const linkCls = 'hover:text-orange-400 focus-visible:outline-none focus-visible:text-orange-400 focus-visible:underline'
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-orange-500 text-white font-black text-lg px-3 py-1 rounded">MEGA</div>
-              <span className="text-white font-bold text-xl">TARPS</span>
-            </div>
-            <p className="text-sm text-slate-400 leading-relaxed mb-4">
-              Premium heavy-duty tarps for contractors, farmers, and industry professionals.
-            </p>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-orange-400" />
-                <a href="tel:+19133132691" className="hover:text-white">(913) 313-2691</a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-orange-400" />
-                <a href="mailto:mfirooz@megatarps.com" className="hover:text-white">mfirooz@megatarps.com</a>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-orange-400 mt-0.5" />
-                <span className="text-slate-400">Ships Nationwide</span>
-              </div>
-            </div>
-          </div>
+    <footer className="bg-slate-900 text-slate-300" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">Footer</h2>
 
-          {/* Products */}
+      {/* Wholesale band */}
+      <div className="border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h3 className="text-white font-semibold mb-4">Products</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/products/construction-roofing" className="hover:text-orange-400">Construction & Roofing</Link></li>
-              <li><Link href="/products/agriculture-farming" className="hover:text-orange-400">Agriculture & Farming</Link></li>
-              <li><Link href="/products/industrial-warehouse" className="hover:text-orange-400">Industrial & Warehouse</Link></li>
-              <li><Link href="/products/general-purpose" className="hover:text-orange-400">General Purpose</Link></li>
-              <li><Link href="/products?type=fire-retardant" className="hover:text-orange-400">Fire Retardant Tarps</Link></li>
-              <li><Link href="/products?type=mesh" className="hover:text-orange-400">Mesh Tarps</Link></li>
-              <li><Link href="/products?type=canvas" className="hover:text-orange-400">Canvas Tarps</Link></li>
-            </ul>
+            <p className="text-white font-black text-xl tracking-tight">Buying for a crew, farm or warehouse?</p>
+            <p className="text-slate-400 text-sm mt-1">Tier pricing, tax-exempt purchasing and net terms for qualified buyers.</p>
           </div>
-
-          {/* Resources */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/resources#sizing" className="hover:text-orange-400">Tarp Sizing Guide</Link></li>
-              <li><Link href="/resources#mil-thickness" className="hover:text-orange-400">Mil Thickness Explained</Link></li>
-              <li><Link href="/resources#materials" className="hover:text-orange-400">Fire Retardant Ratings</Link></li>
-              <li><Link href="/resources#faq" className="hover:text-orange-400">Grommet Spacing Guide</Link></li>
-              <li><Link href="/bulk-quote" className="hover:text-orange-400">Bulk Pricing / RFQ</Link></li>
-              <li><Link href="/about" className="hover:text-orange-400">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-orange-400">Contact</Link></li>
-            </ul>
-          </div>
-
-          {/* Contractor */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">For Contractors</h3>
-            <ul className="space-y-2 text-sm mb-6">
-              <li><Link href="/account" className="hover:text-orange-400">Contractor Login</Link></li>
-              <li><Link href="/account/orders" className="hover:text-orange-400">Track Orders</Link></li>
-              <li><Link href="/account/quotes" className="hover:text-orange-400">My Quotes</Link></li>
-              <li><Link href="/bulk-quote" className="hover:text-orange-400">Request Bulk Quote</Link></li>
-            </ul>
-            <div className="bg-slate-800 rounded-lg p-4">
-              <p className="text-sm font-semibold text-white mb-1">Bulk Quote Response</p>
-              <p className="text-xs text-slate-400">We respond within 4 business hours</p>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/apply" className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors">
+              Open a wholesale account <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+            <Link href="/bulk-quote" className="inline-flex items-center justify-center ring-1 ring-slate-600 hover:ring-slate-400 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors">
+              Request a pallet quote
+            </Link>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-slate-700 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-          <p>&copy; {new Date().getFullYear()} MegaTarps. All rights reserved.</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {/* Brand + contact */}
+          <div className="col-span-2">
+            <Link href="/" className="flex items-center gap-2 mb-4 w-fit" aria-label="MegaTarps home">
+              <span className="bg-orange-500 text-white font-black text-lg px-3 py-1 rounded">MEGA</span>
+              <span className="text-white font-bold text-xl">TARPS</span>
+            </Link>
+            <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-xs">
+              {site.tagline}. {site.positioning} Wholesale heavy-duty tarps from the {site.baseLocation}.
+            </p>
+            <ul className="space-y-2.5 text-sm">
+              <li className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-orange-400 flex-shrink-0" aria-hidden="true" />
+                <a href={telHref()} className={linkCls}>{site.phoneDisplay}</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-orange-400 flex-shrink-0" aria-hidden="true" />
+                <a href={mailHref()} className={linkCls}>{site.email}</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" aria-hidden="true" />
+                <span className="text-slate-400">{site.hours}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-orange-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                <span className="text-slate-400">{site.serviceAreaSummary}</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Shop */}
+          <nav aria-label="Shop by category">
+            <h3 className="text-white font-semibold mb-4">Categories</h3>
+            <ul className="space-y-2 text-sm">
+              {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
+                <li key={slug}><Link href={`/products/${slug}`} className={linkCls}>{label}</Link></li>
+              ))}
+              <li><Link href="/products?type=fire-retardant" className={linkCls}>Fire-Retardant</Link></li>
+              <li><Link href="/products" className={linkCls}>All tarps</Link></li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Shop by job">
+            <h3 className="text-white font-semibold mb-4">Shop by job</h3>
+            <ul className="space-y-2 text-sm">
+              {JOBS.map((j) => (
+                <li key={j.slug}><Link href={`/products?job=${j.slug}`} className={linkCls}>{j.label}</Link></li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Resources */}
+          <nav aria-label="Resources">
+            <h3 className="text-white font-semibold mb-4">Resources</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href={CALCULATOR.path} className={linkCls}>{CALCULATOR.title}</Link></li>
+              {ARTICLES.slice(0, 4).map((a) => (
+                <li key={a.slug}><Link href={`/resources/${a.slug}`} className={linkCls}>{a.shortTitle}</Link></li>
+              ))}
+              <li><Link href="/resources" className={linkCls}>All guides</Link></li>
+            </ul>
+          </nav>
+
+          {/* Company & policies */}
+          <nav aria-label="Company and policies">
+            <h3 className="text-white font-semibold mb-4">Company</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/apply" className={linkCls}>Wholesale application</Link></li>
+              <li><Link href="/account" className={linkCls}>Account login</Link></li>
+              <li><Link href="/about" className={linkCls}>About</Link></li>
+              <li><Link href="/contact" className={linkCls}>Contact</Link></li>
+              <li><Link href="/shipping" className={linkCls}>Shipping &amp; freight</Link></li>
+              <li><Link href="/returns" className={linkCls}>Returns</Link></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+          <p>&copy; {new Date().getFullYear()} {site.legalName}. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-slate-300">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>
+            <Link href="/terms" className="hover:text-slate-300">Terms</Link>
+            <Link href="/shipping" className="hover:text-slate-300">Shipping</Link>
+            <Link href="/returns" className="hover:text-slate-300">Returns</Link>
           </div>
         </div>
       </div>

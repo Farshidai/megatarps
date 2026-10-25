@@ -1,33 +1,46 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ChatWidget } from '@/components/chat/ChatWidget'
+import { JsonLd, organizationJsonLd, websiteJsonLd } from '@/components/seo/JsonLd'
+import { site, SITE_URL } from '@/lib/site'
 
+// Note: no site-wide `alternates.canonical` here on purpose. A canonical set in the
+// root layout would be inherited by every page that doesn't override it, pointing
+// them all at the homepage. Pages set their own canonical.
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'MegaTarps — Heavy-Duty Tarps for Contractors & Industry',
+    default: 'Wholesale Heavy-Duty Tarps by the Case & Pallet | MegaTarps',
     template: '%s | MegaTarps',
   },
-  description:
-    'Wholesale and retail heavy-duty tarps for construction, roofing, agriculture, and industry. 5-mil to 20-mil poly tarps, canvas, mesh, fire retardant. Bulk pricing available.',
-  keywords: [
-    'heavy duty tarps',
-    'wholesale tarps',
-    'contractor tarps',
-    'roofing tarps',
-    'bulk tarps',
-    'poly tarps',
-    '16 mil tarp',
-    '20 mil tarp',
-    'fire retardant tarp',
-  ],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://megatarps.com'),
+  description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.legalName, url: SITE_URL }],
+  creator: site.legalName,
+  publisher: site.legalName,
+  category: 'business',
+  formatDetection: { telephone: false, address: false, email: false },
   openGraph: {
     type: 'website',
-    siteName: 'MegaTarps',
+    siteName: site.name,
     locale: 'en_US',
+    url: SITE_URL,
+    title: 'MegaTarps: wholesale heavy-duty tarps for contractors',
+    description:
+      'The right mil, the right size, by the pallet. Case and pallet pricing on 5–20 mil poly, canvas, mesh and fire-retardant tarps, with LTL freight across the Midwest.',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MegaTarps: wholesale heavy-duty tarps for contractors',
+    description: 'Case and pallet pricing on 5–20 mil tarps. Kansas City based, Midwest LTL freight.',
+  },
+  robots: { index: true, follow: true },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0f172a',
 }
 
 export default function RootLayout({
@@ -38,8 +51,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-orange-500 focus:text-white focus:font-bold focus:px-4 focus:py-2 focus:rounded-lg"
+        >
+          Skip to content
+        </a>
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main id="main" className="flex-1">{children}</main>
         <Footer />
         <ChatWidget />
       </body>

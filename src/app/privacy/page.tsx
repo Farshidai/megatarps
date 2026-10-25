@@ -1,69 +1,101 @@
+// REVIEW: Farshid must confirm. Reflects what the code does today (Stripe, Supabase,
+// Resend, Anthropic chat, newsletter, no third-party analytics). Update it if you add
+// analytics, ad pixels or a new vendor. Not legal advice.
 import type { Metadata } from 'next'
+import { PolicyPage, Placeholder } from '@/components/seo/PolicyPage'
+import { site, mailHref } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'MegaTarps Privacy Policy.',
+  description: `How ${site.name} (${site.legalName}) collects, uses and protects information from customers and website visitors.`,
+  alternates: { canonical: '/privacy' },
 }
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-black text-slate-900 mb-2">Privacy Policy</h1>
-      <p className="text-slate-400 text-sm mb-8">Last updated: January 1, 2025</p>
+    <PolicyPage
+      title="Privacy Policy"
+      path="/privacy"
+      updated="October 25, 2026"
+      intro={
+        <p>
+          This policy explains what information {site.legalName} (&quot;{site.name}&quot;) collects through MegaTarps.com
+          and how we use it. We do not sell personal information.
+        </p>
+      }
+    >
+      <section>
+        <h2>Information we collect</h2>
+        <ul>
+          <li><strong>Account and application details:</strong> name, company, email, phone, business type, addresses and tax-exemption certificates you provide.</li>
+          <li><strong>Orders and quotes:</strong> products, quantities, shipping and jobsite addresses, and delivery notes.</li>
+          <li><strong>Payments:</strong> processed by Stripe. We receive the payment status and the card brand and last four digits, never the full card number.</li>
+          <li><strong>Newsletter:</strong> your email address and where you signed up.</li>
+          <li><strong>Messages:</strong> contact forms, emails and chat-assistant conversations.</li>
+          <li><strong>Technical data:</strong> standard server logs (IP address, browser, pages requested) kept for security and troubleshooting.</li>
+        </ul>
+      </section>
 
-      <div className="space-y-8 text-slate-600 text-sm leading-relaxed">
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Information We Collect</h2>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li><strong>Contact information:</strong> Name, email, phone, company — when you submit a quote request or create an account.</li>
-            <li><strong>Order data:</strong> Shipping address and payment information — processed securely via Stripe (we never store card numbers).</li>
-            <li><strong>Usage data:</strong> Pages visited, time on site — via PostHog analytics (anonymous).</li>
-            <li><strong>Chat sessions:</strong> Messages you send to our AI assistant — used to improve responses.</li>
-          </ul>
-        </section>
+      <section>
+        <h2>How we use it</h2>
+        <ul>
+          <li>To process orders, quotes, freight and returns, and to review wholesale and credit applications.</li>
+          <li>To apply tax exemptions and keep the records tax law requires.</li>
+          <li>To answer your questions and send order, quote and account emails.</li>
+          <li>To send the newsletter if you subscribed. Every newsletter has an unsubscribe link.</li>
+          <li>To secure the site and prevent fraud.</li>
+        </ul>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">How We Use Your Information</h2>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Process and fulfill orders and quote requests</li>
-            <li>Send order confirmations and quote responses via email (Resend)</li>
-            <li>Improve our product recommendations and site experience</li>
-            <li>Comply with legal obligations</li>
-          </ul>
-          <p className="mt-3">We do not sell your personal information to third parties.</p>
-        </section>
+      <section>
+        <h2>Who we share it with</h2>
+        <p>Only service providers who need it to run the business, under their own privacy terms:</p>
+        <ul>
+          <li><strong>Stripe</strong> for payments.</li>
+          <li><strong>Supabase</strong> for our database and account login.</li>
+          <li><strong>Resend</strong> for sending email.</li>
+          <li><strong>Anthropic</strong> to power the chat assistant. Please don&apos;t enter sensitive personal information in chat.</li>
+          <li><strong>Freight and parcel carriers</strong>, which receive delivery names, addresses and phone numbers.</li>
+          <li>Accountants, lawyers or authorities when required by law.</li>
+        </ul>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Third-Party Services</h2>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li><strong>Stripe:</strong> Payment processing. <a href="https://stripe.com/privacy" className="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">Stripe Privacy Policy</a></li>
-            <li><strong>Supabase:</strong> Database and authentication. Data stored in US region.</li>
-            <li><strong>Resend:</strong> Transactional email delivery.</li>
-            <li><strong>Anthropic (Claude):</strong> AI chat assistant. Messages are processed per <a href="https://www.anthropic.com/privacy" className="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">Anthropic&apos;s policy</a>.</li>
-            <li><strong>PostHog:</strong> Anonymous usage analytics.</li>
-          </ul>
-        </section>
+      <section>
+        <h2>Cookies and analytics</h2>
+        <p>
+          We use essential cookies to keep you signed in and to remember your cart. We do not currently use advertising
+          cookies or third-party analytics. If that changes, we will update this policy first.
+        </p>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Data Retention</h2>
-          <p>Order and quote records are retained for 7 years for accounting purposes. Account data is retained until you request deletion. Contact us to delete your account data.</p>
-        </section>
+      <section>
+        <h2>Retention</h2>
+        <p>
+          Order, invoice and tax-exemption records are kept as long as tax and accounting rules require (
+          <Placeholder>retention period, e.g. 7 years</Placeholder>). Newsletter addresses are kept until you unsubscribe.
+          Other account data is kept while your account is active, or until you ask us to delete it.
+        </p>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Cookies</h2>
-          <p>We use essential cookies for authentication. We do not use tracking cookies or advertising cookies.</p>
-        </section>
+      <section>
+        <h2>Your choices</h2>
+        <p>
+          You can ask to see, correct or delete your personal information, or unsubscribe from email, by contacting{' '}
+          <a href={mailHref('Privacy request')}>{site.email}</a>. We may keep records we are legally required to keep.
+        </p>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Your Rights</h2>
-          <p>You may request access to, correction of, or deletion of your personal data by emailing <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a>.</p>
-        </section>
+      <section>
+        <h2>Children</h2>
+        <p>This site is for business buyers and is not directed to children under 13.</p>
+      </section>
 
-        <section>
-          <h2 className="text-lg font-bold text-slate-900">Contact</h2>
-          <p>Privacy questions: <a href="mailto:mfirooz@megatarps.com" className="text-orange-600 hover:underline">mfirooz@megatarps.com</a></p>
-        </section>
-      </div>
-    </div>
+      <section>
+        <h2>Contact</h2>
+        <p>
+          {site.legalName} · {site.baseLocation} · <a href={mailHref('Privacy question')}>{site.email}</a> · {site.phoneDisplay}
+        </p>
+      </section>
+    </PolicyPage>
   )
 }
