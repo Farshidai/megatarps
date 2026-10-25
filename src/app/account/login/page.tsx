@@ -25,7 +25,9 @@ export default function LoginPage() {
       setError('Invalid email or password.')
       setLoading(false)
     } else {
-      router.push('/account')
+      // Honor ?redirect= from src/proxy.ts (internal paths only)
+      const r = new URLSearchParams(window.location.search).get('redirect')
+      router.push(r && r.startsWith('/') && !r.startsWith('//') ? r : '/account')
       router.refresh()
     }
   }
@@ -81,8 +83,8 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-slate-500 mt-6">
             Don&apos;t have an account?{' '}
-            <a href="/account/register" className="text-orange-600 font-semibold hover:underline">
-              Create one
+            <a href="/apply" className="text-orange-600 font-semibold hover:underline">
+              Apply for a wholesale account
             </a>
           </p>
         </div>
