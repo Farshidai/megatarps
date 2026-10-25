@@ -1,94 +1,84 @@
-import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+import { ArrowRight, FileText } from 'lucide-react'
+import { isDemoMode } from '@/lib/demo'
+import { getSignedInUser } from '@/lib/quotes/auth'
+import { listQuotesForContractor } from '@/lib/quotes/store'
+import { STATUS_LABELS, STATUS_STYLES, effectiveStatus, nowMs } from '@/lib/quotes/types'
 import { formatPrice } from '@/lib/utils'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'My Quotes' }
-
-const STATUS_STYLES: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-700',
-  quoted: 'bg-blue-100 text-blue-700',
-  accepted: 'bg-green-100 text-green-700',
-  ordered: 'bg-indigo-100 text-indigo-700',
-  expired: 'bg-slate-100 text-slate-500',
-}
+export const dynamic = 'force-dynamic'
 
 export default async function AccountQuotesPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const demo = isDemoMode()
+  const user = demo ? null : await getSignedInUser()
 
-  if (!user) {
+  if (!demo && !user) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-        <p className="text-slate-500 mb-4">Sign in to view your quotes.</p>
-        <a href="/account/login" className="text-orange-600 font-semibold hover:underline">Sign In →</a>
+        <p className="text-slate-500 mb-4">Sign in to see your quotes.</p>
+        <Link href="/account/login?redirect=/account/quotes" className="text-orange-600 font-semibold hover:underline">Sign in →</Link>
       </div>
     )
   }
 
-  const { data: quotes } = await supabase
-    .from('quotes')
-    .select('*')
-    .eq('contractor_id', user.id)
-    .order('created_at', { ascending: false })
+  const quotes = await listQuotesForContractor(user?.id ?? 'demo')
+  const now = nowMs()
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-black text-slate-900">My Quote Requests</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-black text-slate-900">My quotes</h1>
+        <Link href="/bulk-quote" className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 py-2 rounded-lg text-sm">New quote request</Link>
+      </div>
+      {demo && <p className="text-xs text-slate-500 bg-white border border-dashed border-slate-300 rounded-lg px-3 py-2">Demo mode: showing sample quotes.</p>}
 
-      {!quotes?.length ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-          <p className="text-slate-400 mb-4">You haven&apos;t submitted any quote requests yet.</p>
-          <a href="/bulk-quote"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors">
-            Request Bulk Pricing
-          </a>
+      {!quotes.length ? (
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center">
+          <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" aria-hidden />
+          <p className="text-slate-500 mb-4">You haven&apos;t requested any quotes yet.</p>
+          <Link href="/bulk-quote" className="text-orange-600 font-semibold hover:underline">Request wholesale pricing →</Link>
         </div>
       ) : (
-        <div className="space-y-3">
-          {quotes.map(q => {
-            const items = q.items as Array<{ sku: string; name: string; quantity: number; unit_price_cents: number }>
+        <ul className="space-y-3">
+          {quotes.map((q) => {
+            const s = effectiveStatus(q, now)
+            const units = q.items.reduce((n, i) => n + i.quantity, 0)
+            const action =
+              s === 'quoted' ? 'Review & accept' : s === 'accepted' ? 'Complete payment' : s === 'pending' ? 'Track request' : 'View quote'
             return (
-              <div key={q.id} className="bg-white rounded-xl border border-slate-200 p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-bold text-slate-900">{q.quote_number}</p>
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_STYLES[q.status] ?? 'bg-slate-100 text-slate-600'}`}>
-                        {q.status}
-                      </span>
+              <li key={q.id}>
+                <Link
+                  href={`/quote/${q.public_token}`}
+                  className="group block bg-white rounded-xl border border-slate-200 hover:border-orange-300 hover:shadow-sm p-5 transition"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <p className="font-mono font-bold text-slate-900">{q.quote_number}</p>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ring-1 ${STATUS_STYLES[s]}`}>{STATUS_LABELS[s]}</span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Requested {new Date(q.created_at).toLocaleDateString('en-US', { dateStyle: 'medium' })} · {q.items.length} line{q.items.length === 1 ? '' : 's'} · {units.toLocaleString()} units
+                      </p>
+                      <p className="text-sm text-slate-600 mt-1 truncate">{q.items.map((i) => i.name || i.sku).join(', ')}</p>
                     </div>
-                    <p className="text-xs text-slate-400">{new Date(q.created_at).toLocaleDateString()}</p>
-                  </div>
-                  {q.total_cents && (
-                    <p className="font-black text-slate-900 text-lg">{formatPrice(q.total_cents)}</p>
-                  )}
-                </div>
-
-                <ul className="mt-3 text-sm text-slate-600 space-y-1">
-                  {items.map((item, i) => (
-                    <li key={i} className="flex justify-between">
-                      <span>{item.quantity}x {item.name || item.sku}</span>
-                      {item.unit_price_cents > 0 && (
-                        <span className="text-slate-500">{formatPrice(item.unit_price_cents)} ea</span>
+                    <div className="text-right">
+                      {q.total_cents && s !== 'pending' ? <p className="font-black text-slate-900 text-lg tabular-nums">{formatPrice(q.total_cents)}</p> : null}
+                      {s === 'quoted' && q.valid_until && (
+                        <p className="text-xs text-blue-700">Valid until {new Date(q.valid_until).toLocaleDateString('en-US', { dateStyle: 'medium' })}</p>
                       )}
-                    </li>
-                  ))}
-                </ul>
-
-                {q.status === 'pending' && (
-                  <p className="mt-3 text-xs text-orange-600">
-                    We&apos;ll send pricing to your email within 4 business hours.
+                    </div>
+                  </div>
+                  <p className={`mt-3 inline-flex items-center gap-1 text-sm font-semibold ${s === 'quoted' || s === 'accepted' ? 'text-orange-600' : 'text-slate-500'} group-hover:underline`}>
+                    {action} <ArrowRight className="w-4 h-4" aria-hidden />
                   </p>
-                )}
-                {q.status === 'quoted' && q.expires_at && (
-                  <p className="mt-3 text-xs text-blue-600">
-                    Quote valid until {new Date(q.expires_at).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
+                </Link>
+              </li>
             )
           })}
-        </div>
+        </ul>
       )}
     </div>
   )

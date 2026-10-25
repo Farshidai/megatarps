@@ -1,110 +1,126 @@
-import { createAdminClient } from '@/lib/supabase/server'
-import { generateQuoteNumber } from '@/lib/utils'
-import { Resend } from 'resend'
+import { getProducts } from '@/lib/products'
+import { isQuoteOnly } from '@/lib/pricing'
+import { getAccountPricing } from '@/lib/accounts'
+import { addEvent, contractorProfileExists, createQuote } from '@/lib/quotes/store'
+import { getSignedInUser } from '@/lib/quotes/auth'
+import { emailNewRequest } from '@/lib/quotes/emails'
+import { DELIVERY_TYPES, type DeliveryType, type QuoteLine } from '@/lib/quotes/types'
+
+const str = (v: unknown, max = 200) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const ZIP_RE = /^\d{5}(-\d{4})?$/
 
 export async function POST(request: Request) {
-  const body = await request.json()
-  const {
-    name, email, phone, company,
-    project_type, project_location, timeline, special_requirements,
-    items,
-    shipping_name, shipping_line1, shipping_city, shipping_state, shipping_zip,
-  } = body
-
-  if (!name || !email || !items?.length) {
-    return Response.json({ error: 'Missing required fields' }, { status: 400 })
+  let body: Record<string, unknown>
+  try {
+    body = await request.json()
+  } catch {
+    return Response.json({ error: 'Invalid request' }, { status: 400 })
   }
 
-  const quoteNumber = generateQuoteNumber()
-  const supabase = await createAdminClient()
+  // Honeypot: real users never fill the hidden "website" field.
+  if (str(body.website)) return Response.json({ success: true, quote_number: 'MQ-RECEIVED' })
 
-  const { error } = await supabase.from('quotes').insert({
-    quote_number: quoteNumber,
-    guest_name: name,
-    guest_email: email,
-    guest_phone: phone || null,
-    guest_company: company || null,
-    items: items.map((item: { description: string; sku: string; quantity: number }) => ({
-      sku: item.sku || '',
-      name: item.description,
-      quantity: item.quantity,
-      unit_price_cents: 0,
+  const name = str(body.name, 120)
+  const email = str(body.email, 200).toLowerCase()
+  const phone = str(body.phone, 40)
+  const company = str(body.company, 160)
+  const deliveryZip = str(body.delivery_zip ?? body.shipping_zip, 10)
+  const deliveryType = str(body.delivery_type, 20) as DeliveryType
+  const neededBy = str(body.needed_by, 10)
+
+  const errors: Record<string, string> = {}
+  if (!name) errors.name = 'Name is required'
+  if (!EMAIL_RE.test(email)) errors.email = 'A valid email is required'
+  if (!ZIP_RE.test(deliveryZip)) errors.delivery_zip = 'A 5-digit delivery ZIP is required for freight'
+  if (deliveryType && !DELIVERY_TYPES.includes(deliveryType)) errors.delivery_type = 'Choose a delivery type'
+  if (neededBy && (!/^\d{4}-\d{2}-\d{2}$/.test(neededBy) || Number.isNaN(Date.parse(neededBy)))) errors.needed_by = 'Invalid date'
+
+  const rawItems = Array.isArray(body.items) ? body.items.slice(0, 60) : []
+  const catalog = await getProducts()
+  const bySku = new Map(catalog.map((p) => [p.xpose_sku.toLowerCase(), p]))
+  const byId = new Map(catalog.map((p) => [p.id, p]))
+
+  const items: QuoteLine[] = []
+  for (const raw of rawItems as Record<string, unknown>[]) {
+    const qty = Math.floor(Number(raw?.quantity))
+    const sku = str(raw?.sku, 60)
+    const description = str(raw?.description ?? raw?.name, 300)
+    const product = byId.get(str(raw?.product_id, 60)) ?? (sku ? bySku.get(sku.toLowerCase()) : undefined)
+    if (!product && !description && !sku) continue
+    if (!Number.isFinite(qty) || qty < 1 || qty > 100000) {
+      errors.items = 'Each line needs a quantity between 1 and 100,000'
+      continue
+    }
+    items.push({
+      product_id: product?.id ?? null,
+      sku: product?.xpose_sku ?? sku,
+      name: product?.name ?? description,
+      quantity: qty,
+      unit_price_cents: 0, // priced by admin; never trust browser prices
       line_total: 0,
-    })),
-    project_type: project_type || null,
-    project_location: project_location || null,
-    timeline: timeline || null,
-    special_requirements: special_requirements || null,
-    status: 'pending',
-    shipping_address: {
-      name: shipping_name,
-      line1: shipping_line1,
-      city: shipping_city,
-      state: shipping_state,
-      zip: shipping_zip,
-      country: 'US',
-    },
-  })
+      quote_only: product ? isQuoteOnly(product) : true,
+    })
+  }
+  if (!items.length) errors.items = 'Add at least one product'
 
-  if (error) {
-    console.error('Quote insert error:', error)
+  if (Object.keys(errors).length) {
+    return Response.json({ error: 'Please fix the highlighted fields', fields: errors }, { status: 400 })
+  }
+
+  // Attach the signed-in contractor (quotes.contractor_id has an FK to contractor_profiles).
+  let contractorId: string | null = null
+  try {
+    const acct = await getAccountPricing()
+    const user = acct.userId ? { id: acct.userId } : await getSignedInUser()
+    if (user && (await contractorProfileExists(user.id))) contractorId = user.id
+  } catch (e) {
+    console.error('rfq: account lookup failed', e)
+  }
+
+  const shipping = {
+    name: str(body.shipping_name, 120) || name,
+    company: company || undefined,
+    line1: str(body.shipping_line1, 200),
+    city: str(body.shipping_city, 100),
+    state: str(body.shipping_state, 2).toUpperCase(),
+    zip: deliveryZip,
+    country: 'US',
+  }
+
+  let quote
+  try {
+    quote = await createQuote({
+      contractor_id: contractorId,
+      guest_name: name,
+      guest_email: email,
+      guest_phone: phone || null,
+      guest_company: company || null,
+      items,
+      status: 'pending',
+      project_type: str(body.project_type, 40) || null,
+      project_location: str(body.project_location, 160) || null,
+      timeline: str(body.timeline, 40) || null,
+      special_requirements: str(body.special_requirements, 2000) || null,
+      ai_recommended: body.source === 'chat',
+      shipping_address: shipping,
+      delivery_type: deliveryType || null,
+      delivery_zip: deliveryZip,
+      needed_by: neededBy || null,
+    })
+  } catch (e) {
+    console.error('Quote insert error:', e)
     return Response.json({ error: 'Failed to save quote request' }, { status: 500 })
   }
 
-  // Send email notifications (non-blocking)
-  try {
-    const resend = new Resend(process.env.RESEND_API_KEY)
-    const itemList = items
-      .map((i: { description: string; sku: string; quantity: number }) =>
-        `<li>${i.quantity}x ${i.description}${i.sku ? ` (SKU: ${i.sku})` : ''}</li>`)
-      .join('')
+  const source = body.source === 'cart' ? 'from cart' : body.source === 'chat' ? 'from AI chat' : 'via bulk quote form'
+  await addEvent(quote.id, 'created', `Submitted ${source}`)
 
-    await Promise.all([
-      // Admin notification
-      resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'mfirooz@megatarps.com',
-        to: process.env.ADMIN_EMAIL ?? 'farshid@megatarps.com',
-        subject: `🧾 New Bulk Quote ${quoteNumber} — ${name}${company ? ` (${company})` : ''}`,
-        html: `
-          <h2 style="color:#ea580c">New Bulk Quote Request</h2>
-          <p><strong>Quote #:</strong> ${quoteNumber}</p>
-          <table cellpadding="4" style="font-size:14px">
-            <tr><td><strong>Name</strong></td><td>${name}</td></tr>
-            <tr><td><strong>Company</strong></td><td>${company || '—'}</td></tr>
-            <tr><td><strong>Email</strong></td><td><a href="mailto:${email}">${email}</a></td></tr>
-            <tr><td><strong>Phone</strong></td><td>${phone || '—'}</td></tr>
-            <tr><td><strong>Timeline</strong></td><td>${timeline || '—'}</td></tr>
-            <tr><td><strong>Project Type</strong></td><td>${project_type || '—'}</td></tr>
-            <tr><td><strong>Location</strong></td><td>${project_location || '—'}</td></tr>
-          </table>
-          <h3>Items Requested</h3>
-          <ul>${itemList}</ul>
-          ${special_requirements ? `<p><strong>Special Requirements:</strong><br>${special_requirements}</p>` : ''}
-          <p><strong>Ship to:</strong> ${shipping_name}, ${shipping_line1}, ${shipping_city} ${shipping_state} ${shipping_zip}</p>
-          <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/admin/rfqs" style="background:#ea580c;color:white;padding:8px 16px;border-radius:6px;text-decoration:none">View in Admin →</a></p>
-        `,
-      }),
-      // Customer confirmation
-      resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'mfirooz@megatarps.com',
-        to: email,
-        subject: `Quote Request Received — ${quoteNumber}`,
-        html: `
-          <h2>We got your quote request!</h2>
-          <p>Hi ${name},</p>
-          <p>Thanks for reaching out to MegaTarps. We've received your bulk quote request <strong>${quoteNumber}</strong> and will respond within <strong>4 business hours</strong> (Mon–Fri).</p>
-          <h3>What you requested:</h3>
-          <ul>${itemList}</ul>
-          <p>Questions? Reply to this email or call us at (913) 313-2691.</p>
-          <br>
-          <p>— The MegaTarps Team</p>
-        `,
-      }),
-    ])
-  } catch (emailError) {
-    console.error('Email send error:', emailError)
-    // Don't fail the request if email fails
+  try {
+    await emailNewRequest(quote)
+  } catch (e) {
+    console.error('rfq email error:', e) // never fail the request over email
   }
 
-  return Response.json({ success: true, quote_number: quoteNumber })
+  return Response.json({ success: true, quote_number: quote.quote_number, token: quote.public_token })
 }

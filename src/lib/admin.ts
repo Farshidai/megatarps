@@ -7,6 +7,7 @@ import { isDemoMode } from '@/lib/demo'
 import { isAdminEmail } from '@/lib/admin-emails'
 
 export { getAdminEmails, isAdminEmail } from '@/lib/admin-emails'
+export { getAdminEmails as adminEmails } from '@/lib/admin-emails'
 
 export interface AdminUser {
   email: string
