@@ -20,7 +20,7 @@ export async function getAppUrl(): Promise<string> {
 
 export function quoteAdminRecipients(): string[] {
   const list = adminEmails()
-  return list.length ? list : ['farshid@megatarps.com']
+  return list.length ? list : ['mfirooz@megatarps.com']
 }
 
 const shell = (body: string) => `

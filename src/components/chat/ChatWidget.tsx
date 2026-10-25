@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect, useId } from 'react'
-import Link from 'next/link'
 import { MessageSquare, X, Send, Loader2, Bot, User, FileText, ArrowRight } from 'lucide-react'
 
 interface Message {
@@ -68,8 +67,9 @@ export function ChatWidget() {
   const panelId = useId()
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    // also re-run when streaming ends: the quote handoff card appears only then
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [messages, streaming])
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 100)
@@ -193,13 +193,12 @@ export function ChatWidget() {
                           <li key={it.sku} className="flex justify-between gap-2"><span className="font-mono">{it.sku}</span><span>× {it.qty}</span></li>
                         ))}
                       </ul>
-                      <Link
+                      <a
                         href={quoteHref(items)}
-                        onClick={() => setOpen(false)}
                         className="w-full inline-flex items-center justify-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg px-3 py-2"
                       >
                         <FileText className="w-4 h-4" aria-hidden /> Turn this into a quote request <ArrowRight className="w-4 h-4" aria-hidden />
-                      </Link>
+                      </a>
                     </div>
                   )}
                 </div>

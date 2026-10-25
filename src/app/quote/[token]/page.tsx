@@ -97,7 +97,7 @@ export default async function QuotePage({
                   <span className="bg-slate-900 text-white font-black text-2xl px-2.5 py-1 rounded-r-md leading-none">TARPS</span>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Mega Innovation Group LLC<br />Kansas City metro · Serving the Midwest<br />(913) 313-2691 · quotes@megatarps.com
+                  Mega Innovation Group LLC<br />Kansas City metro · Serving the Midwest<br />(913) 313-2691 · mfirooz@megatarps.com
                 </p>
               </div>
               <div className="sm:text-right">
