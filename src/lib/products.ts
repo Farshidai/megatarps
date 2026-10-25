@@ -11,7 +11,7 @@ export const PUBLIC_PRODUCT_COLUMNS = [
   'thickness_mil', 'width_ft', 'length_ft', 'coverage_sqft', 'color', 'color_hex',
   'retail_price_cents', 'units_per_half_pallet', 'units_per_full_pallet', 'units_per_case',
   'pack_quantity', 'accessory_type', 'size_label', 'material', 'image_urls', 'active',
-  'in_stock', 'created_at', 'updated_at',
+  'in_stock', 'created_at', 'updated_at', 'shipping_weight_lb',
 ].join(', ')
 const PRODUCT_SELECT = `${PUBLIC_PRODUCT_COLUMNS}, product_line:product_lines(*)`
 export const PUBLIC_RULE_COLUMNS =

@@ -19,7 +19,7 @@ BEGIN
   SELECT string_agg(quote_ident(column_name), ', ' ORDER BY ordinal_position) INTO cols
   FROM information_schema.columns
   WHERE table_schema = 'public' AND table_name = 'products'
-    AND column_name NOT IN ('cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_checked_at');
+    AND column_name NOT IN ('cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at');
   EXECUTE 'REVOKE SELECT ON public.products FROM anon, authenticated';
   EXECUTE format('GRANT SELECT (%s) ON public.products TO anon, authenticated', cols);
 

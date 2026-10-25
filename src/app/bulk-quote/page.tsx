@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Request a Wholesale Quote — Pallets & Bulk Tarps',
   description:
-    'Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote within 4 business hours.',
+    'Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote, usually within one business day.',
 }
 
 export default async function BulkQuotePage() {

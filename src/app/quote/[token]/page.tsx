@@ -67,7 +67,7 @@ export default async function QuotePage({
           )}
           {status === 'pending' && (
             <Banner tone="amber" icon={<Clock className="w-5 h-5" aria-hidden />} title="We’re pricing your request">
-              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within 4 business hours.
+              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within one business day.
             </Banner>
           )}
           {status === 'expired' && (

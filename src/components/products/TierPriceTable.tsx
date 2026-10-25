@@ -111,7 +111,7 @@ function QuotePanel({ product, className }: { product: CatalogProduct; className
         <h2 id="quote-heading" className="text-lg font-black text-slate-900">Wholesale pricing by quote</h2>
         <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
           This SKU is priced per order based on quantity, mix and freight. Send your quantities and
-          we&apos;ll reply with case and pallet pricing, usually within 4 business hours.
+          we&apos;ll reply with case and pallet pricing, usually within one business day.
         </p>
         <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-slate-600">
           <li>✓ Case &amp; pallet pricing</li>

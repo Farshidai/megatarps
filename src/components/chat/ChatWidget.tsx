@@ -1,4 +1,5 @@
 'use client'
+import { site } from '@/lib/site'
 
 import { useState, useRef, useEffect, useId } from 'react'
 import { MessageSquare, X, Send, Loader2, Bot, User, FileText, ArrowRight } from 'lucide-react'
@@ -98,7 +99,7 @@ export function ChatWidget() {
         body: JSON.stringify({ messages: nextMessages }),
       })
       if (!res.ok || !res.body) {
-        setLast("Sorry, I'm having trouble connecting right now. Please try again or call us at (913) 313-2691.")
+        setLast("Sorry, I'm having trouble connecting right now. Please try again or call us at " + site.phoneDisplay + ".")
         return
       }
 

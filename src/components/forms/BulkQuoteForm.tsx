@@ -1,4 +1,5 @@
 'use client'
+import { site } from '@/lib/site'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -148,14 +149,14 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setFieldErrors(data.fields ?? {})
-        setError(data.error ?? 'Something went wrong. Please try again or call us at (913) 313-2691.')
+        setError(data.error ?? 'Something went wrong. Please try again or call us at ' + site.phoneDisplay + '.')
         setTimeout(() => errorRef.current?.focus(), 0)
         return
       }
       setResult({ quote_number: data.quote_number, token: data.token })
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {
-      setError('Network error. Please try again or call us at (913) 313-2691.')
+      setError('Network error. Please try again or call us at ' + site.phoneDisplay + '.')
     } finally {
       setSubmitting(false)
     }
@@ -170,7 +171,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
           Request <span className="font-mono font-bold text-slate-900">{result.quote_number}</span> is with our team.
         </p>
         <p className="text-slate-600 mb-6">
-          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong> within 4 business hours.
+          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong> within one business day.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {result.token && (
@@ -182,7 +183,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
             Continue browsing
           </Link>
         </div>
-        <p className="text-slate-400 text-sm mt-6">Questions? Call (913) 313-2691</p>
+        <p className="text-slate-400 text-sm mt-6">Questions? Call {site.phoneDisplay}</p>
       </div>
     )
   }
@@ -421,7 +422,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
             {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden /> : <Send className="w-5 h-5" aria-hidden />}
             {submitting ? 'Sending…' : 'Request quote'}
           </button>
-          <p className="text-center text-xs text-slate-400">Priced quote in 4 business hours · No obligation</p>
+          <p className="text-center text-xs text-slate-400">Priced quote within 1 business day · No obligation</p>
         </div>
       </aside>
     </form>

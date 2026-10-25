@@ -73,7 +73,7 @@ export async function emailNewRequest(q: QuoteRecord) {
           subject: `We received your quote request ${q.quote_number}`,
           html: shell(`
             <h2 style="margin:0 0 8px">Thanks, ${esc(q.guest_name?.split(' ')[0] || 'there')} — we're on it.</h2>
-            <p>Your request <b>${esc(q.quote_number)}</b> is with our team. You'll get a priced quote, including LTL freight to ${esc(q.delivery_zip || 'your ZIP')}, within <b>4 business hours</b> (Mon–Fri).</p>
+            <p>Your request <b>${esc(q.quote_number)}</b> is with our team. You'll get a priced quote, including LTL freight to ${esc(q.delivery_zip || 'your ZIP')}, usually within <b>one business day</b> (Mon–Fri).</p>
             ${itemsTable(q, false)}
             ${button(`${app}/quote/${q.public_token}`, 'Track your request')}
             <p style="color:#64748b;font-size:13px">Questions? Reply to this email or call (913) 313-2691.</p>`),

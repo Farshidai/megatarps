@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { connection } from 'next/server'
-import { LayoutDashboard, FileText, ShoppingBag, Package, Tag, Users, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, FileText, ShoppingBag, Package, Tag, Users, Truck, ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
 import { requireAdmin } from '@/lib/admin'
 import { getPendingCount } from './accounts/data'
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/admin/rfqs', label: 'RFQs / Quotes', icon: FileText },
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/pricing-rules', label: 'Pricing Rules', icon: Tag },
+  { href: '/admin/freight', label: 'Freight', icon: Truck },
   { href: '/admin/accounts', label: 'Accounts', icon: Users },
 ]
 
