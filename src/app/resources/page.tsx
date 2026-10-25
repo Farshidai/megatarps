@@ -1,144 +1,89 @@
+import Link from 'next/link'
 import type { Metadata } from 'next'
+import { ArrowRight, Calculator, Clock } from 'lucide-react'
+import { ARTICLES, CALCULATOR } from './_content'
+import { JsonLd, breadcrumbJsonLd } from '@/components/seo/JsonLd'
+import { SITE_URL } from '@/lib/site'
+import { NewsletterSignup } from '@/components/seo/NewsletterSignup'
 
 export const metadata: Metadata = {
-  title: 'Tarp Buying Guide & Resources',
-  description: 'Learn how to choose the right tarp for your project. Mil thickness guide, coverage calculator, and industry tips.',
+  title: 'Tarp Guides & Resources for Contractors',
+  description:
+    'Practical tarp guides for contractors, roofers and farms: mil thickness, sizing with overhang, poly vs canvas vs vinyl, storm roof tarps, cold-weather concrete and wholesale freight.',
+  alternates: { canonical: '/resources' },
 }
 
 export default function ResourcesPage() {
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'MegaTarps resource guides',
+    itemListElement: [
+      ...ARTICLES.map((a, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE_URL}/resources/${a.slug}`, name: a.title })),
+      { '@type': 'ListItem', position: ARTICLES.length + 1, url: `${SITE_URL}${CALCULATOR.path}`, name: CALCULATOR.title },
+    ],
+  }
+
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-black text-slate-900 mb-3">Tarp Buying Guide</h1>
-      <p className="text-slate-600 mb-10">Everything you need to choose the right tarp for the job.</p>
+    <div className="bg-white">
+      <JsonLd data={[itemList, breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Resources', path: '/resources' }])]} />
 
-      <div className="space-y-10">
-
-        {/* Mil Thickness Guide */}
-        <section id="mil-thickness" className="scroll-mt-24">
-          <h2 className="text-xl font-black text-slate-900 mb-4">Mil Thickness Guide</h2>
-          <p className="text-slate-600 text-sm mb-4">
-            &quot;Mil&quot; refers to thousandths of an inch. Higher mil = thicker, heavier, more durable.
+      <header className="relative bg-slate-950 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgb(249_115_22_/_0.14),_transparent_60%)]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+          <p className="text-xs font-bold text-orange-400 uppercase tracking-[0.18em] mb-3">Resources</p>
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight max-w-3xl leading-[1.05]">
+            Tarp guides written for the jobsite
+          </h1>
+          <p className="mt-5 text-lg text-slate-300 max-w-2xl leading-relaxed">
+            The right mil, the right size, the right material. Straight answers for contractors, roofers, farms and
+            warehouse buyers, with no fluff.
           </p>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-            {[
-              ['5–7 Mil', 'Light Duty', 'Camping ground cloths, home projects, temporary furniture covers. Not for extended outdoor use.'],
-              ['10 Mil', 'Medium Duty', 'Construction debris, equipment storage, truck bed liners. 1–2 season outdoor use.'],
-              ['12 Mil', 'Heavy Duty', 'Roofing projects, scaffold enclosures, outdoor covers lasting 2–3 seasons.'],
-              ['16 Mil', 'Super Heavy Duty', 'Farm equipment, industrial covers, commercial applications. Multi-year outdoor use.'],
-              ['20 Mil', 'Ultra Heavy Duty', 'Permanent outdoor covers, extreme weather, commercial operations. Longest lifespan.'],
-            ].map(([mil, level, desc], i) => (
-              <div key={mil} className={`grid grid-cols-12 gap-4 px-5 py-4 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                <div className="col-span-2 font-black text-slate-900">{mil}</div>
-                <div className="col-span-2 font-semibold text-orange-600">{level}</div>
-                <div className="col-span-8 text-slate-600">{desc}</div>
-              </div>
-            ))}
-          </div>
-        </section>
+        </div>
+      </header>
 
-        {/* Material Guide */}
-        <section id="materials" className="scroll-mt-24">
-          <h2 className="text-xl font-black text-slate-900 mb-4">Material Types</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {[
-              {
-                material: 'Polyethylene (Poly)',
-                props: ['Waterproof', 'UV resistant', 'Lightweight', 'Most affordable'],
-                best: 'General purpose, roofing, storage, outdoor covers',
-              },
-              {
-                material: 'Canvas',
-                props: ['Breathable', 'Absorbs moisture', 'Heavy'],
-                best: 'Drop cloths, auto/equipment covers, anywhere breathability matters',
-              },
-              {
-                material: 'Fire Retardant Poly',
-                props: ['NFPA 701 rated', 'Self-extinguishing', 'Waterproof'],
-                best: 'Welding, electrical, construction near open flames, regulated sites',
-              },
-              {
-                material: 'Mesh / Shade Cloth',
-                props: ['Lets air through', 'Blocks UV', 'Lightweight'],
-                best: 'Privacy fences, shade structures, wind screens, golf ranges',
-              },
-            ].map(({ material, props, best }) => (
-              <div key={material} className="bg-white rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-slate-900 mb-2">{material}</h3>
-                <ul className="text-xs text-slate-500 mb-3 space-y-0.5">
-                  {props.map(p => <li key={p}>✓ {p}</li>)}
-                </ul>
-                <p className="text-xs text-slate-600"><strong>Best for:</strong> {best}</p>
-              </div>
-            ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Calculator feature */}
+        <Link
+          href={CALCULATOR.path}
+          className="group flex flex-col sm:flex-row sm:items-center gap-5 rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 sm:p-8 mb-12 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-shadow focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/15 ring-1 ring-white/30 flex items-center justify-center flex-shrink-0">
+            <Calculator className="w-7 h-7" aria-hidden="true" />
           </div>
-        </section>
-
-        {/* Sizing Guide */}
-        <section id="sizing" className="scroll-mt-24">
-          <h2 className="text-xl font-black text-slate-900 mb-4">How to Measure</h2>
-          <div className="bg-white rounded-xl border border-slate-200 p-6 text-sm text-slate-600 space-y-3">
-            <p>
-              <strong className="text-slate-900">For rectangular areas:</strong> Measure the item or area at its widest and longest points.
-              Add 2–4 feet on each side for overlap and tie-downs.
-            </p>
-            <p>
-              <strong className="text-slate-900">For roofing:</strong> Measure the roof width × pitch length. A 20×40 roof needs at least a 25×50 tarp
-              to account for overhang.
-            </p>
-            <p>
-              <strong className="text-slate-900">For irregular shapes:</strong> Use the bounding box (widest × longest). It&apos;s better to size up.
-            </p>
-            <p className="text-orange-700 font-medium">
-              When in doubt, size up — a slightly oversized tarp is always better than one that&apos;s too small.
-              Ask our AI assistant for help sizing your specific project.
-            </p>
+          <div className="flex-1">
+            <p className="text-2xl font-black tracking-tight">{CALCULATOR.title}</p>
+            <p className="text-orange-50/90 mt-1">{CALCULATOR.description}</p>
           </div>
-        </section>
+          <span className="inline-flex items-center gap-2 bg-white text-orange-600 font-black px-5 py-3 rounded-xl text-sm whitespace-nowrap group-hover:gap-3 transition-all w-fit">
+            Size my tarp <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </span>
+        </Link>
 
-        {/* FAQ */}
-        <section id="faq" className="scroll-mt-24">
-          <h2 className="text-xl font-black text-slate-900 mb-4">Common Questions</h2>
-          <div className="space-y-4">
-            {[
-              {
-                q: 'What does "finished size" mean?',
-                a: 'Finished size is the usable area after hemming and grommets. The raw poly cut is slightly larger. All our sizes are finished sizes.',
-              },
-              {
-                q: 'How often are grommets placed?',
-                a: 'Our standard tarps have grommets every 18 inches along the perimeter. This gives you plenty of tie-down points for securing the tarp.',
-              },
-              {
-                q: 'Do you carry custom sizes?',
-                a: 'We stock standard sizes up to 40×60 ft. For custom sizes, submit a bulk quote request and we\'ll check availability with our supplier.',
-              },
-              {
-                q: 'Is fire retardant the same as fireproof?',
-                a: 'No. Fire retardant means the material self-extinguishes when the flame source is removed. It is not fireproof. It meets NFPA 701 for flame resistance.',
-              },
-              {
-                q: 'Can I get net terms?',
-                a: 'Yes, for qualified contractors. Submit a bulk quote and mention net terms in the special requirements. We\'ll set up an account.',
-              },
-            ].map(({ q, a }) => (
-              <div key={q} className="bg-white rounded-xl border border-slate-200 p-5">
-                <p className="font-bold text-slate-900 mb-2">{q}</p>
-                <p className="text-sm text-slate-600">{a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <div className="bg-slate-900 rounded-2xl p-6 text-center text-white">
-          <p className="font-bold mb-2">Still not sure which tarp to get?</p>
-          <p className="text-slate-300 text-sm mb-4">Use our AI chat assistant (bottom right) — describe your project and we&apos;ll recommend the right tarp.</p>
-          <a href="/products"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors inline-block">
-            Browse Products
-          </a>
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-6">Guides</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {ARTICLES.map((a) => (
+            <Link
+              key={a.slug}
+              href={`/resources/${a.slug}`}
+              className="group flex flex-col rounded-2xl ring-1 ring-slate-200 hover:ring-orange-300 hover:shadow-xl p-6 transition-all bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+            >
+              <p className="text-[11px] font-bold text-orange-600 uppercase tracking-wider mb-3">{a.topic}</p>
+              <h3 className="text-lg font-black text-slate-900 leading-snug group-hover:text-orange-700 mb-3">{a.title}</h3>
+              <p className="text-sm text-slate-600 leading-relaxed mb-5 flex-1">{a.excerpt}</p>
+              <span className="flex items-center justify-between text-xs text-slate-500">
+                <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" aria-hidden="true" /> {a.readingMinutes} min read</span>
+                <span className="inline-flex items-center gap-1 font-bold text-slate-700 group-hover:text-orange-600">
+                  Read guide <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </span>
+              </span>
+            </Link>
+          ))}
         </div>
 
+        <div className="mt-14">
+          <NewsletterSignup source="resources" />
+        </div>
       </div>
     </div>
   )
