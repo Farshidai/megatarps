@@ -15,6 +15,14 @@ await db.exec(`
   DO $$ BEGIN CREATE ROLE anon; EXCEPTION WHEN others THEN NULL; END $$;
   DO $$ BEGIN CREATE ROLE authenticated; EXCEPTION WHEN others THEN NULL; END $$;
   DO $$ BEGIN CREATE ROLE service_role; EXCEPTION WHEN others THEN NULL; END $$;
+  -- Supabase Storage stand-ins (used by migration 0003 for the resale-certificates bucket)
+  CREATE SCHEMA IF NOT EXISTS storage;
+  CREATE TABLE IF NOT EXISTS storage.buckets (id text primary key, name text not null, public boolean default false,
+    file_size_limit bigint, allowed_mime_types text[], created_at timestamptz default now());
+  CREATE TABLE IF NOT EXISTS storage.objects (id uuid primary key default gen_random_uuid(), bucket_id text references storage.buckets(id),
+    name text, owner uuid, created_at timestamptz default now());
+  ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+  CREATE OR REPLACE FUNCTION storage.foldername(name text) RETURNS text[] LANGUAGE sql AS 'select (string_to_array(name, ''/''))[1:array_length(string_to_array(name, ''/''), 1) - 1]';
 `)
 const strip = (sql) => sql.replace(/CREATE EXTENSION[^;]*;/gi, '')
 // migrations (if any) run after schema, before seeds
