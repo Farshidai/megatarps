@@ -3,13 +3,27 @@ import type { Product } from '@/types'
 import type { PricingRule } from '@/lib/pricing'
 import { isDemoMode, demoProducts, demoPricingRules } from '@/lib/demo'
 
+// Public (anon/authenticated) roles may only read these columns — cost and market
+// data are revoked at the database level (supabase/migrations/0099_column_privileges.sql).
+// Keep this list in sync with that migration when adding public product columns.
+export const PUBLIC_PRODUCT_COLUMNS = [
+  'id', 'xpose_sku', 'mega_sku', 'name', 'slug', 'product_line_id', 'categories', 'tarp_type',
+  'thickness_mil', 'width_ft', 'length_ft', 'coverage_sqft', 'color', 'color_hex',
+  'retail_price_cents', 'units_per_half_pallet', 'units_per_full_pallet', 'units_per_case',
+  'pack_quantity', 'accessory_type', 'size_label', 'material', 'image_urls', 'active',
+  'in_stock', 'created_at', 'updated_at',
+].join(', ')
+const PRODUCT_SELECT = `${PUBLIC_PRODUCT_COLUMNS}, product_line:product_lines(*)`
+export const PUBLIC_RULE_COLUMNS =
+  'id, tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent, priority, active'
+
 /** Active volume pricing rules (tier table source). */
 export async function getPricingRules(): Promise<PricingRule[]> {
   if (isDemoMode()) return demoPricingRules
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('pricing_rules')
-    .select('*')
+    .select(PUBLIC_RULE_COLUMNS)
     .eq('active', true)
     .order('min_quantity', { ascending: true })
   if (error) {
@@ -40,7 +54,7 @@ export async function getProducts(filters?: {
 
   let query = supabase
     .from('products')
-    .select('*, product_line:product_lines(*)')
+    .select(PRODUCT_SELECT)
     .eq('active', filters?.active ?? true)
     .order('width_ft', { ascending: true })
     .order('length_ft', { ascending: true })
@@ -68,7 +82,7 @@ export async function getProducts(filters?: {
     return []
   }
 
-  return (data as Product[]) ?? []
+  return (data as unknown as Product[]) ?? []
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -77,13 +91,13 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
   const { data, error } = await supabase
     .from('products')
-    .select('*, product_line:product_lines(*)')
+    .select(PRODUCT_SELECT)
     .eq('slug', slug)
     .eq('active', true)
     .single()
 
   if (error || !data) return null
-  return data as Product
+  return data as unknown as Product
 }
 
 export async function getProductBySku(sku: string): Promise<Product | null> {
@@ -92,12 +106,12 @@ export async function getProductBySku(sku: string): Promise<Product | null> {
 
   const { data, error } = await supabase
     .from('products')
-    .select('*, product_line:product_lines(*)')
+    .select(PRODUCT_SELECT)
     .eq('xpose_sku', sku)
     .single()
 
   if (error || !data) return null
-  return data as Product
+  return data as unknown as Product
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
@@ -109,14 +123,14 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
 
   const { data } = await supabase
     .from('products')
-    .select('*, product_line:product_lines(*)')
+    .select(PRODUCT_SELECT)
     .eq('active', true)
     .eq('in_stock', true)
     .in('product_line_id', ['16mil-super', '10mil-heavy'])
     .order('coverage_sqft', { ascending: false })
     .limit(limit)
 
-  return (data as Product[]) ?? []
+  return (data as unknown as Product[]) ?? []
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
@@ -127,13 +141,13 @@ export async function getRelatedProducts(product: Product, limit = 4): Promise<P
 
   const { data } = await supabase
     .from('products')
-    .select('*, product_line:product_lines(*)')
+    .select(PRODUCT_SELECT)
     .eq('active', true)
     .eq('product_line_id', product.product_line_id)
     .neq('id', product.id)
     .limit(limit)
 
-  return (data as Product[]) ?? []
+  return (data as unknown as Product[]) ?? []
 }
 
 // For AI agent — returns lightweight product data

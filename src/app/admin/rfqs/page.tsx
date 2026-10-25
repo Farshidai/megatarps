@@ -12,7 +12,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = { title: 'Quotes & RFQs' }
 export const dynamic = 'force-dynamic'
 
-const SLA_HOURS = 4
+const SLA_HOURS = 24
 
 export default async function AdminRFQsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   await requireAdmin()
@@ -37,7 +37,7 @@ export default async function AdminRFQsPage({ searchParams }: { searchParams: Pr
         </div>
         {overdue > 0 && (
           <Link href="/admin/rfqs?status=pending" className="inline-flex items-center gap-2 text-sm font-semibold text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-            <AlertTriangle className="w-4 h-4" aria-hidden /> {overdue} request{overdue > 1 ? 's' : ''} past the {SLA_HOURS}-hour promise
+            <AlertTriangle className="w-4 h-4" aria-hidden /> {overdue} request{overdue > 1 ? 's' : ''} waiting over {SLA_HOURS} hours
           </Link>
         )}
       </div>

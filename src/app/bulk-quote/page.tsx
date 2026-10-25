@@ -27,7 +27,7 @@ export default async function BulkQuotePage() {
 
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           {[
-            { icon: Clock, title: '4-hour turnaround', desc: 'Business hours, Mon–Fri' },
+            { icon: Clock, title: 'Fast quote turnaround', desc: 'We aim to reply within one business day' },
             { icon: Truck, title: 'LTL freight quoted', desc: 'Dock, liftgate or jobsite delivery' },
             { icon: BadgeDollarSign, title: 'Accept & pay online', desc: 'Card, or Net terms for approved accounts' },
           ].map(({ icon: Icon, title, desc }) => (

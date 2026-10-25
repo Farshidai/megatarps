@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-25T18:43:38.463Z",
+ "generated_at": "2026-10-25T18:46:10.933Z",
  "product_lines": [
   {
    "id": "10mil-heavy",
@@ -203,7 +203,7 @@
    "fire_retardant": true,
    "reinforced_corners": true,
    "sewn_in_rope": false,
-   "description": "NFPA 701 rated fire retardant. Self-extinguishing when flame removed. Required for welding areas, electrical work, and OSHA-regulated job sites."
+   "description": "Fire-retardant poly for welding areas, electrical work and other jobs that call for flame-resistant coverings. Ask us for the supplier's fire-test certification for your job file."
   },
   {
    "id": "mesh",
@@ -225,7 +225,7 @@
  ],
  "products": [
   {
-   "id": "453147c0-6ac2-497a-8103-b93740c39f36",
+   "id": "696b8964-8c65-4856-a72d-68cc6671c7ed",
    "xpose_sku": "NCT-15",
    "mega_sku": null,
    "name": "Nylon Cable Ties 15\" 100-Pack",
@@ -249,8 +249,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "cable-tie",
@@ -258,7 +258,7 @@
    "material": "Nylon"
   },
   {
-   "id": "37eac592-001f-4364-82cd-917719ba68d8",
+   "id": "9c6a760e-4b2b-446e-8018-65f86c9f309f",
    "xpose_sku": "RTD330-DJH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 3\"x30ft Double J-Hook",
@@ -283,8 +283,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -292,7 +292,7 @@
    "material": "Polyester"
   },
   {
-   "id": "d1e8a944-f41e-47ac-a00b-b71ca7ef6771",
+   "id": "eeeea7a9-f1b8-431e-a849-e28915180326",
    "xpose_sku": "RTD227-FH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 2\"x27ft Flat Hook",
@@ -317,8 +317,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -326,7 +326,7 @@
    "material": "Polyester"
   },
   {
-   "id": "337d5a0a-5cac-4bb9-9048-641dec05f70d",
+   "id": "00db4ca5-6882-4f30-ae70-0aa4473e94b6",
    "xpose_sku": "RTD227-DJH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 2\"x27ft Double J-Hook",
@@ -351,8 +351,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -360,7 +360,7 @@
    "material": "Polyester"
   },
   {
-   "id": "6b626024-5bbf-45c4-9f45-d003b64ad7d2",
+   "id": "18dcadf7-68f9-433c-8e8f-d0d0b6d8bb0c",
    "xpose_sku": "RTD227-CG-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 2\"x27ft Chain Grab Hook",
@@ -385,8 +385,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -394,7 +394,7 @@
    "material": "Polyester"
   },
   {
-   "id": "c420234d-0076-4c8f-b4b1-1371441a9165",
+   "id": "8ed5f083-8b3a-48ca-beb4-f76698da8964",
    "xpose_sku": "RTD215-FH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 2\"x15ft Flat Hook",
@@ -419,8 +419,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -428,7 +428,7 @@
    "material": "Polyester"
   },
   {
-   "id": "de2e222a-b596-4d77-aa6d-54be93529195",
+   "id": "52861772-e944-4364-8692-18f296e7e649",
    "xpose_sku": "RTD215-DJH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 2\"x15ft Double J-Hook",
@@ -453,8 +453,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -462,7 +462,7 @@
    "material": "Polyester"
   },
   {
-   "id": "398cd291-a9fd-4509-a237-1400244f878d",
+   "id": "a31429d8-a9d6-4556-bb62-87b21143cca8",
    "xpose_sku": "RTD115-DJH-4-X",
    "mega_sku": null,
    "name": "Ratchet Strap 1\"x15ft Double J-Hook",
@@ -487,8 +487,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -496,7 +496,7 @@
    "material": "Polyester"
   },
   {
-   "id": "d58e427c-4ea1-4697-b6af-63a359ae14cd",
+   "id": "ba277b38-7c86-489e-8f28-89f236bf5350",
    "xpose_sku": "TC-25",
    "mega_sku": null,
    "name": "Tarp Grabber Clips 25-Pack",
@@ -520,8 +520,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "clip",
@@ -529,7 +529,7 @@
    "material": "High-Impact Nylon"
   },
   {
-   "id": "748b9568-40b8-4b4d-aef3-0024d4535270",
+   "id": "790d1f53-caa9-4ba4-9afe-2dc2979171b2",
    "xpose_sku": "TC-10",
    "mega_sku": null,
    "name": "Tarp Grabber Clips 10-Pack",
@@ -553,8 +553,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "clip",
@@ -562,7 +562,7 @@
    "material": "High-Impact Nylon"
   },
   {
-   "id": "3bc9aa4e-acfb-4480-9ef3-6d3e26e84583",
+   "id": "7763c6ec-4ec6-4c18-b197-26d86efb6326",
    "xpose_sku": "NCT-8",
    "mega_sku": null,
    "name": "Nylon Cable Ties 8\" 100-Pack",
@@ -586,8 +586,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "cable-tie",
@@ -595,7 +595,7 @@
    "material": "Nylon"
   },
   {
-   "id": "2071ab1a-ed1a-484f-a82b-f2f22437e804",
+   "id": "f4dbe6e9-a994-47b2-afb0-c6da8ddfe071",
    "xpose_sku": "BB-9B-100",
    "mega_sku": null,
    "name": "Ball Bungee 9\" Black 100-Pack",
@@ -619,8 +619,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "bungee",
@@ -628,7 +628,7 @@
    "material": "Elastic"
   },
   {
-   "id": "43b589cc-ce1f-4d0a-b188-a03499e62ac6",
+   "id": "ff0e2feb-ee83-440f-9b7f-87b235f83a78",
    "xpose_sku": "NCT-11",
    "mega_sku": null,
    "name": "Nylon Cable Ties 11\" 100-Pack",
@@ -652,8 +652,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "cable-tie",
@@ -661,7 +661,7 @@
    "material": "Nylon"
   },
   {
-   "id": "22281e17-f41c-4ab2-8503-37480d878e82",
+   "id": "6cc5c31b-3236-49f4-b6a7-d543b4f9d590",
    "xpose_sku": "BB-9B-25",
    "mega_sku": null,
    "name": "Ball Bungee 9\" Black 25-Pack",
@@ -685,8 +685,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "bungee",
@@ -694,7 +694,7 @@
    "material": "Elastic"
   },
   {
-   "id": "b7450196-6a72-477b-a1f5-0eb0d6502bea",
+   "id": "6000724c-d106-4498-a7f7-3b9c6469a231",
    "xpose_sku": "BB-11B-10",
    "mega_sku": null,
    "name": "Ball Bungees 11\" - Black",
@@ -719,8 +719,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "bungee",
@@ -728,7 +728,7 @@
    "material": "Elastic"
   },
   {
-   "id": "1fa400b9-5416-4cbb-9144-694ec5b0a0ad",
+   "id": "13782d95-8284-4fe3-bb49-2e0cdfd6fd5f",
    "xpose_sku": "BB-11B-100",
    "mega_sku": null,
    "name": "Ball Bungee 11\" Black 100-Pack",
@@ -752,8 +752,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "bungee",
@@ -761,7 +761,7 @@
    "material": "Elastic"
   },
   {
-   "id": "12958d35-7c40-4608-9aff-c9756691052d",
+   "id": "512007fa-07f1-4db2-be28-d041034a1f70",
    "xpose_sku": "BB-11B-25",
    "mega_sku": null,
    "name": "Ball Bungee 11\" Black 25-Pack",
@@ -785,8 +785,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "bungee",
@@ -794,7 +794,7 @@
    "material": "Elastic"
   },
   {
-   "id": "2d726c5e-a999-4870-81bd-4e3a1b05c654",
+   "id": "e999853e-4ea3-44b5-a9d4-0b478e490e58",
    "xpose_sku": "BB-6B-10",
    "mega_sku": null,
    "name": "Ball Bungee 6\" Black 10-Pack",
@@ -818,8 +818,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "bungee",
@@ -827,7 +827,7 @@
    "material": "Elastic"
   },
   {
-   "id": "1c23c3eb-a862-4753-a80e-2fae06ee2828",
+   "id": "3d248ff9-bec1-4d59-9ce8-f32f36074503",
    "xpose_sku": "BB-6B-100",
    "mega_sku": null,
    "name": "Ball Bungee 6\" Black 100-Pack",
@@ -851,8 +851,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 100,
    "accessory_type": "bungee",
@@ -860,7 +860,7 @@
    "material": "Elastic"
   },
   {
-   "id": "482da365-e6cb-4bd8-8489-41fe6022ab1e",
+   "id": "a0243be5-0b9f-4d87-9911-9306e7473544",
    "xpose_sku": "BB-6B-25",
    "mega_sku": null,
    "name": "Ball Bungee 6\" Black 25-Pack",
@@ -884,8 +884,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "bungee",
@@ -893,7 +893,7 @@
    "material": "Elastic"
   },
   {
-   "id": "6a726f6e-c3f1-41f5-99a3-f201c8c21611",
+   "id": "ee41222c-5662-4f51-9655-d029ff40768d",
    "xpose_sku": "BB-9B-10",
    "mega_sku": null,
    "name": "Ball Bungees 9\" - Black",
@@ -918,8 +918,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "bungee",
@@ -927,7 +927,7 @@
    "material": "Elastic"
   },
   {
-   "id": "713b3dc4-1007-457a-8188-9fda53ddf323",
+   "id": "3c286576-aa91-466c-bb91-32310ab77f67",
    "xpose_sku": "TS-9-50",
    "mega_sku": null,
    "name": "Rubber Tie Down 9\" 50-Pack",
@@ -951,8 +951,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 50,
    "accessory_type": "tie-down",
@@ -960,7 +960,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "3b305313-443c-40c5-ac5f-d8e146395667",
+   "id": "f35b990b-3986-4a45-ae23-bc308fc41f40",
    "xpose_sku": "TS-9-25",
    "mega_sku": null,
    "name": "Rubber Tie Down 9\" 25-Pack",
@@ -984,8 +984,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "tie-down",
@@ -993,7 +993,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "344e7b72-0623-4416-9de8-7f0461191b0c",
+   "id": "c3475393-91f9-446c-9a92-a468845b896a",
    "xpose_sku": "TS-9-10",
    "mega_sku": null,
    "name": "Rubber Tie Down 9\" 10-Pack",
@@ -1017,8 +1017,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "tie-down",
@@ -1026,7 +1026,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "bd90ee66-289c-4813-828b-ea0a3d653c33",
+   "id": "9c122e76-b70d-4a49-8743-1021b867366d",
    "xpose_sku": "TS-41-50",
    "mega_sku": null,
    "name": "Rubber Tie Down 41\" 50-Pack",
@@ -1050,8 +1050,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 50,
    "accessory_type": "tie-down",
@@ -1059,7 +1059,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "62a6d285-fc3b-4452-960b-60ccebb4e873",
+   "id": "d78c3159-0193-4e62-b338-306831de21a8",
    "xpose_sku": "TS-41-25",
    "mega_sku": null,
    "name": "Rubber Tie Down 41\" 25-Pack",
@@ -1083,8 +1083,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "tie-down",
@@ -1092,7 +1092,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "846280b2-d6c2-464b-b417-8c8e03f39524",
+   "id": "8e6dd3eb-b6fa-46a8-9b56-d2b405524236",
    "xpose_sku": "TS-41-10",
    "mega_sku": null,
    "name": "Rubber Tie Down 41\" 10-Pack",
@@ -1116,8 +1116,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "tie-down",
@@ -1125,7 +1125,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "8086f838-6002-4f7a-88d0-acd84f1af290",
+   "id": "19a5f313-1ef4-4800-ac82-ef97ed9e16e3",
    "xpose_sku": "TS-31-50",
    "mega_sku": null,
    "name": "Rubber Tie Down 31\" 50-Pack",
@@ -1149,8 +1149,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 50,
    "accessory_type": "tie-down",
@@ -1158,7 +1158,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "d67c5cb3-195b-485a-84f7-438941790c77",
+   "id": "d564aad0-012c-41dc-8a93-5fe3403f1b72",
    "xpose_sku": "TS-31-25",
    "mega_sku": null,
    "name": "Rubber Tie Down 31\" 25-Pack",
@@ -1182,8 +1182,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "tie-down",
@@ -1191,7 +1191,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "83914019-2c8b-4d6a-b54d-892bc3122155",
+   "id": "f6229397-847a-4a02-a234-74f3967a1d83",
    "xpose_sku": "TS-31-10",
    "mega_sku": null,
    "name": "Rubber Tie Down 31\" 10-Pack",
@@ -1215,8 +1215,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "tie-down",
@@ -1224,7 +1224,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "8162acc9-991a-4f5e-8821-30f18020cd95",
+   "id": "e50dc442-b3cb-4156-8d8e-b2ec53ca1152",
    "xpose_sku": "TS-21-50",
    "mega_sku": null,
    "name": "Rubber Tie Down 21\" 50-Pack",
@@ -1248,8 +1248,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 50,
    "accessory_type": "tie-down",
@@ -1257,7 +1257,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "9a6f772f-16e4-44bc-9d28-300e361c6093",
+   "id": "463a7355-6723-4578-a780-5d100053dae9",
    "xpose_sku": "TS-21-25",
    "mega_sku": null,
    "name": "Rubber Tie Down 21\" 25-Pack",
@@ -1281,8 +1281,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "tie-down",
@@ -1290,7 +1290,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "450da429-da98-430e-8261-961814726429",
+   "id": "a75ef859-3973-4a95-bb1d-876c3548144d",
    "xpose_sku": "TS-21-10",
    "mega_sku": null,
    "name": "Rubber Tie Down 21\" 10-Pack",
@@ -1314,8 +1314,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "tie-down",
@@ -1323,7 +1323,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "5593daae-f2d0-4946-8cc8-90eeebf052ad",
+   "id": "d7b656ba-7a67-436d-b2fd-a11cc726f2f8",
    "xpose_sku": "TS-15-50",
    "mega_sku": null,
    "name": "Rubber Tie Down 15\" 50-Pack",
@@ -1347,8 +1347,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 50,
    "accessory_type": "tie-down",
@@ -1356,7 +1356,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "10237e4d-2c45-43cc-9ee3-e870364c188c",
+   "id": "6184d3c6-e0b7-4497-8d0f-98461a0108eb",
    "xpose_sku": "TS-15-25",
    "mega_sku": null,
    "name": "Rubber Tie Down 15\" 25-Pack",
@@ -1380,8 +1380,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 25,
    "accessory_type": "tie-down",
@@ -1389,7 +1389,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "b922714f-1b65-4a2b-bf84-85b928a9994a",
+   "id": "d60bd2a9-f583-4b88-a822-8c64676f6dde",
    "xpose_sku": "TS-15-10",
    "mega_sku": null,
    "name": "Rubber Tie Down 15\" 10-Pack",
@@ -1413,8 +1413,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 10,
    "accessory_type": "tie-down",
@@ -1422,7 +1422,7 @@
    "material": "Natural Rubber"
   },
   {
-   "id": "520516fc-23b5-4960-93d6-bb751bdae551",
+   "id": "1adfe16c-e2a5-453e-aa7c-3eddcd2597e3",
    "xpose_sku": "RTD430-FH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 4\"x30ft Flat Hook",
@@ -1447,8 +1447,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -1456,7 +1456,7 @@
    "material": "Polyester"
   },
   {
-   "id": "e197c760-c0ff-4748-a9db-91489fd8a7df",
+   "id": "2f437e06-a79a-42b2-a160-65f5cc6d83f2",
    "xpose_sku": "RTD430-DJH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 4\"x30ft Double J-Hook",
@@ -1481,8 +1481,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -1490,7 +1490,7 @@
    "material": "Polyester"
   },
   {
-   "id": "97ccdf2d-a4f9-4a7d-b5d9-b090e27d5683",
+   "id": "8a130f4e-c4b7-42b5-b84e-9f9311a3f2fe",
    "xpose_sku": "RTD330-FH-1-X",
    "mega_sku": null,
    "name": "Ratchet Strap 3\"x30ft Flat Hook",
@@ -1515,8 +1515,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": 1,
    "accessory_type": "ratchet-strap",
@@ -1524,7 +1524,7 @@
    "material": "Polyester"
   },
   {
-   "id": "85580199-ea8a-42ad-96f6-b46ee71b665f",
+   "id": "acb19a49-2538-4453-90a8-e60fb3e7f74b",
    "xpose_sku": "BMT-410",
    "mega_sku": null,
    "name": "4' x 10' Mesh Tarp - Black (60% Shade)",
@@ -1547,8 +1547,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1556,7 +1556,7 @@
    "material": null
   },
   {
-   "id": "dcd54652-3ea9-48cd-b056-62beb02186ed",
+   "id": "13f62836-f9f3-4d86-b542-03988f844ff1",
    "xpose_sku": "BMT-415",
    "mega_sku": null,
    "name": "4' x 15' Mesh Tarp - Black (60% Shade)",
@@ -1579,8 +1579,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1588,7 +1588,7 @@
    "material": null
   },
   {
-   "id": "a30a0377-6f7c-4e6d-bca3-e08f79ad18d4",
+   "id": "ecbe8fcc-0af3-4901-a34f-1f3262d7a61c",
    "xpose_sku": "UHD-420-X",
    "mega_sku": null,
    "name": "4' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -1611,8 +1611,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1620,7 +1620,7 @@
    "material": null
   },
   {
-   "id": "85f8d2af-b42c-4dce-8306-b8d917a8a8cb",
+   "id": "ec826182-5e15-4ba0-9abe-d0a2ee90b157",
    "xpose_sku": "BHD-420",
    "mega_sku": null,
    "name": "4' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -1643,8 +1643,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1652,7 +1652,7 @@
    "material": null
   },
   {
-   "id": "a682ef3a-5703-4008-b40f-b922fbcf2298",
+   "id": "3728b2cd-b0ec-4161-b04e-63d69984d94d",
    "xpose_sku": "CTOD10-57",
    "mega_sku": null,
    "name": "5' x 7' Canvas Tarp - 10 oz (Olive Drab)",
@@ -1675,8 +1675,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1684,7 +1684,7 @@
    "material": null
   },
   {
-   "id": "69d69848-4c6e-4db5-8c9c-ac6d5eac81ec",
+   "id": "93ae5104-f4c1-4c84-b9e7-a178fe21f4c9",
    "xpose_sku": "UHD-57-X",
    "mega_sku": null,
    "name": "5' x 7' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -1707,8 +1707,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1716,7 +1716,7 @@
    "material": null
   },
   {
-   "id": "b2b6010d-0959-4563-9a79-c1d6493e451e",
+   "id": "75635bae-0d1a-4f89-b6f5-28fb077cdc23",
    "xpose_sku": "BHD-57",
    "mega_sku": null,
    "name": "5' x 7' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -1739,8 +1739,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1748,7 +1748,7 @@
    "material": null
   },
   {
-   "id": "90a13e1d-3ac0-4746-aa72-5e6267ca2e01",
+   "id": "f7feb9a6-2d6b-4ef1-95ee-249e141e063b",
    "xpose_sku": "STH-57",
    "mega_sku": null,
    "name": "5' x 7' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -1771,8 +1771,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1780,7 +1780,7 @@
    "material": null
   },
   {
-   "id": "9a9184de-e656-4d2d-ac5c-8fa87d34c1ee",
+   "id": "cead9f23-4d4a-428b-b763-dc0ec1abb236",
    "xpose_sku": "BT-57",
    "mega_sku": null,
    "name": "5' x 7' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -1803,8 +1803,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1812,7 +1812,7 @@
    "material": null
   },
   {
-   "id": "c32e5126-7049-4968-badc-2eb267974904",
+   "id": "30cca8e4-b4bc-40c4-8157-c548ee7cfa8a",
    "xpose_sku": "CVTFR-58",
    "mega_sku": null,
    "name": "5' x 8' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -1836,8 +1836,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1845,7 +1845,7 @@
    "material": null
   },
   {
-   "id": "9f0321b9-28d1-437d-9e40-e18b8ee2eda8",
+   "id": "ffd1b301-dba6-4fce-aa02-62ce0559655c",
    "xpose_sku": "BHD-68",
    "mega_sku": null,
    "name": "6' x 8' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -1868,8 +1868,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1877,7 +1877,7 @@
    "material": null
   },
   {
-   "id": "743e5b47-0503-42ad-80e1-1b3e23a713e9",
+   "id": "05b135d2-dcd8-4710-bd68-94d2baebbf94",
    "xpose_sku": "BMT-68",
    "mega_sku": null,
    "name": "6' x 8' Mesh Tarp - Black (60% Shade)",
@@ -1900,8 +1900,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1909,7 +1909,7 @@
    "material": null
   },
   {
-   "id": "c52ab0f0-6649-4d52-a7db-456950d7699b",
+   "id": "39f5dad2-f228-47ac-b6e8-7fef60c28885",
    "xpose_sku": "STH-68",
    "mega_sku": null,
    "name": "6' x 8' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -1932,8 +1932,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1941,7 +1941,7 @@
    "material": null
   },
   {
-   "id": "8c9f40a5-ab41-4a83-ac7a-2c5d8fdbb899",
+   "id": "5da411b6-5d28-4fae-a60d-2532397fc7e8",
    "xpose_sku": "CVTFR-68",
    "mega_sku": null,
    "name": "6' x 8' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -1965,8 +1965,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -1974,7 +1974,7 @@
    "material": null
   },
   {
-   "id": "08f6a050-2b5f-40c2-8ba9-95f3cc9afa5a",
+   "id": "52cd5056-0392-4d3d-b47a-582ddb6a981f",
    "xpose_sku": "CTOD10-68",
    "mega_sku": null,
    "name": "6' x 8' Canvas Tarp - 10 oz (Olive Drab)",
@@ -1997,8 +1997,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2006,7 +2006,7 @@
    "material": null
   },
   {
-   "id": "3a732171-5e58-4650-82c1-181f40109970",
+   "id": "2a9fd7f0-c854-4494-96f4-cec0b64fe31b",
    "xpose_sku": "BT-68",
    "mega_sku": null,
    "name": "6' x 8' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2029,8 +2029,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2038,7 +2038,7 @@
    "material": null
   },
   {
-   "id": "022a7009-6930-4f89-83d6-2ff772146beb",
+   "id": "22562ec2-732f-4816-a2e9-fb341490d879",
    "xpose_sku": "UHD-68-X",
    "mega_sku": null,
    "name": "6' x 8' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -2061,8 +2061,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2070,7 +2070,7 @@
    "material": null
   },
   {
-   "id": "1eb85a41-ad43-4bc8-a8d0-40dfc6461540",
+   "id": "7e4cce9c-8031-4de6-a2af-4d28b2386855",
    "xpose_sku": "CVTFR-610",
    "mega_sku": null,
    "name": "6' x 10' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -2094,8 +2094,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2103,7 +2103,7 @@
    "material": null
   },
   {
-   "id": "5ea93380-8c9a-4ebe-9e99-9bda12f2d9cb",
+   "id": "4cbaad07-7674-4338-8469-aa8d4461356f",
    "xpose_sku": "BHD-620",
    "mega_sku": null,
    "name": "6' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -2126,8 +2126,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2135,7 +2135,7 @@
    "material": null
   },
   {
-   "id": "f2810249-6fea-463f-ae8c-f39ff6db4a9f",
+   "id": "a1d95a7a-6f9c-4f23-8dfa-b65b22326ffe",
    "xpose_sku": "UHD-620-X",
    "mega_sku": null,
    "name": "6' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -2158,8 +2158,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2167,7 +2167,7 @@
    "material": null
   },
   {
-   "id": "27ac52aa-503e-4b38-97c1-42338fe88557",
+   "id": "898a1ff2-dbfe-41b0-95bf-203e148a8f72",
    "xpose_sku": "CTOD10-79",
    "mega_sku": null,
    "name": "7' x 9' Canvas Tarp - 10 oz (Olive Drab)",
@@ -2190,8 +2190,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2199,7 +2199,7 @@
    "material": null
   },
   {
-   "id": "efdb169f-69ab-4ed4-a5f3-a400f21decb4",
+   "id": "b10a0c0c-b1b4-4e90-b3db-b695bfa5aaad",
    "xpose_sku": "UHD-810-X",
    "mega_sku": null,
    "name": "8' x 10' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -2222,8 +2222,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2231,7 +2231,7 @@
    "material": null
   },
   {
-   "id": "100cc2b2-bf24-416a-b56d-1bb4a5f169ee",
+   "id": "cc7de09f-8980-4c06-ab60-daf270f37d85",
    "xpose_sku": "STH-810",
    "mega_sku": null,
    "name": "8' x 10' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -2255,8 +2255,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2264,7 +2264,7 @@
    "material": null
   },
   {
-   "id": "21b3d5a5-7a50-4a78-a133-5bef9f9cb206",
+   "id": "c2dc08ae-9d73-4943-99f8-2d5554a6ffe8",
    "xpose_sku": "CTOD10-810",
    "mega_sku": null,
    "name": "8' x 10' Canvas Tarp - 10 oz (Olive Drab)",
@@ -2288,8 +2288,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2297,7 +2297,7 @@
    "material": null
   },
   {
-   "id": "392c1faf-aaa7-446a-8e87-9d1bff9637ea",
+   "id": "0b2ea14e-d72c-4446-b2e4-c05038188905",
    "xpose_sku": "BHD-810",
    "mega_sku": null,
    "name": "8' x 10' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -2320,8 +2320,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2329,7 +2329,7 @@
    "material": null
   },
   {
-   "id": "393a3b3b-4f63-41b0-8513-c31a875042f6",
+   "id": "2d75f989-3bd8-4699-9382-200df94849d8",
    "xpose_sku": "BMT-810",
    "mega_sku": null,
    "name": "8' x 10' Mesh Tarp - Black (60% Shade)",
@@ -2353,8 +2353,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2362,7 +2362,7 @@
    "material": null
   },
   {
-   "id": "aaad1f99-6ef6-4c98-a581-51accf2455e4",
+   "id": "ae212a0f-e316-4e52-817c-4bf73829a5c2",
    "xpose_sku": "BT-810",
    "mega_sku": null,
    "name": "8' x 10' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2385,8 +2385,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2394,7 +2394,7 @@
    "material": null
   },
   {
-   "id": "4a5217ab-73d2-4516-a498-c9f4a5dc58c2",
+   "id": "1ff0bd79-cd00-4363-9e2d-8015d1a68a43",
    "xpose_sku": "CVTFR-810",
    "mega_sku": null,
    "name": "8' x 10' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -2418,8 +2418,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2427,7 +2427,7 @@
    "material": null
   },
   {
-   "id": "6ff241e7-062b-40f6-a307-48411076f87e",
+   "id": "050f7db8-85c4-4a87-9580-0438a53321a4",
    "xpose_sku": "BT-812",
    "mega_sku": null,
    "name": "8' x 12' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2450,8 +2450,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2459,7 +2459,7 @@
    "material": null
   },
   {
-   "id": "7c1ca074-cc5b-4eb0-a39e-4fa35d5947bf",
+   "id": "c51d9238-2c97-4b32-aae0-723e45f27fbc",
    "xpose_sku": "CTOD10-812",
    "mega_sku": null,
    "name": "8' x 12' Canvas Tarp - 10 oz (Olive Drab)",
@@ -2483,8 +2483,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2492,7 +2492,7 @@
    "material": null
   },
   {
-   "id": "07c98a4b-eb96-4557-a1aa-e2e4bbf28e2f",
+   "id": "7090bb03-063f-4e29-bea6-a55c101108e8",
    "xpose_sku": "CVTFR-812",
    "mega_sku": null,
    "name": "8' x 12' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -2516,8 +2516,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2525,7 +2525,7 @@
    "material": null
   },
   {
-   "id": "d4716d74-6b81-4da6-b33d-33cb5ce2b739",
+   "id": "23a4318a-034c-4b7e-81ae-ec6063c618d0",
    "xpose_sku": "CVTFR-815",
    "mega_sku": null,
    "name": "8' x 15' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -2549,8 +2549,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2558,7 +2558,7 @@
    "material": null
   },
   {
-   "id": "3a452912-c3ed-41d2-b333-f7f004151924",
+   "id": "aad79f9f-ef95-44bf-92db-6c4f6f6b4ffa",
    "xpose_sku": "BT-815",
    "mega_sku": null,
    "name": "8' x 15' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2581,8 +2581,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2590,7 +2590,7 @@
    "material": null
   },
   {
-   "id": "04ba6572-b7b7-4d42-9b5e-6a5ae35f6dc7",
+   "id": "24284d7c-2905-4208-a373-409abaac9c57",
    "xpose_sku": "BMT-816",
    "mega_sku": null,
    "name": "8' x 16' Mesh Tarp - Black (60% Shade)",
@@ -2613,8 +2613,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2622,7 +2622,7 @@
    "material": null
   },
   {
-   "id": "66266f6d-9be9-48b6-a16b-d8eb703e8df6",
+   "id": "c69c9539-6348-4c8d-9bff-0cdb71c53d74",
    "xpose_sku": "CTOD10-816",
    "mega_sku": null,
    "name": "8' x 16' Canvas Tarp - 10 oz (Olive Drab)",
@@ -2645,8 +2645,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2654,7 +2654,7 @@
    "material": null
   },
   {
-   "id": "18cc7fd9-0a27-4c19-b2ba-d6148485bfc1",
+   "id": "a8068a67-1f93-4d00-ba94-23b07c7b4bb8",
    "xpose_sku": "STH-912",
    "mega_sku": null,
    "name": "9' x 12' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -2678,8 +2678,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2687,7 +2687,7 @@
    "material": null
   },
   {
-   "id": "2b5c10d8-80e5-4f6e-bd82-7c5bbd445fbc",
+   "id": "66e87895-daab-48ed-af9c-539c672ff298",
    "xpose_sku": "BT-912",
    "mega_sku": null,
    "name": "9' x 12' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2710,8 +2710,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2719,7 +2719,7 @@
    "material": null
   },
   {
-   "id": "8f35e62f-61f6-491c-a5db-160e1e9a594f",
+   "id": "923cb6b7-d5c2-4703-8590-283faaf6edad",
    "xpose_sku": "UHD-1010-X",
    "mega_sku": null,
    "name": "10' x 10' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -2742,8 +2742,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2751,7 +2751,7 @@
    "material": null
   },
   {
-   "id": "4d2f239e-58aa-4484-9cee-99b3fab3d885",
+   "id": "0614b3c6-7150-4870-854e-0cab995860ff",
    "xpose_sku": "BT-1010",
    "mega_sku": null,
    "name": "10' x 10' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2774,8 +2774,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2783,7 +2783,7 @@
    "material": null
   },
   {
-   "id": "46c1a1b6-7015-4dc5-8b82-6cbc31b6c3e5",
+   "id": "1bc08b1a-6688-43c7-b04c-32a56484cd75",
    "xpose_sku": "CVTFR-1010",
    "mega_sku": null,
    "name": "10' x 10' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -2807,8 +2807,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2816,7 +2816,7 @@
    "material": null
   },
   {
-   "id": "4c550d94-d540-4b9b-a951-83fa4d893541",
+   "id": "7273c473-9410-4566-838e-e3cfb6074edf",
    "xpose_sku": "STH-1010",
    "mega_sku": null,
    "name": "10' x 10' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -2839,8 +2839,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2848,7 +2848,7 @@
    "material": null
   },
   {
-   "id": "dee22057-309a-4c03-bd9b-f0c65a7a2e47",
+   "id": "b7257933-ad22-48a2-a851-f557d2f7a0ed",
    "xpose_sku": "BHD-1010",
    "mega_sku": null,
    "name": "10' x 10' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -2871,8 +2871,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2880,7 +2880,7 @@
    "material": null
   },
   {
-   "id": "0b26663e-3a74-491a-b78b-0b163401bb85",
+   "id": "4acb712f-39b0-44d1-a771-b2e17b2f8ba5",
    "xpose_sku": "CTOD10-1010",
    "mega_sku": null,
    "name": "10' x 10' Canvas Tarp - 10 oz (Olive Drab)",
@@ -2903,8 +2903,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2912,7 +2912,7 @@
    "material": null
   },
   {
-   "id": "edd181c8-14ff-4c0d-8c62-092e70548b26",
+   "id": "264dc5fa-dc4a-48d4-b139-0f970e5632ac",
    "xpose_sku": "BHD-1012",
    "mega_sku": null,
    "name": "10' x 12' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -2935,8 +2935,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2944,7 +2944,7 @@
    "material": null
   },
   {
-   "id": "283efcc2-d2ab-47c3-90ec-5df9e4338765",
+   "id": "fc3ce069-1608-410a-94df-dfd6fc015a0b",
    "xpose_sku": "UHD-1012-X",
    "mega_sku": null,
    "name": "10' x 12' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -2967,8 +2967,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -2976,7 +2976,7 @@
    "material": null
   },
   {
-   "id": "ba3568a7-603e-40d2-9ddb-3f5d39d4ea6e",
+   "id": "ecd272fb-3cd5-483c-a220-6b24d335cab7",
    "xpose_sku": "BT-1012",
    "mega_sku": null,
    "name": "10' x 12' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -2999,8 +2999,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3008,7 +3008,7 @@
    "material": null
   },
   {
-   "id": "e38a5a3d-ef07-44c3-9e73-6ef2d4d05a54",
+   "id": "e49ba078-3250-49e2-a56c-5800fbbb214d",
    "xpose_sku": "STH-1012",
    "mega_sku": null,
    "name": "10' x 12' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3031,8 +3031,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3040,7 +3040,7 @@
    "material": null
   },
   {
-   "id": "e4f17ba2-7b5b-4e07-940b-46513cce43ce",
+   "id": "371a0b8d-b974-4d35-b60e-ab20d363b74c",
    "xpose_sku": "MT-10X12-7MIL",
    "mega_sku": null,
    "name": "10' x 12' Multi-purpose Poly Tarp - 7 Mil",
@@ -3068,8 +3068,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3077,7 +3077,7 @@
    "material": null
   },
   {
-   "id": "d038ad98-26c5-4d1e-b3ab-98e737b351e0",
+   "id": "9d2c487a-def3-4b93-9226-8ea861afbae7",
    "xpose_sku": "BMT-1012",
    "mega_sku": null,
    "name": "10' x 12' Mesh Tarp - Black (60% Shade)",
@@ -3100,8 +3100,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3109,7 +3109,7 @@
    "material": null
   },
   {
-   "id": "34755fdf-7c57-4fff-a5fb-dff9f6604190",
+   "id": "916b6865-9c90-4ffe-9e4b-cfec3d861357",
    "xpose_sku": "CTOD10-1012",
    "mega_sku": null,
    "name": "10' x 12' Canvas Tarp - 10 oz (Olive Drab)",
@@ -3132,8 +3132,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3141,7 +3141,7 @@
    "material": null
   },
   {
-   "id": "2a36a757-9cbd-45b8-929c-6dd005ef2ebc",
+   "id": "ece55496-66db-4271-a189-cf1707f2dbe4",
    "xpose_sku": "CTOD10-1014",
    "mega_sku": null,
    "name": "10' x 14' Canvas Tarp - 10 oz (Olive Drab)",
@@ -3164,8 +3164,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3173,7 +3173,7 @@
    "material": null
   },
   {
-   "id": "8da246bb-e229-4b6d-9b5d-2759f611b1e3",
+   "id": "60f7da18-b00f-4c33-a618-2b9af933b881",
    "xpose_sku": "STH-1015",
    "mega_sku": null,
    "name": "10' x 15' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3196,8 +3196,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3205,7 +3205,7 @@
    "material": null
   },
   {
-   "id": "84c1a216-2fec-4541-81ec-e73172ab0bff",
+   "id": "1cd2b90a-d4c4-4406-9a7a-915441e6463b",
    "xpose_sku": "BT-1015",
    "mega_sku": null,
    "name": "10' x 15' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3228,8 +3228,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3237,7 +3237,7 @@
    "material": null
   },
   {
-   "id": "e8ab0b39-7f8d-4825-a274-98f10e2e5c10",
+   "id": "5adc884d-fe5f-4075-8138-69120d8770ee",
    "xpose_sku": "CTOD10-1016",
    "mega_sku": null,
    "name": "10' x 16' Canvas Tarp - 10 oz (Olive Drab)",
@@ -3260,8 +3260,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3269,7 +3269,7 @@
    "material": null
   },
   {
-   "id": "60cae836-87ec-43e9-88a7-1783b0e53dd4",
+   "id": "594e2544-2d1b-47f5-87ee-18047af72084",
    "xpose_sku": "BMT-1016",
    "mega_sku": null,
    "name": "10' x 16' Mesh Tarp - Black (60% Shade)",
@@ -3292,8 +3292,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3301,7 +3301,7 @@
    "material": null
   },
   {
-   "id": "7ab547c8-8133-408b-bd47-b1fafb257d53",
+   "id": "1b1a5e01-c7fe-4175-9071-da1de96fc124",
    "xpose_sku": "BT-1016",
    "mega_sku": null,
    "name": "10' x 16' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3324,8 +3324,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3333,7 +3333,7 @@
    "material": null
   },
   {
-   "id": "9c4ff02b-4324-4fab-ad1b-439ae16dfd68",
+   "id": "7a2e74de-b818-46dd-ad77-6d0e9d1936c1",
    "xpose_sku": "BT-1018",
    "mega_sku": null,
    "name": "10' x 18' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3356,8 +3356,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3365,7 +3365,7 @@
    "material": null
   },
   {
-   "id": "b9c642c2-de0e-4f57-ac92-6c32ce4846b2",
+   "id": "5c881465-3141-4024-824d-82cfcb9c7e85",
    "xpose_sku": "BHD-1020",
    "mega_sku": null,
    "name": "10' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -3389,8 +3389,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3398,7 +3398,7 @@
    "material": null
   },
   {
-   "id": "e22ddd12-ec6f-4735-8f91-004afedc0725",
+   "id": "71ab213e-5581-4cad-86d3-3facfd3d3b1c",
    "xpose_sku": "STH-1020",
    "mega_sku": null,
    "name": "10' x 20' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3422,8 +3422,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3431,7 +3431,7 @@
    "material": null
   },
   {
-   "id": "3deca7b6-7de9-4fcf-849b-b96cf31f12d5",
+   "id": "8cac3e56-93a5-4c9b-9d3b-c7fdd9415114",
    "xpose_sku": "BT-1020",
    "mega_sku": null,
    "name": "10' x 20' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3454,8 +3454,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3463,7 +3463,7 @@
    "material": null
   },
   {
-   "id": "b9a7d298-50b5-45da-a704-e28384d7225c",
+   "id": "42f0a3b8-f9a7-4228-9250-d58e2e9d5589",
    "xpose_sku": "BMT-1020",
    "mega_sku": null,
    "name": "10' x 20' Mesh Tarp - Black (60% Shade)",
@@ -3486,8 +3486,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3495,7 +3495,7 @@
    "material": null
   },
   {
-   "id": "0413990a-ade7-4c6b-aae5-95e6ae05586a",
+   "id": "8b5b016b-510e-4fd2-b272-7dcd14358504",
    "xpose_sku": "UHD-1020-X",
    "mega_sku": null,
    "name": "10' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -3519,8 +3519,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3528,7 +3528,7 @@
    "material": null
   },
   {
-   "id": "6091b0db-d3b5-455d-b4bc-7b865edda32b",
+   "id": "ed6e39fa-b420-4767-bcec-b9ceb2bd42ef",
    "xpose_sku": "CVTFR-1020",
    "mega_sku": null,
    "name": "10' x 20' Fire Retardant Clear Vinyl Tarp - 20 Mil",
@@ -3552,8 +3552,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3561,7 +3561,7 @@
    "material": null
   },
   {
-   "id": "08a0d0c9-19a5-4a29-ba3e-4abf3ce33514",
+   "id": "c908a4b7-6e6f-4c25-8848-7d8ee1c39503",
    "xpose_sku": "BT-1022",
    "mega_sku": null,
    "name": "10' x 22' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3584,8 +3584,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3593,7 +3593,7 @@
    "material": null
   },
   {
-   "id": "5e8779c5-6b79-4c5a-a7d8-7afddaf29bc0",
+   "id": "142d6e09-a6ee-4634-938c-1ef613c17bd9",
    "xpose_sku": "BMT-1212",
    "mega_sku": null,
    "name": "12' x 12' Mesh Tarp - Black (60% Shade)",
@@ -3616,8 +3616,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3625,7 +3625,7 @@
    "material": null
   },
   {
-   "id": "3cd846f7-a888-4a7e-8672-2aa23d37e4c2",
+   "id": "6531d496-fc7b-4c58-99e2-1d913aa9a024",
    "xpose_sku": "STH-1212",
    "mega_sku": null,
    "name": "12' x 12' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3648,8 +3648,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3657,7 +3657,7 @@
    "material": null
   },
   {
-   "id": "27a97437-ac5b-41a8-9c99-bdd8424b579b",
+   "id": "b4c425c9-d8d4-48e0-b886-e90e47af6925",
    "xpose_sku": "BT-1212",
    "mega_sku": null,
    "name": "12' x 12' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3680,8 +3680,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3689,7 +3689,7 @@
    "material": null
   },
   {
-   "id": "ef48eacc-fb2f-4217-b988-446411a55000",
+   "id": "1d58986d-f8dc-4aae-9140-618f16790877",
    "xpose_sku": "BT-1214",
    "mega_sku": null,
    "name": "12' x 14' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3712,8 +3712,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3721,7 +3721,7 @@
    "material": null
   },
   {
-   "id": "f6748c43-2f5c-4ba3-82c7-48110fd79d4d",
+   "id": "2efab38a-40c4-43dc-b4b7-553aa679a057",
    "xpose_sku": "CTOD10-1214",
    "mega_sku": null,
    "name": "12' x 14' Canvas Tarp - 10 oz (Olive Drab)",
@@ -3744,8 +3744,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3753,7 +3753,7 @@
    "material": null
   },
   {
-   "id": "90644139-9552-4a64-9a8d-8d47ef382baf",
+   "id": "19ee82bd-b3c4-499d-96d7-0655124ed2ea",
    "xpose_sku": "STH-1214",
    "mega_sku": null,
    "name": "12' x 14' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3776,8 +3776,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3785,7 +3785,7 @@
    "material": null
   },
   {
-   "id": "c0508013-ae34-4d86-85fc-1723b18c3d50",
+   "id": "8ea3bac8-de37-4f09-91de-3d4f9c949064",
    "xpose_sku": "MT-12X16-10MIL",
    "mega_sku": null,
    "name": "12' x 16' Heavy Duty Poly Tarp - 10 Mil",
@@ -3813,8 +3813,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3822,7 +3822,7 @@
    "material": null
   },
   {
-   "id": "a1cd3adf-f783-47df-ad41-56dbe9c42f2b",
+   "id": "3ebf2b2d-1555-47fe-9032-35d8e63a00ff",
    "xpose_sku": "BHD-1216",
    "mega_sku": null,
    "name": "12' x 16' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -3845,8 +3845,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3854,7 +3854,7 @@
    "material": null
   },
   {
-   "id": "9944abe8-257b-42b3-ad8a-7ea39952c626",
+   "id": "68497e52-ca9e-4293-b6cc-0f5d9450bdf6",
    "xpose_sku": "BMT-1216",
    "mega_sku": null,
    "name": "12' x 16' Mesh Tarp - Black (60% Shade)",
@@ -3877,8 +3877,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3886,7 +3886,7 @@
    "material": null
   },
   {
-   "id": "62e5e814-800a-4906-8ea8-e4e9b10864dd",
+   "id": "440b9c0a-d387-41f7-8e8c-bd30ac334f61",
    "xpose_sku": "STH-1216",
    "mega_sku": null,
    "name": "12' x 16' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -3909,8 +3909,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3918,7 +3918,7 @@
    "material": null
   },
   {
-   "id": "547dc4de-2cb6-42da-bcc3-e46416e068a2",
+   "id": "686fb559-b1ea-4e5a-93e9-ea425f066f02",
    "xpose_sku": "UHD-1216-X",
    "mega_sku": null,
    "name": "12' x 16' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -3941,8 +3941,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3950,7 +3950,7 @@
    "material": null
   },
   {
-   "id": "e2a72ac3-08d8-41bf-add8-f142089627e9",
+   "id": "2543d169-72a3-45e2-b446-34e4e4ca28f2",
    "xpose_sku": "BT-1216",
    "mega_sku": null,
    "name": "12' x 16' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -3973,8 +3973,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -3982,7 +3982,7 @@
    "material": null
   },
   {
-   "id": "7128996f-a6fb-4c67-9b97-72668c672b3d",
+   "id": "5adb36ec-862f-4633-802f-fc834a1db838",
    "xpose_sku": "CTOD10-1216",
    "mega_sku": null,
    "name": "12' x 16' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4005,8 +4005,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4014,7 +4014,7 @@
    "material": null
   },
   {
-   "id": "590428c3-87a7-4974-8c32-99361d290ed2",
+   "id": "d4ff129d-c081-4981-ae61-49550b22245e",
    "xpose_sku": "BT-1218",
    "mega_sku": null,
    "name": "12' x 18' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4037,8 +4037,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4046,7 +4046,7 @@
    "material": null
   },
   {
-   "id": "78680bad-5e69-4fef-b709-0b4ae1e25d16",
+   "id": "e3589d40-feef-48bc-8644-2d9595932923",
    "xpose_sku": "CTOD10-1220",
    "mega_sku": null,
    "name": "12' x 20' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4070,8 +4070,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4079,7 +4079,7 @@
    "material": null
   },
   {
-   "id": "61a00324-4114-4abd-ae50-b3f3142c7ea9",
+   "id": "de03db57-de37-4a95-a55e-3ada8d2011c5",
    "xpose_sku": "BT-1220",
    "mega_sku": null,
    "name": "12' x 20' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4102,8 +4102,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4111,7 +4111,7 @@
    "material": null
   },
   {
-   "id": "70eeac63-a1d8-4f81-b88a-44de70238cad",
+   "id": "fc2445fa-bf12-47b3-bc67-2829b6f8758d",
    "xpose_sku": "STH-1220",
    "mega_sku": null,
    "name": "12' x 20' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4135,8 +4135,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4144,7 +4144,7 @@
    "material": null
   },
   {
-   "id": "cc6058f8-727e-4b08-876d-8b9304812a9a",
+   "id": "3708dc55-373a-4471-9bbf-bededf89e339",
    "xpose_sku": "UHD-1220-X",
    "mega_sku": null,
    "name": "12' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -4168,8 +4168,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4177,7 +4177,7 @@
    "material": null
   },
   {
-   "id": "6a85b472-a33e-45c2-abcd-cd36f31e4632",
+   "id": "b06600ae-8cde-4dbb-9b58-1b021161a8b2",
    "xpose_sku": "BMT-1220",
    "mega_sku": null,
    "name": "12' x 20' Mesh Tarp - Black (60% Shade)",
@@ -4201,8 +4201,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4210,7 +4210,7 @@
    "material": null
   },
   {
-   "id": "e7b97cbd-d0ec-4830-98a3-83b0eb21d382",
+   "id": "51a62576-9e16-42dc-814d-cbd94a56bd2f",
    "xpose_sku": "BHD-1220",
    "mega_sku": null,
    "name": "12' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -4234,8 +4234,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4243,7 +4243,7 @@
    "material": null
   },
   {
-   "id": "2f396795-bf94-4065-a579-0204af408e9c",
+   "id": "ec02836b-504e-4e1f-91e7-86f3c7bfb96f",
    "xpose_sku": "BT-1222",
    "mega_sku": null,
    "name": "12' x 22' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4266,8 +4266,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4275,7 +4275,7 @@
    "material": null
   },
   {
-   "id": "6b35df62-175a-4757-b68f-6c26c7069582",
+   "id": "28b15075-ce20-4a49-a055-5d5fb824da44",
    "xpose_sku": "CTOD10-1224",
    "mega_sku": null,
    "name": "12' x 24' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4299,8 +4299,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4308,7 +4308,7 @@
    "material": null
   },
   {
-   "id": "29de139a-d0e4-41ab-b603-04399e1f8490",
+   "id": "0eaa0223-0f0b-4721-b34d-3dbf6316bb55",
    "xpose_sku": "UHD-1225-X",
    "mega_sku": null,
    "name": "12' x 25' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -4332,8 +4332,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4341,7 +4341,7 @@
    "material": null
   },
   {
-   "id": "a9ef6dc9-29ec-4045-8bfa-9b5b5bb68722",
+   "id": "7a93e12e-9553-4bab-acf6-8a1b68ed6811",
    "xpose_sku": "BHD-1225",
    "mega_sku": null,
    "name": "12' x 25' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -4365,8 +4365,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4374,7 +4374,7 @@
    "material": null
   },
   {
-   "id": "e42876df-23bb-4c8e-a489-3d9d578ffe5a",
+   "id": "32692a1d-a6ca-4854-8dc2-8f9bdd37c8fa",
    "xpose_sku": "STH-1225",
    "mega_sku": null,
    "name": "12' x 25' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4398,8 +4398,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4407,7 +4407,7 @@
    "material": null
   },
   {
-   "id": "9cc4a6f7-a698-419b-9736-2564fed0815c",
+   "id": "49c92d20-ff47-4650-afcf-af3e542748f7",
    "xpose_sku": "BT-1225",
    "mega_sku": null,
    "name": "12' x 25' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4430,8 +4430,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4439,7 +4439,7 @@
    "material": null
   },
   {
-   "id": "6dafebab-d727-4214-89f3-d9f16d661e6c",
+   "id": "73f47d0d-fa43-4d4b-a888-6c06e554eb21",
    "xpose_sku": "UHD-1230-X",
    "mega_sku": null,
    "name": "12' x 30' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -4463,8 +4463,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4472,7 +4472,7 @@
    "material": null
   },
   {
-   "id": "462dc09e-cc16-4a13-a795-aac29341a0b5",
+   "id": "c564e18b-eadd-4913-b894-fa4a6b3f8888",
    "xpose_sku": "BHD-1230",
    "mega_sku": null,
    "name": "12' x 30' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -4496,8 +4496,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4505,7 +4505,7 @@
    "material": null
   },
   {
-   "id": "196fded6-dbbd-4c71-82e5-565d0232ade6",
+   "id": "001b2c24-7791-4077-bbdf-286f6e97c0f7",
    "xpose_sku": "UHD-1240-X",
    "mega_sku": null,
    "name": "12' x 40' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -4530,8 +4530,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4539,7 +4539,7 @@
    "material": null
   },
   {
-   "id": "e7c6d89b-143d-4eea-914c-43f00b315658",
+   "id": "7ba0fe16-9f9c-4df5-896f-2490ca75a70b",
    "xpose_sku": "BHD-1240",
    "mega_sku": null,
    "name": "12' x 40' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -4564,8 +4564,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4573,7 +4573,7 @@
    "material": null
   },
   {
-   "id": "a2b2999e-5764-4858-8a33-d40455a7e683",
+   "id": "151afae3-0930-4efe-b70d-3e2aef88699b",
    "xpose_sku": "STH-1414",
    "mega_sku": null,
    "name": "14' x 14' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4596,8 +4596,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4605,7 +4605,7 @@
    "material": null
   },
   {
-   "id": "961afb9b-bcbb-4db8-a3ec-116d12ab63a8",
+   "id": "1d717f7b-2f3e-4626-8245-6816a4a32172",
    "xpose_sku": "CTOD10-1414",
    "mega_sku": null,
    "name": "14' x 14' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4628,8 +4628,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4637,7 +4637,7 @@
    "material": null
   },
   {
-   "id": "0c5fae59-f18c-4bc3-bfaf-c962ebeab347",
+   "id": "4b328f7f-b90c-4245-8b0f-2a26f3296c7e",
    "xpose_sku": "CTOD10-1416",
    "mega_sku": null,
    "name": "14' x 16' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4660,8 +4660,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4669,7 +4669,7 @@
    "material": null
   },
   {
-   "id": "080a5b3c-6656-4a16-8c13-c6664f195c11",
+   "id": "e8053e89-9e81-4890-a7aa-c5d6bb6a56aa",
    "xpose_sku": "CTOD10-1420",
    "mega_sku": null,
    "name": "14' x 20' Canvas Tarp - 10 oz (Olive Drab)",
@@ -4693,8 +4693,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4702,7 +4702,7 @@
    "material": null
   },
   {
-   "id": "3e72189e-185b-42a0-a6f1-1c3fbd4d49a1",
+   "id": "0b2491a4-21be-4984-98f3-f98375ed1777",
    "xpose_sku": "BHD-1515",
    "mega_sku": null,
    "name": "15' x 15' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -4725,8 +4725,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4734,7 +4734,7 @@
    "material": null
   },
   {
-   "id": "f5be9486-8714-4ccd-a3d4-c9f1431fa882",
+   "id": "189be825-3dac-4b33-9cae-202287e941fd",
    "xpose_sku": "UHD-1515-X",
    "mega_sku": null,
    "name": "15' x 15' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -4757,8 +4757,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4766,7 +4766,7 @@
    "material": null
   },
   {
-   "id": "0f0e13aa-a663-4325-81ce-9e40cf745e5a",
+   "id": "7979df56-44fa-4a5e-8956-4bf406eb6d0f",
    "xpose_sku": "WTFR-1520",
    "mega_sku": null,
    "name": "15' x 20' Fire Retardant Poly Tarp - 12 Mil",
@@ -4790,8 +4790,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4799,7 +4799,7 @@
    "material": null
   },
   {
-   "id": "c2c8b6d4-2a80-4176-889a-3becdd6f9b53",
+   "id": "b42729f7-d3a6-41a5-9e69-7a4a8bb01360",
    "xpose_sku": "STH-1520",
    "mega_sku": null,
    "name": "15' x 20' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4823,8 +4823,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4832,7 +4832,7 @@
    "material": null
   },
   {
-   "id": "b41a3065-e8ca-470c-bd5f-6635dd033ce7",
+   "id": "e1b60613-1307-45b7-b1ab-b8e47e134682",
    "xpose_sku": "BT-1520",
    "mega_sku": null,
    "name": "15' x 20' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4856,8 +4856,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4865,7 +4865,7 @@
    "material": null
   },
   {
-   "id": "3777c2a9-a9fb-4de0-8abc-da4cf50c8a98",
+   "id": "f0d0032f-c25f-4929-886c-91a7c677fee1",
    "xpose_sku": "STH-1525",
    "mega_sku": null,
    "name": "15' x 25' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4889,8 +4889,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4898,7 +4898,7 @@
    "material": null
   },
   {
-   "id": "f12edb53-6fb1-4848-929d-afab4c207ff6",
+   "id": "3353e9eb-e471-415e-ac75-8d3866a2d627",
    "xpose_sku": "BT-1525",
    "mega_sku": null,
    "name": "15' x 25' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -4922,8 +4922,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4931,7 +4931,7 @@
    "material": null
   },
   {
-   "id": "c23f25a8-7e7d-4760-94d7-7aa653714dc3",
+   "id": "8fc27dec-08ee-4213-b0f2-bd44e899fecf",
    "xpose_sku": "15X30-10MIL-HP72",
    "mega_sku": null,
    "name": "15' x 30' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -4957,8 +4957,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4966,7 +4966,7 @@
    "material": null
   },
   {
-   "id": "5a96f8e1-b885-4e30-9e6c-7ce1f72bcadb",
+   "id": "96c6ada7-1b1f-482d-9aaf-321f7d1e4583",
    "xpose_sku": "STH-1530",
    "mega_sku": null,
    "name": "15' x 30' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -4990,8 +4990,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -4999,7 +4999,7 @@
    "material": null
   },
   {
-   "id": "f0d859ba-ff8f-4e17-b6d7-a0c5c2574de2",
+   "id": "a0402020-318d-4f5c-9db5-0191169a9683",
    "xpose_sku": "BT-1530",
    "mega_sku": null,
    "name": "15' x 30' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5023,8 +5023,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5032,7 +5032,7 @@
    "material": null
   },
   {
-   "id": "7f7d0c7c-46de-4216-9e39-d6677a62e1ba",
+   "id": "29052820-c179-4315-86fd-0ef26a06de42",
    "xpose_sku": "UHD-1540-X",
    "mega_sku": null,
    "name": "15' x 40' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -5057,8 +5057,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5066,7 +5066,7 @@
    "material": null
   },
   {
-   "id": "f82791b5-abc9-4a7b-a299-a295d02128e8",
+   "id": "8f528e57-8ea4-4a83-9551-34ba925a052c",
    "xpose_sku": "BHD-1540",
    "mega_sku": null,
    "name": "15' x 40' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -5091,8 +5091,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5100,7 +5100,7 @@
    "material": null
   },
   {
-   "id": "0a2c1705-c624-42ca-af30-d421ca9a0e1d",
+   "id": "bcac00f7-1bf9-48d1-b18f-447ea9dc9518",
    "xpose_sku": "BHD-1620",
    "mega_sku": null,
    "name": "16' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -5124,8 +5124,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5133,7 +5133,7 @@
    "material": null
   },
   {
-   "id": "0858ca96-6dd3-434f-be16-9b8dc237cc71",
+   "id": "b417f7b9-a6ad-4ac3-8471-ae848fcc0227",
    "xpose_sku": "MT-16X20-12MIL",
    "mega_sku": null,
    "name": "16' x 20' Extreme Duty Poly Tarp - 12 Mil",
@@ -5161,8 +5161,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5170,7 +5170,7 @@
    "material": null
   },
   {
-   "id": "3fb3b56f-c6dc-4e7f-9004-f3caf97038a1",
+   "id": "b48b4e53-1068-48a7-9ed0-a8314cfab61e",
    "xpose_sku": "BT-1620",
    "mega_sku": null,
    "name": "16' x 20' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5194,8 +5194,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5203,7 +5203,7 @@
    "material": null
   },
   {
-   "id": "36190e31-e3e2-4560-b950-31f8690c8b2c",
+   "id": "2c71b356-8c89-4802-add9-f5dc3335a0b3",
    "xpose_sku": "CTOD10-1620",
    "mega_sku": null,
    "name": "16' x 20' Canvas Tarp - 10 oz (Olive Drab)",
@@ -5227,8 +5227,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5236,7 +5236,7 @@
    "material": null
   },
   {
-   "id": "a4c36f2b-a4f3-4263-9c9b-52a2a90c57e1",
+   "id": "d8ff85aa-c353-4ec7-8dc2-e62b38fc3d54",
    "xpose_sku": "STH-1620",
    "mega_sku": null,
    "name": "16' x 20' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -5260,8 +5260,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5269,7 +5269,7 @@
    "material": null
   },
   {
-   "id": "c1c99e70-2445-4396-a7d9-725d6f4b4f13",
+   "id": "f9f9b30a-a68e-4983-8a8f-fc2b1263da4f",
    "xpose_sku": "UHD-1620-X",
    "mega_sku": null,
    "name": "16' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -5293,8 +5293,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5302,7 +5302,7 @@
    "material": null
   },
   {
-   "id": "fdf822af-9e55-442a-b7e9-9168277b13bc",
+   "id": "5dd064f1-828b-47a2-8eb6-f41734ba9e72",
    "xpose_sku": "BMT-1620",
    "mega_sku": null,
    "name": "16' x 20' Mesh Tarp - Black (60% Shade)",
@@ -5326,8 +5326,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5335,7 +5335,7 @@
    "material": null
   },
   {
-   "id": "5ec00668-a90f-4641-b063-cce574cd77b9",
+   "id": "a200518b-c64b-4b90-b87d-894d3e7da295",
    "xpose_sku": "BHD-1824",
    "mega_sku": null,
    "name": "18' x 24' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -5359,8 +5359,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5368,7 +5368,7 @@
    "material": null
   },
   {
-   "id": "e665ad9b-494b-4f8b-bece-cfb35c9aaab9",
+   "id": "8603af7f-3dc1-404a-b104-8b80c587223d",
    "xpose_sku": "STH-1824",
    "mega_sku": null,
    "name": "18' x 24' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -5392,8 +5392,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5401,7 +5401,7 @@
    "material": null
   },
   {
-   "id": "f983c0f2-66e5-48d9-ad02-e4267a8d2013",
+   "id": "3d4d8e86-2829-4571-aff0-772f156fb778",
    "xpose_sku": "UHD-1824-X",
    "mega_sku": null,
    "name": "18' x 24' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -5425,8 +5425,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5434,7 +5434,7 @@
    "material": null
   },
   {
-   "id": "61298e7e-cce0-4e60-be74-6a1b33937324",
+   "id": "c85843e0-3b68-4afa-b5f0-c34abd9123fe",
    "xpose_sku": "BT-1824",
    "mega_sku": null,
    "name": "18' x 24' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5458,8 +5458,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5467,7 +5467,7 @@
    "material": null
   },
   {
-   "id": "4910eba9-39b6-4017-b5d3-bbd2a2a54fc3",
+   "id": "61be049a-9bd5-441d-8939-b0d8c7fd34c9",
    "xpose_sku": "STH-2020",
    "mega_sku": null,
    "name": "20' x 20' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -5492,8 +5492,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5501,7 +5501,7 @@
    "material": null
   },
   {
-   "id": "db3348bf-95f7-42ad-8fac-201b5f517e6b",
+   "id": "77769f31-a05f-4949-9494-a33d57697008",
    "xpose_sku": "20X20-10MIL-HP72",
    "mega_sku": null,
    "name": "20' x 20' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -5527,8 +5527,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5536,7 +5536,7 @@
    "material": null
   },
   {
-   "id": "9a290b54-c9b4-4c85-9dfd-cee12ec9695b",
+   "id": "799ba519-8862-4314-8ce8-89baa6d163ee",
    "xpose_sku": "BT-2020",
    "mega_sku": null,
    "name": "20' x 20' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5561,8 +5561,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5570,7 +5570,7 @@
    "material": null
   },
   {
-   "id": "0c9c7d7b-49b3-4264-aa00-4c5c10181b3b",
+   "id": "1627d26d-4df4-48dd-b7c3-c2887c409d9e",
    "xpose_sku": "CTOD10-2020",
    "mega_sku": null,
    "name": "20' x 20' Canvas Tarp - 10 oz (Olive Drab)",
@@ -5595,8 +5595,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5604,7 +5604,7 @@
    "material": null
   },
   {
-   "id": "ddd6e750-e8c1-48a2-9cbc-617951ee1d53",
+   "id": "ea16b818-4d65-4dc2-932b-ed638e2e6054",
    "xpose_sku": "UHD-2020-X",
    "mega_sku": null,
    "name": "20' x 20' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -5629,8 +5629,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5638,7 +5638,7 @@
    "material": null
   },
   {
-   "id": "6eb6667a-efa5-4ff5-887d-69a2cd9599c7",
+   "id": "8d07c380-85d3-4387-a389-5a6fd8330641",
    "xpose_sku": "BHD-2020",
    "mega_sku": null,
    "name": "20' x 20' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -5663,8 +5663,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5672,7 +5672,7 @@
    "material": null
   },
   {
-   "id": "2977c2f2-68f3-4933-9212-ad767607a286",
+   "id": "62cf750c-f1d9-461b-bb7f-151e0468160b",
    "xpose_sku": "20X20-7MIL-HP72",
    "mega_sku": null,
    "name": "20' x 20' Heavy Duty Poly Tarp - 7 Mil (Bulk Pallet)",
@@ -5698,8 +5698,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5707,7 +5707,7 @@
    "material": null
   },
   {
-   "id": "8f253efa-de0e-463b-b852-0d85fbb6366d",
+   "id": "5a4ca91d-28bc-47ad-bc59-809cca448763",
    "xpose_sku": "BMT-2020",
    "mega_sku": null,
    "name": "20' x 20' Mesh Tarp - Black (60% Shade)",
@@ -5731,8 +5731,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5740,7 +5740,7 @@
    "material": null
   },
   {
-   "id": "a8b98921-b201-4ff9-ac69-e330b3cd9f1d",
+   "id": "443255de-ec12-4730-b872-5a8733a249f6",
    "xpose_sku": "BT-2025",
    "mega_sku": null,
    "name": "20' x 25' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5765,8 +5765,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5774,7 +5774,7 @@
    "material": null
   },
   {
-   "id": "dd39fac7-2fd8-403f-a837-d0550478b119",
+   "id": "31526dc4-3d44-4027-9c57-fa32a8b07c26",
    "xpose_sku": "STH-2025",
    "mega_sku": null,
    "name": "20' x 25' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -5799,8 +5799,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5808,7 +5808,7 @@
    "material": null
   },
   {
-   "id": "ca375d33-5c2f-42b3-84fe-2e0de3ad721f",
+   "id": "3ed1c69f-f48e-4327-9b29-bed24d5b8c17",
    "xpose_sku": "WTFR-2030",
    "mega_sku": null,
    "name": "20' x 30' Fire Retardant Poly Tarp - 12 Mil",
@@ -5832,8 +5832,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5841,7 +5841,7 @@
    "material": null
   },
   {
-   "id": "62df5d42-9e39-4de2-a821-f5168b983386",
+   "id": "61db0388-e186-461e-82c5-3fba52b8c977",
    "xpose_sku": "MT-20X30-12MIL",
    "mega_sku": null,
    "name": "20' x 30' Extreme Duty Poly Tarp - 12 Mil",
@@ -5869,8 +5869,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5878,7 +5878,7 @@
    "material": null
   },
   {
-   "id": "d54af77f-b1c8-40b3-a6fb-d51867cde386",
+   "id": "3f56ecfc-d62a-41d7-b468-e77d7b36364c",
    "xpose_sku": "20X30-10MIL-HP48",
    "mega_sku": null,
    "name": "20' x 30' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -5904,8 +5904,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5913,7 +5913,7 @@
    "material": null
   },
   {
-   "id": "901bd94c-f207-4dc2-96a0-f3421525577f",
+   "id": "fede6499-b96b-4c7a-b3d7-19b6be397454",
    "xpose_sku": "BT-2030",
    "mega_sku": null,
    "name": "20' x 30' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -5937,8 +5937,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5946,7 +5946,7 @@
    "material": null
   },
   {
-   "id": "568e1968-b0a0-4ae0-a5ba-0b0925e6f549",
+   "id": "66abf32a-6dad-4ddf-9e98-ec4e5b87535a",
    "xpose_sku": "CTOD10-2030",
    "mega_sku": null,
    "name": "20' x 30' Canvas Tarp - 10 oz (Olive Drab)",
@@ -5971,8 +5971,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -5980,7 +5980,7 @@
    "material": null
   },
   {
-   "id": "770c522a-bb51-49b0-8542-5742eb680d2d",
+   "id": "6b314ffc-e92b-42bd-a9bb-ff7e7950fe84",
    "xpose_sku": "UHD-2030-X",
    "mega_sku": null,
    "name": "20' x 30' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -6005,8 +6005,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6014,7 +6014,7 @@
    "material": null
   },
   {
-   "id": "0f643522-7547-4646-9512-f177a43d2405",
+   "id": "acd0f03a-8219-4406-9ce7-f592ba53a5e5",
    "xpose_sku": "BMT-2030",
    "mega_sku": null,
    "name": "20' x 30' Mesh Tarp - Black (60% Shade)",
@@ -6037,8 +6037,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6046,7 +6046,7 @@
    "material": null
   },
   {
-   "id": "4db2ed29-4f14-465d-8b8b-5d6c23975d41",
+   "id": "3190ae21-29d9-4cef-a5ed-4533b9ce355d",
    "xpose_sku": "BHD-2030",
    "mega_sku": null,
    "name": "20' x 30' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -6071,8 +6071,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6080,7 +6080,7 @@
    "material": null
   },
   {
-   "id": "12791e0d-c441-4471-8420-359242819da4",
+   "id": "8abf2817-b61a-4c04-a26e-d79be676c6a1",
    "xpose_sku": "MT-20X30-20MIL",
    "mega_sku": null,
    "name": "20' x 30' Ultra Duty Poly Tarp - 20 Mil",
@@ -6108,8 +6108,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6117,7 +6117,7 @@
    "material": null
   },
   {
-   "id": "501a59f3-0797-4e03-82fc-94c513c842f9",
+   "id": "cbde7829-c557-4fda-bfcc-f5c1d4dab1fb",
    "xpose_sku": "MT-20X30-10MIL",
    "mega_sku": null,
    "name": "20' x 30' Heavy Duty Poly Tarp - 10 Mil",
@@ -6145,8 +6145,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6154,7 +6154,7 @@
    "material": null
   },
   {
-   "id": "8d4f2463-08fa-4b69-874c-0099d799ad53",
+   "id": "f28355b1-c1d9-4e22-80f4-970854642f4b",
    "xpose_sku": "STH-2030",
    "mega_sku": null,
    "name": "20' x 30' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -6179,8 +6179,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6188,7 +6188,7 @@
    "material": null
   },
   {
-   "id": "a96d1809-b0f0-42e0-b3ad-da8a784d4772",
+   "id": "95459802-81e0-4240-9941-dd50a50fa24f",
    "xpose_sku": "BT-2035",
    "mega_sku": null,
    "name": "20' x 35' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -6212,8 +6212,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6221,7 +6221,7 @@
    "material": null
   },
   {
-   "id": "90658ad9-04f7-446a-b45f-d19e1a625906",
+   "id": "b629bc23-e475-4a61-b601-52e033af1f6b",
    "xpose_sku": "STH-2035",
    "mega_sku": null,
    "name": "20' x 35' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -6246,8 +6246,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6255,7 +6255,7 @@
    "material": null
   },
   {
-   "id": "41f8aa65-cfa7-42b6-a7e2-cfc13633d10a",
+   "id": "3a86a8bf-89c4-46d2-930c-a220f723fbe7",
    "xpose_sku": "BMT-2040",
    "mega_sku": null,
    "name": "20' x 40' Mesh Tarp - Black (60% Shade)",
@@ -6278,8 +6278,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6287,7 +6287,7 @@
    "material": null
   },
   {
-   "id": "d4b23925-079b-4cf7-a433-cc3be7e39a96",
+   "id": "cd975865-ba44-4eaa-83ff-2a6eb5119129",
    "xpose_sku": "20X40-10MIL-HP30",
    "mega_sku": null,
    "name": "20' x 40' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -6313,8 +6313,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6322,7 +6322,7 @@
    "material": null
   },
   {
-   "id": "702dc08b-719d-465e-acc5-7997a6e3858a",
+   "id": "e34953dc-7321-44b7-8458-fff15d92aa65",
    "xpose_sku": "STH-2040",
    "mega_sku": null,
    "name": "20' x 40' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -6347,8 +6347,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6356,7 +6356,7 @@
    "material": null
   },
   {
-   "id": "bba0497c-41dc-41eb-8ad9-5de3246653a8",
+   "id": "176acba2-dfb6-4db8-93d2-23eb435e24f6",
    "xpose_sku": "WTFR-2040",
    "mega_sku": null,
    "name": "20' x 40' Fire Retardant Poly Tarp - 12 Mil",
@@ -6380,8 +6380,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6389,7 +6389,7 @@
    "material": null
   },
   {
-   "id": "6a276f4f-c486-48fd-b706-0501bcd98697",
+   "id": "fbff7ae7-a585-4b6d-87c4-60781bf2ebf4",
    "xpose_sku": "BHD-2040",
    "mega_sku": null,
    "name": "20' x 40' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -6414,8 +6414,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6423,7 +6423,7 @@
    "material": null
   },
   {
-   "id": "322cadec-b867-4e2a-8305-21acb3b4eaef",
+   "id": "fdf55aaa-7cac-482c-b358-99846e870626",
    "xpose_sku": "CTOD10-2040",
    "mega_sku": null,
    "name": "20' x 40' Canvas Tarp - 10 oz (Olive Drab)",
@@ -6447,8 +6447,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6456,7 +6456,7 @@
    "material": null
   },
   {
-   "id": "a2e67c0b-d3e9-47a3-bc13-d4d27d7f5f0d",
+   "id": "25eba652-4cdd-49ec-946b-a74bdd7d7b23",
    "xpose_sku": "BT-2040",
    "mega_sku": null,
    "name": "20' x 40' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -6481,8 +6481,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6490,7 +6490,7 @@
    "material": null
   },
   {
-   "id": "8f04a90a-9994-48bb-a169-b540b0af267c",
+   "id": "ad04f4ef-6595-4a14-81c5-f373ece6646b",
    "xpose_sku": "UHD-2040-X",
    "mega_sku": null,
    "name": "20' x 40' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -6515,8 +6515,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6524,7 +6524,7 @@
    "material": null
   },
   {
-   "id": "6188292d-2a18-4ae5-997a-709dcfd3014d",
+   "id": "f15087b9-d6c6-48b6-aba6-d4005de236f1",
    "xpose_sku": "MT-20X40-10MIL",
    "mega_sku": null,
    "name": "20' x 40' Heavy Duty Poly Tarp - 10 Mil",
@@ -6552,8 +6552,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6561,7 +6561,7 @@
    "material": null
   },
   {
-   "id": "4d1bfba1-e7a1-4fbe-9e4a-85da7bd46a1f",
+   "id": "a48480b6-0c77-4cf4-90ae-e0580352cd6a",
    "xpose_sku": "WTFR-2120",
    "mega_sku": null,
    "name": "21' x 20' Fire Retardant Poly Tarp - 12 Mil",
@@ -6585,8 +6585,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6594,7 +6594,7 @@
    "material": null
   },
   {
-   "id": "a3c18d84-17b8-4add-a514-364ab31b2310",
+   "id": "6280dd85-9a5b-49f4-ad5c-4708cbb9b38d",
    "xpose_sku": "BT-2436",
    "mega_sku": null,
    "name": "24' x 36' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -6619,8 +6619,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6628,7 +6628,7 @@
    "material": null
   },
   {
-   "id": "482c0002-8f2b-40e4-840b-5e50e0e752c0",
+   "id": "3e5e42ce-571a-4468-b6f5-8167fbd436bf",
    "xpose_sku": "BHD-2436",
    "mega_sku": null,
    "name": "24' x 36' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -6653,8 +6653,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6662,7 +6662,7 @@
    "material": null
   },
   {
-   "id": "2f7884dd-059a-4c08-88a9-da0578d80c28",
+   "id": "6d9e827e-889b-492b-8c1b-64f81d3ffbad",
    "xpose_sku": "UHD-2436-X",
    "mega_sku": null,
    "name": "24' x 36' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -6687,8 +6687,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6696,7 +6696,7 @@
    "material": null
   },
   {
-   "id": "b13bb939-1216-4321-81ac-a57e9131131b",
+   "id": "60094c05-b664-4ff6-afee-f34608eeb4b9",
    "xpose_sku": "BT-2540",
    "mega_sku": null,
    "name": "25' x 40' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -6721,8 +6721,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6730,7 +6730,7 @@
    "material": null
   },
   {
-   "id": "19a833a0-dd07-4114-88c3-71d42e1d3bd2",
+   "id": "05ff9b7d-0029-488c-aed0-968864127df6",
    "xpose_sku": "STH-2540",
    "mega_sku": null,
    "name": "25' x 40' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -6755,8 +6755,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6764,7 +6764,7 @@
    "material": null
   },
   {
-   "id": "13417917-d734-464b-aad0-8aad0f2000c7",
+   "id": "a05e0e43-198e-49df-9636-4a63c377fdd9",
    "xpose_sku": "BHD-2545",
    "mega_sku": null,
    "name": "25' x 45' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -6788,8 +6788,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6797,7 +6797,7 @@
    "material": null
   },
   {
-   "id": "c35af8b9-977a-4852-9f80-7782aae8fc2d",
+   "id": "4ddc4c1d-e9c4-4e3c-b049-5330b5cc3281",
    "xpose_sku": "UHD-2545-X",
    "mega_sku": null,
    "name": "25' x 45' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -6821,8 +6821,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6830,7 +6830,7 @@
    "material": null
   },
   {
-   "id": "77e9a73b-ea1a-4243-8a2a-4ce8f9b7b29d",
+   "id": "6cddcae2-2ec7-49bc-8348-28843e0075be",
    "xpose_sku": "STH-3030",
    "mega_sku": null,
    "name": "30' x 30' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -6854,8 +6854,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6863,7 +6863,7 @@
    "material": null
   },
   {
-   "id": "748e5f92-a5a9-4a69-892a-2c572b6aae3c",
+   "id": "fe7c4f78-1094-40ed-acee-8b0f578ce307",
    "xpose_sku": "BHD-3030",
    "mega_sku": null,
    "name": "30' x 30' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -6887,8 +6887,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6896,7 +6896,7 @@
    "material": null
   },
   {
-   "id": "4b354ea6-51cf-47a3-b49e-2aaa99e56aee",
+   "id": "f134d904-a66f-415a-8f77-2aaa061e90d5",
    "xpose_sku": "BT-3030",
    "mega_sku": null,
    "name": "30' x 30' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -6921,8 +6921,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6930,7 +6930,7 @@
    "material": null
   },
   {
-   "id": "98d02382-c5c6-4a40-8d88-c1559236ac9a",
+   "id": "cd7a447b-bb19-4add-87a6-878f4b2594f8",
    "xpose_sku": "UHD-3030-X",
    "mega_sku": null,
    "name": "30' x 30' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -6954,8 +6954,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6963,7 +6963,7 @@
    "material": null
   },
   {
-   "id": "e09c5c8d-4ad4-44a4-90a1-6f3217c8938e",
+   "id": "fc75cb2e-0a9e-4278-b2de-00c65c078f61",
    "xpose_sku": "BMT-3030",
    "mega_sku": null,
    "name": "30' x 30' Mesh Tarp - Black (60% Shade)",
@@ -6986,8 +6986,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -6995,7 +6995,7 @@
    "material": null
   },
   {
-   "id": "e37f65db-87d4-451d-abcd-0e3846092b74",
+   "id": "2f5b01f2-d80f-4fe2-9e6e-4575d104126b",
    "xpose_sku": "MT-30X40-12MIL",
    "mega_sku": null,
    "name": "30' x 40' Extreme Duty Poly Tarp - 12 Mil",
@@ -7023,8 +7023,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7032,7 +7032,7 @@
    "material": null
   },
   {
-   "id": "f131d110-ecaa-44e1-a2ba-c734f790dddc",
+   "id": "7a396fb1-d9c4-4a35-9d38-01fbeddcc9ad",
    "xpose_sku": "BHD-3040",
    "mega_sku": null,
    "name": "30' x 40' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -7056,8 +7056,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7065,7 +7065,7 @@
    "material": null
   },
   {
-   "id": "dbe9456f-2850-488e-9d27-ed175e7ca465",
+   "id": "ee6ae82b-57cb-46e1-bff0-990b80460e52",
    "xpose_sku": "UHD-3040-X",
    "mega_sku": null,
    "name": "30' x 40' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -7089,8 +7089,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7098,7 +7098,7 @@
    "material": null
   },
   {
-   "id": "733d878d-741d-4fc6-9847-89a5849e3a97",
+   "id": "8f9abb9b-24e3-4b05-9a0f-dd592aa6fe25",
    "xpose_sku": "BT-3040",
    "mega_sku": null,
    "name": "30' x 40' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7123,8 +7123,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7132,7 +7132,7 @@
    "material": null
   },
   {
-   "id": "9b92c2e1-3473-478f-ba98-8ddee1faeb49",
+   "id": "e6e3bb96-9c52-4f97-9659-46894731e8cd",
    "xpose_sku": "BMT-3040",
    "mega_sku": null,
    "name": "30' x 40' Mesh Tarp - Black (60% Shade)",
@@ -7155,8 +7155,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7164,7 +7164,7 @@
    "material": null
   },
   {
-   "id": "1e83d060-a25a-477e-88f9-25971d0b22e3",
+   "id": "3c637a4f-524a-472b-9821-071189ebc6e1",
    "xpose_sku": "30X40-7MIL-HP24",
    "mega_sku": null,
    "name": "30' x 40' Heavy Duty Poly Tarp - 7 Mil (Bulk Pallet)",
@@ -7190,8 +7190,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7199,7 +7199,7 @@
    "material": null
   },
   {
-   "id": "0ca25355-ef47-487d-99c3-78e93ea0a47e",
+   "id": "fa5c23c3-c1ed-4fdc-be77-61baa7b2dfe0",
    "xpose_sku": "30X40-10MIL-HP22",
    "mega_sku": null,
    "name": "30' x 40' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -7225,8 +7225,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7234,7 +7234,7 @@
    "material": null
   },
   {
-   "id": "34a16e11-916f-41bd-bf2e-ef29b1d010ad",
+   "id": "1901e97e-f48e-4be5-9571-5570161fc33e",
    "xpose_sku": "MT-30X40-10MIL",
    "mega_sku": null,
    "name": "30' x 40' Heavy Duty Poly Tarp - 10 Mil",
@@ -7262,8 +7262,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7271,7 +7271,7 @@
    "material": null
   },
   {
-   "id": "516c613a-5ab0-429b-99e6-68cfee5ac53d",
+   "id": "98676fed-d1d4-4823-9e6d-55fcf88978ba",
    "xpose_sku": "STH-3040",
    "mega_sku": null,
    "name": "30' x 40' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7295,8 +7295,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7304,7 +7304,7 @@
    "material": null
   },
   {
-   "id": "1103bd5f-0d8d-4524-a055-5870c2d3e147",
+   "id": "6871992b-54c7-4736-bdc8-a253f08b61da",
    "xpose_sku": "MT-30X40-10MIL-SB",
    "mega_sku": null,
    "name": "30' x 40' Heavy Duty Silver/Black Poly Tarp - 10 Mil",
@@ -7332,8 +7332,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7341,7 +7341,7 @@
    "material": null
   },
   {
-   "id": "1c88196b-54db-4ec0-9e54-13d2fe20438a",
+   "id": "7829d86c-58ff-4932-b5e4-12110a31019f",
    "xpose_sku": "STH-3050",
    "mega_sku": null,
    "name": "30' x 50' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7365,8 +7365,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7374,7 +7374,7 @@
    "material": null
   },
   {
-   "id": "f684cdbb-ca9c-4bca-8155-9a5869bc0d39",
+   "id": "e93fb0c7-f6c7-4d70-b033-becf44552cc2",
    "xpose_sku": "UHD-3050-X",
    "mega_sku": null,
    "name": "30' x 50' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -7398,8 +7398,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7407,7 +7407,7 @@
    "material": null
   },
   {
-   "id": "2b230045-163d-4aa3-b67d-26ba817b699d",
+   "id": "a278e0ec-c25c-4f1b-bb43-a7253b6bdc0a",
    "xpose_sku": "BHD-3050",
    "mega_sku": null,
    "name": "30' x 50' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -7431,8 +7431,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7440,7 +7440,7 @@
    "material": null
   },
   {
-   "id": "603f249f-6846-4d4f-96af-c849ae805bc4",
+   "id": "0a116b08-f6c8-4e79-8e72-b65975d66813",
    "xpose_sku": "30X50-10MIL-HP18",
    "mega_sku": null,
    "name": "30' x 50' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -7466,8 +7466,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7475,7 +7475,7 @@
    "material": null
   },
   {
-   "id": "ef7e4f9c-e2c8-47f1-95fb-baaedcf80b32",
+   "id": "d2c63a4a-f9a1-4735-89c1-5e692012ef44",
    "xpose_sku": "30X50-7MIL-HP16",
    "mega_sku": null,
    "name": "30' x 50' Heavy Duty Poly Tarp - 7 Mil (Bulk Pallet)",
@@ -7501,8 +7501,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7510,7 +7510,7 @@
    "material": null
   },
   {
-   "id": "7db99e09-7374-4c6d-81a1-43691d412870",
+   "id": "6da13c97-ea60-43e6-8285-bf95e8d0fbcf",
    "xpose_sku": "BT-3050",
    "mega_sku": null,
    "name": "30' x 50' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7535,8 +7535,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7544,7 +7544,7 @@
    "material": null
   },
   {
-   "id": "cddffc68-cd4d-4367-8928-01003fe298c1",
+   "id": "1a56c7ad-acbf-422e-9400-a62b5a72dd42",
    "xpose_sku": "STH-3060",
    "mega_sku": null,
    "name": "30' x 60' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7568,8 +7568,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7577,7 +7577,7 @@
    "material": null
   },
   {
-   "id": "6ae95fc6-a1fb-49d2-a081-090dc2c23d55",
+   "id": "973f7da5-ee0a-411f-b1c1-f77ad8408b4a",
    "xpose_sku": "BT-3060",
    "mega_sku": null,
    "name": "30' x 60' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7602,8 +7602,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7611,7 +7611,7 @@
    "material": null
   },
   {
-   "id": "865c9e48-bf4f-4ede-8cea-d18709ec5959",
+   "id": "a3877888-7ec9-41c6-89a5-3272b6e782c8",
    "xpose_sku": "BMT-4040",
    "mega_sku": null,
    "name": "40' x 40' Mesh Tarp - Black (60% Shade)",
@@ -7634,8 +7634,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7643,7 +7643,7 @@
    "material": null
   },
   {
-   "id": "81cd022f-750b-46bf-a441-d2121f218c09",
+   "id": "7e35c917-3434-4eac-89e4-15ef730333d0",
    "xpose_sku": "BT-4040",
    "mega_sku": null,
    "name": "40' x 40' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7667,8 +7667,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7676,7 +7676,7 @@
    "material": null
   },
   {
-   "id": "2f95d38a-94f6-4736-b710-6acbb80ac2c9",
+   "id": "c5914e15-73d8-4e6f-a616-6c0d9b24d59a",
    "xpose_sku": "STH-4040",
    "mega_sku": null,
    "name": "40' x 40' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7700,8 +7700,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7709,7 +7709,7 @@
    "material": null
   },
   {
-   "id": "1dfa0da3-a1b6-4b36-b02c-bb9ab65fdd38",
+   "id": "b8526532-6e90-4099-81bf-d541896db854",
    "xpose_sku": "STH-4050",
    "mega_sku": null,
    "name": "40' x 50' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7733,8 +7733,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7742,7 +7742,7 @@
    "material": null
   },
   {
-   "id": "fd9da599-51f6-4a96-a0a0-4ba4f1d8d899",
+   "id": "86b8c298-998a-4112-97e4-2c638a97c377",
    "xpose_sku": "BT-4050",
    "mega_sku": null,
    "name": "40' x 50' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7766,8 +7766,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7775,7 +7775,7 @@
    "material": null
   },
   {
-   "id": "d18b9dac-df99-4709-8ee9-317c5b9a256d",
+   "id": "65abb000-98ea-4750-8122-2e44a7b5b676",
    "xpose_sku": "40X60-10MIL-FP20",
    "mega_sku": null,
    "name": "40' x 60' Heavy Duty Poly Tarp - 10 Mil (Bulk Pallet)",
@@ -7801,8 +7801,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7810,7 +7810,7 @@
    "material": null
   },
   {
-   "id": "0569c036-3724-4d3e-bc2f-21ba3cd5d8d1",
+   "id": "5d7b075e-9131-4fd1-9f6b-e9877eec470a",
    "xpose_sku": "STH-4060",
    "mega_sku": null,
    "name": "40' x 60' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -7834,8 +7834,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7843,7 +7843,7 @@
    "material": null
   },
   {
-   "id": "61ff61ef-d06d-4bd7-b581-445d6138298c",
+   "id": "9d9c3ae2-2d90-42aa-800c-70f6916fb892",
    "xpose_sku": "MT-40X60-10MIL",
    "mega_sku": null,
    "name": "40' x 60' Heavy Duty Poly Tarp - 10 Mil",
@@ -7871,8 +7871,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.401Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.909Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7880,7 +7880,7 @@
    "material": null
   },
   {
-   "id": "5cb23a21-1c73-490d-9b1f-642a103a669d",
+   "id": "1eae17ef-262e-42a2-9537-eb39ddfa415d",
    "xpose_sku": "BHD-4060",
    "mega_sku": null,
    "name": "40' x 60' Super Heavy Duty Poly Tarp - 16 Mil (Brown)",
@@ -7904,8 +7904,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7913,7 +7913,7 @@
    "material": null
   },
   {
-   "id": "4d229e22-cc34-44b3-8f83-419876e2a640",
+   "id": "3e370e6c-3f41-44c6-be32-26c964256f34",
    "xpose_sku": "UHD-4060-X",
    "mega_sku": null,
    "name": "40' x 60' Ultra Heavy Duty Poly Tarp - 20 Mil (Brown)",
@@ -7937,8 +7937,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7946,7 +7946,7 @@
    "material": null
   },
   {
-   "id": "776dfbe5-6d5e-49ec-bb1a-ed3bba409e0a",
+   "id": "f208b8fd-6a30-426a-89b0-0a87521bb689",
    "xpose_sku": "BT-4060",
    "mega_sku": null,
    "name": "40' x 60' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -7970,8 +7970,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -7979,7 +7979,7 @@
    "material": null
   },
   {
-   "id": "2bd4276b-cb59-4311-ba95-f4a4f9e9ab92",
+   "id": "1945346d-a21a-4a81-9b2c-fb33bf6065c6",
    "xpose_sku": "40X60-7MIL-FP12",
    "mega_sku": null,
    "name": "40' x 60' Heavy Duty Poly Tarp - 7 Mil (Bulk Pallet)",
@@ -8005,8 +8005,8 @@
    ],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.401Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.909Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8014,7 +8014,7 @@
    "material": null
   },
   {
-   "id": "b7476004-1519-4563-be4b-a18237502e47",
+   "id": "751d984e-2c0f-4fe6-badc-2ff258100ee2",
    "xpose_sku": "BT-5050",
    "mega_sku": null,
    "name": "50' x 50' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -8038,8 +8038,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8047,7 +8047,7 @@
    "material": null
   },
   {
-   "id": "38d5aad6-ceb0-4bc2-beb0-937d31e1329f",
+   "id": "d3edf033-7f10-46c5-98a4-ae972b0494b8",
    "xpose_sku": "STH-5050",
    "mega_sku": null,
    "name": "50' x 50' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -8071,8 +8071,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8080,7 +8080,7 @@
    "material": null
   },
   {
-   "id": "cddbac33-8521-4678-9b6f-72f202ffe1e2",
+   "id": "ce4fc932-34c4-478f-804b-0570fdff6116",
    "xpose_sku": "BMT-5050",
    "mega_sku": null,
    "name": "50' x 50' Mesh Tarp - Black (60% Shade)",
@@ -8103,8 +8103,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8112,7 +8112,7 @@
    "material": null
   },
   {
-   "id": "f4ca8f5a-6179-4f89-b856-322fe3196a78",
+   "id": "addcd2b3-fa50-4b11-91f4-fd7c7e17d65d",
    "xpose_sku": "BT-50100",
    "mega_sku": null,
    "name": "50' x 100' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -8136,8 +8136,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8145,7 +8145,7 @@
    "material": null
   },
   {
-   "id": "8784d34b-5682-4961-932d-57a9cded8cc8",
+   "id": "c5f3e33d-6caa-4ff4-8af5-420605f275a5",
    "xpose_sku": "STH-50100",
    "mega_sku": null,
    "name": "50' x 100' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -8169,8 +8169,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8178,7 +8178,7 @@
    "material": null
   },
   {
-   "id": "8f9c81b7-703e-461d-855b-176126056b88",
+   "id": "777b945a-7962-4a54-806b-1bf07c592262",
    "xpose_sku": "STH-6060",
    "mega_sku": null,
    "name": "60' x 60' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -8202,8 +8202,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8211,7 +8211,7 @@
    "material": null
   },
   {
-   "id": "5e506521-d055-4f99-9496-c50832e20c1a",
+   "id": "a9de485a-bd06-4f6b-bd64-f6c71674cf26",
    "xpose_sku": "STH-100100",
    "mega_sku": null,
    "name": "100' x 100' Heavy Duty Poly Tarp - 10 Mil (Silver/Black)",
@@ -8235,8 +8235,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8244,7 +8244,7 @@
    "material": null
   },
   {
-   "id": "3764922d-4a71-4a39-bbea-b48bc3a09aeb",
+   "id": "89543f62-9b74-4bad-969e-b34f73b8e6e9",
    "xpose_sku": "BT-100100",
    "mega_sku": null,
    "name": "100' x 100' Multipurpose Poly Tarp - 5 Mil (Blue)",
@@ -8268,8 +8268,8 @@
    "image_urls": [],
    "active": true,
    "in_stock": true,
-   "created_at": "2026-10-25T18:43:38.421Z",
-   "updated_at": "2026-10-25T18:43:38.421Z",
+   "created_at": "2026-10-25T18:46:10.916Z",
+   "updated_at": "2026-10-25T18:46:10.916Z",
    "units_per_case": null,
    "pack_quantity": null,
    "accessory_type": null,
@@ -8279,7 +8279,7 @@
  ],
  "pricing_rules": [
   {
-   "id": "5dacfe67-ef8b-4843-8de8-7e43c6f227c3",
+   "id": "f2059c57-48d8-4197-9c00-894ed58811fa",
    "tarp_type": null,
    "thickness_mil": null,
    "min_quantity": 5,
@@ -8289,10 +8289,10 @@
    "flat_markup_cents": null,
    "priority": 0,
    "active": true,
-   "created_at": "2026-10-25T18:43:38.401Z"
+   "created_at": "2026-10-25T18:46:10.909Z"
   },
   {
-   "id": "d71babe1-25a5-48ec-bef6-ae0b9fdca744",
+   "id": "afc08d61-a210-4074-a66e-d6a068f7fced",
    "tarp_type": null,
    "thickness_mil": null,
    "min_quantity": 10,
@@ -8302,10 +8302,10 @@
    "flat_markup_cents": null,
    "priority": 0,
    "active": true,
-   "created_at": "2026-10-25T18:43:38.401Z"
+   "created_at": "2026-10-25T18:46:10.909Z"
   },
   {
-   "id": "dda59b35-c0b5-44b3-baa5-e70417f66f96",
+   "id": "72040453-157c-449c-953d-85713a43bb87",
    "tarp_type": null,
    "thickness_mil": null,
    "min_quantity": 25,
@@ -8315,10 +8315,10 @@
    "flat_markup_cents": null,
    "priority": 0,
    "active": true,
-   "created_at": "2026-10-25T18:43:38.401Z"
+   "created_at": "2026-10-25T18:46:10.909Z"
   },
   {
-   "id": "ad607e2d-e0bb-4470-b798-e15dc7d28783",
+   "id": "4c9b0d8b-c8a9-4a3d-9332-e4f9f973bbcc",
    "tarp_type": null,
    "thickness_mil": null,
    "min_quantity": 50,
@@ -8328,10 +8328,10 @@
    "flat_markup_cents": null,
    "priority": 0,
    "active": true,
-   "created_at": "2026-10-25T18:43:38.401Z"
+   "created_at": "2026-10-25T18:46:10.909Z"
   },
   {
-   "id": "05dbd45e-91d1-4695-b214-0181d428cebd",
+   "id": "5d0e7b6a-adbc-4fc5-9acf-0b3902c83686",
    "tarp_type": null,
    "thickness_mil": null,
    "min_quantity": 100,
@@ -8341,7 +8341,7 @@
    "flat_markup_cents": null,
    "priority": 0,
    "active": true,
-   "created_at": "2026-10-25T18:43:38.401Z"
+   "created_at": "2026-10-25T18:46:10.909Z"
   }
  ]
 }

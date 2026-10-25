@@ -27,7 +27,7 @@ VALUES
   ('20mil-ultra', '20-Mil Ultra Heavy Duty Poly', 20, 'Polyethylene', '16x16', 5.0, 'Aluminum', 18,
    true, true, true, false, true, true, 'Ultra-heavy 20-mil tarp for extreme conditions. Maximum strength for permanent commercial covers, extreme weather, and years of continuous use.'),
   ('fr-poly', 'Fire Retardant Poly Tarp', 16, 'Fire Retardant Polyethylene', '14x14', 4.0, 'Aluminum', 18,
-   true, true, true, true, true, false, 'NFPA 701 rated fire retardant. Self-extinguishing when flame removed. Required for welding areas, electrical work, and OSHA-regulated job sites.'),
+   true, true, true, true, true, false, 'Fire-retardant poly for welding areas, electrical work and other jobs that call for flame-resistant coverings. Ask us for the supplier''s fire-test certification for your job file.'),
   ('canvas-standard', 'Heavy Cotton Canvas Tarp', NULL, 'Cotton Canvas', NULL, 18.0, 'Brass', 24,
    false, false, false, false, true, false, 'Traditional breathable cotton canvas. Used for painting drop cloths, vehicle covers, and applications where air circulation matters.');
 
