@@ -1,53 +1,42 @@
-import { getProducts } from '@/lib/products'
-import { ProductCard } from '@/components/products/ProductCard'
-import { CATEGORY_LABELS } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { ProductListing } from '@/components/products/ProductListing'
+import { parseCatalogQuery } from '@/lib/catalog'
+import { CATEGORY_LABELS } from '@/lib/utils'
 
 interface PageProps {
   params: Promise<{ category: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { category } = await params
   const label = CATEGORY_LABELS[category]
   if (!label) return {}
+  const filtered = Object.keys(parseCatalogQuery(await searchParams)).length > 0
   return {
-    title: `${label} Tarps — Heavy Duty`,
-    description: `Shop heavy-duty tarps for ${label.toLowerCase()}. Poly, canvas, fire-retardant options. Bulk pricing for 5+ units.`,
+    title: `${label} Tarps — Wholesale & Bulk`,
+    description: `Heavy-duty tarps and supplies for ${label.toLowerCase()}. Poly, canvas, mesh and fire-retardant options with volume pricing from 5 units and pallet quotes.`,
+    alternates: { canonical: `/products/${category}` },
+    robots: filtered ? { index: false, follow: true } : undefined,
   }
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params, searchParams }: PageProps) {
   const { category } = await params
   const label = CATEGORY_LABELS[category]
-
   if (!label) notFound()
-
-  const products = await getProducts({ category })
+  const { category: _ignored, ...query } = parseCatalogQuery(await searchParams)
+  void _ignored
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <nav className="text-sm text-slate-500 mb-6">
-        <a href="/" className="hover:text-orange-600">Home</a>
-        <span className="mx-2">/</span>
-        <a href="/products" className="hover:text-orange-600">Products</a>
-        <span className="mx-2">/</span>
-        <span className="text-slate-900 font-medium">{label}</span>
-      </nav>
-
-      <h1 className="text-3xl font-black text-slate-900 mb-2">{label} Tarps</h1>
-      <p className="text-slate-500 mb-8">{products.length} products</p>
-
-      {products.length === 0 ? (
-        <div className="text-center py-20 text-slate-400">
-          No products found in this category. <a href="/products" className="text-orange-600 hover:underline">Browse all products</a>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {products.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-      )}
-    </div>
+    <ProductListing
+      basePath={`/products/${category}`}
+      query={query}
+      fixedCategory={category}
+      title={`${label} Tarps`}
+      subtitle={`Tarps, covers and tie-downs for ${label.toLowerCase()}, with volume pricing on every SKU.`}
+      breadcrumb={[{ href: '/', label: 'Home' }, { href: '/products', label: 'Products' }, { label }]}
+    />
   )
 }
