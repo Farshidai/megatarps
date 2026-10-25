@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, FileText, Check, TrendingDown, Package } from 'lucide-react'
+import { ShoppingCart, FileText, Check, TrendingDown, Package, Scale, Truck } from 'lucide-react'
+import { productWeightLb, formatLb } from '@/lib/freight'
 import { formatPrice, cn } from '@/lib/utils'
 import { unitPriceCents, lineTotalCents, isQuoteOnly, type PricingRule } from '@/lib/pricing'
 import { useCart } from '@/lib/cart/useCart'
@@ -35,6 +36,9 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
   const nudge = quoteOnly ? null : nextTier(product, qty, rules, opts)
   const presets = packPresets(product, rules)
   const inCart = cart.items.find((i) => i.sku === product.xpose_sku)
+  const unitWeight = productWeightLb(product as Parameters<typeof productWeightLb>[0])
+  const parcelMax = data?.freight?.settings.parcel_max_order_lb ?? 150
+  const truckFreight = unitWeight != null && (unitWeight > parcelMax || unitWeight * qty > parcelMax)
 
   const addToCart = () => {
     cart.addItem({
@@ -83,7 +87,7 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
           <p className="font-bold text-slate-900">Pallet / project pricing by quote</p>
           <p className="text-sm text-slate-500 mt-1">
-            This item is priced per order. Add it to your cart and request a quote, or ask now. We reply within 4 business hours.
+            This item is priced per order. Add it to your cart and request a quote, or ask for one now.
           </p>
         </div>
       ) : (
@@ -122,6 +126,20 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
         </div>
       )}
 
+      {/* Ship weight / freight method */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600" data-testid="ship-weight-info">
+        <span className="inline-flex items-center gap-1.5">
+          <Scale className="w-4 h-4 text-slate-400" aria-hidden />
+          <span>{unitWeight != null ? <>Ship weight ≈ <strong className="text-slate-900">{formatLb(unitWeight)} lb</strong> each</> : 'Ship weight not listed, freight quoted'}</span>
+        </span>
+        {unitWeight != null && qty > 1 && <span className="text-slate-400">{formatLb(unitWeight * qty)} lb for {qty.toLocaleString()}</span>}
+        {truckFreight && (
+          <span className="inline-flex items-center gap-1.5 font-semibold text-orange-700" data-testid="ltl-notice">
+            <Truck className="w-4 h-4" aria-hidden /> Ships by truck freight (LTL)
+          </span>
+        )}
+      </div>
+
       {/* Actions */}
       <div className="flex flex-col gap-3">
         <button
@@ -157,7 +175,7 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
       )}
 
       <p className="text-xs text-slate-400 text-center">
-        Secure checkout via Stripe · Card or ACH · Ships nationwide
+        Secure checkout via Stripe · Card or ACH · Freight calculated by weight
       </p>
     </div>
   )

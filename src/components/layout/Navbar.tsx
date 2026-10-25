@@ -29,10 +29,12 @@ export function Navbar() {
     <header className="bg-white/85 backdrop-blur-lg border-b border-slate-200/70 sticky top-0 z-50">
       {/* Top announcement bar */}
       <div className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
-        <span className="font-semibold">Free shipping on orders over $199</span>
+        <span className="font-semibold">Wholesale case &amp; pallet pricing</span>
         <span className="mx-2 opacity-50">•</span>
-        <Link href="/bulk-quote" className="underline underline-offset-2 hover:no-underline font-semibold">
-          Bulk orders? Get a quote in 4 hours →
+        <span className="font-semibold">Freight calculated by weight</span>
+        <span className="mx-2 opacity-50 hidden sm:inline">•</span>
+        <Link href="/bulk-quote" className="hidden sm:inline underline underline-offset-2 hover:no-underline font-semibold">
+          Truckload or job order? Request a quote →
         </Link>
       </div>
 

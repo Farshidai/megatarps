@@ -52,6 +52,15 @@ async function run(viewport, tag) {
   const box = page.getByTestId('buy-box')
   await box.scrollIntoViewIfNeeded()
   await page.screenshot({ path: `${OUT}b-buybox-${tag}.png`, fullPage: false })
+  const sw = await page.getByTestId('ship-weight-info').innerText(); ok(/Ship weight ≈ 17\.7 lb each/.test(sw), `[${tag}] buy box shows ship weight ≈ 17.7 lb each`)
+  ok(!(await page.getByTestId('ltl-notice').isVisible().catch(() => false)), `[${tag}] 5 units (89 lb) ships parcel, no LTL notice`)
+  await qty.fill('9')
+  await page.waitForTimeout(150)
+  ok(await page.getByTestId('ltl-notice').isVisible(), `[${tag}] 9 units (159 lb) shows "Ships by truck freight (LTL)"`)
+  await page.getByTestId('ship-weight-info').scrollIntoViewIfNeeded()
+  await page.screenshot({ path: `${OUT}b-freight-buybox-${tag}.png`, fullPage: false })
+  await qty.fill('5')
+  await page.waitForTimeout(150)
 
   // ---- add to cart → drawer
   await page.getByRole('button', { name: /^Add to Cart$/ }).click()
@@ -60,6 +69,7 @@ async function run(viewport, tag) {
   await page.waitForSelector('[data-testid="drawer-subtotal"]:not(:has-text("…"))')
   ok(await drawer.isVisible(), `[${tag}] drawer opens after Add to Cart`)
   ok((await page.getByTestId('cart-count').innerText()) === '5', `[${tag}] navbar badge shows 5 units`)
+  ok((await page.getByTestId('freight-amount').innerText()) === '$69.50', `[${tag}] drawer freight: 88.6 lb parcel = $25 + 89 × $0.50 = $69.50`)
   await page.screenshot({ path: `${OUT}b-drawer-${tag}.png` })
   await page.keyboard.press('Escape')
   ok(!(await drawer.isVisible().catch(() => false)), `[${tag}] Escape closes drawer`)
@@ -77,11 +87,11 @@ async function run(viewport, tag) {
   await page2.getByTestId('cart-subtotal').waitFor()
   await page.evaluate(() => {
     const s = JSON.parse(localStorage.getItem('megatarps_cart_v1'))
-    s.items[0].quantity = 10
+    s.items[0].quantity = 6
     localStorage.setItem('megatarps_cart_v1', JSON.stringify(s))
   })
-  await page2.waitForFunction(() => document.querySelector('[data-testid="cart-count"]')?.textContent === '11', null, { timeout: 5000 }).catch(() => {})
-  ok((await page2.getByTestId('cart-count').innerText()) === '11', `[${tag}] other tab updates via storage event (badge 11)`)
+  await page2.waitForFunction(() => document.querySelector('[data-testid="cart-count"]')?.textContent === '7', null, { timeout: 5000 }).catch(() => {})
+  ok((await page2.getByTestId('cart-count').innerText()) === '7', `[${tag}] other tab updates via storage event (badge 7)`)
   await page2.close()
 
   // ---- cart page
@@ -106,9 +116,25 @@ async function run(viewport, tag) {
   await page.getByRole('dialog').waitFor()
   await page.keyboard.press('Escape')
 
-  // ---- checkout (demo) → success clears priced lines, keeps quote lines
+  // ---- freight quote: pallet-heavy cart + an accessory with no listed weight
   await page.goto(BASE + '/cart', { waitUntil: 'load' })
   await page.getByTestId('cart-subtotal').waitFor()
+  ok(await page.getByTestId('freight-quote-required').isVisible(), `[${tag}] heavy / unknown-weight cart → "Freight quote required" replaces Checkout`)
+  ok((await page.getByTestId('checkout-button').count()) === 0, `[${tag}] no Checkout button while freight needs a quote`)
+  ok((await page.getByTestId('freight-amount').innerText()) === 'Quoted separately', `[${tag}] freight shows "Quoted separately"`)
+  await page.screenshot({ path: `${OUT}b-freight-quote-${tag}.png`, fullPage: tag === 'desktop' })
+
+  // ---- parcel-weight cart → checkout (demo) → success clears priced lines, keeps quote lines
+  await page.evaluate(() => {
+    const s = JSON.parse(localStorage.getItem('megatarps_cart_v1'))
+    s.items = s.items.filter((i) => i.quote_only || i.sku === 'MT-20X30-10MIL').map((i) => (i.quote_only ? i : { ...i, quantity: 5 }))
+    localStorage.setItem('megatarps_cart_v1', JSON.stringify(s))
+  })
+  await page.reload({ waitUntil: 'load' })
+  await page.getByTestId('cart-subtotal').waitFor()
+  ok((await page.getByTestId('freight-amount').innerText()) === '$69.50', `[${tag}] cart freight line $69.50 (parcel)`)
+  ok(/88\.6 lb/.test(await page.getByTestId('ship-weight').innerText()), `[${tag}] cart shows total ship weight 88.6 lb`)
+  await page.screenshot({ path: `${OUT}b-freight-cart-${tag}.png`, fullPage: tag === 'desktop' })
   await page.getByTestId('checkout-button').click()
   await page.waitForURL(/\/checkout\/success\?demo=1/)
   await page.getByTestId('order-number').waitFor()
@@ -126,6 +152,22 @@ async function run(viewport, tag) {
   ok(after >= 3, `[${tag}] reorder puts the order's lines back in the cart (${after} lines)`)
   await page.keyboard.press('Escape')
   if (tag === 'desktop') await page.screenshot({ path: `${OUT}b-orders-${tag}.png`, fullPage: tag === 'desktop' })
+
+  // ---- admin freight (demo: read-only + calculator)
+  if (tag === 'desktop') {
+    await page.goto(BASE + '/admin/freight', { waitUntil: 'load' })
+    ok(await page.getByText(/Demo mode: read-only/).isVisible(), `[${tag}] admin freight shows demo read-only notice`)
+    const c = page.getByRole('combobox', { name: 'Calculator row 1 SKU' })
+    await c.fill('MT-40X60-10MIL')
+    await page.locator('[role=listbox] [role=option]').first().click()
+    await page.getByRole('spinbutton', { name: 'Calculator row 1 quantity' }).fill('2')
+    const res = await page.getByTestId('calc-result').innerText()
+    ok(/142 lb/.test(res) && /\$96\.00/.test(res), `[${tag}] calculator: 2 × 40x60 10-mil = 141.7 lb (bills 142) → $25 + 142 × $0.50 = $96.00`)
+    await page.setViewportSize({ width: 1440, height: 1300 })
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.screenshot({ path: `${OUT}b-freight-admin-${tag}.png` })
+    await page.setViewportSize(viewport)
+  }
 
   // ---- cancel page
   await page.goto(BASE + '/checkout/cancel', { waitUntil: 'load' })

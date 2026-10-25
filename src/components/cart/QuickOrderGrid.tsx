@@ -11,6 +11,7 @@ import { parsePastedList, resolveEntry } from '@/lib/cart/quick-order'
 import { nextTier } from '@/lib/cart/tiers'
 import { useCart } from '@/lib/cart/useCart'
 import { MAX_LINE_QUANTITY } from '@/lib/cart/constants'
+import { calculateFreight, formatLb, freightMethodLabel, type FreightConfig } from '@/lib/freight'
 import { SkuCombobox } from './SkuCombobox'
 
 interface Row {
@@ -25,6 +26,7 @@ interface Props {
   catalog: CatalogEntry[]
   rules: PricingRule[]
   wholesaleDiscountPercent: number
+  freight: FreightConfig
 }
 
 let nextId = 1
@@ -35,7 +37,7 @@ function rowQty(r: Row): number | null {
   return Number.isInteger(n) && n >= 1 && n <= MAX_LINE_QUANTITY ? n : null
 }
 
-export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent }: Props) {
+export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, freight: freightConfig }: Props) {
   const cart = useCart()
   const opts = { wholesaleDiscountPercent }
   const [rows, setRows] = useState<Row[]>(() => [blank(), blank(), blank(), blank(), blank()])
@@ -79,6 +81,10 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent }: Pro
   const ready = rows.filter((r) => r.entry && rowQty(r) && (r.entry.quote_only || r.entry.in_stock))
   const subtotal = ready.reduce((s, r) => (r.entry!.quote_only ? s : s + unitPriceCents(r.entry!, rowQty(r)!, rules, opts) * rowQty(r)!), 0)
   const quoteCount = ready.filter((r) => r.entry!.quote_only).length
+  const pricedReady = ready.filter((r) => !r.entry!.quote_only)
+  const freight = pricedReady.length
+    ? calculateFreight(pricedReady.map((r) => ({ sku: r.entry!.sku, quantity: rowQty(r)!, unitWeightLb: r.entry!.unit_weight_lb })), freightConfig, subtotal)
+    : null
 
   const addAll = () => {
     if (!ready.length) return
@@ -226,6 +232,12 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent }: Pro
             {quoteCount > 0 && <span> · {quoteCount} by quote</span>}
           </p>
           <p className="text-xl font-black text-slate-900" data-testid="qo-subtotal">{formatPrice(subtotal)}</p>
+          {freight && (
+            <p className="text-xs text-slate-500" data-testid="qo-freight">
+              {freight.unknownWeightSkus.length ? 'Ship weight not listed for some items' : `${formatLb(freight.totalWeightLb)} lb`} · {freightMethodLabel(freight.method)}
+              {freight.method === 'quote' ? ' (freight quoted separately)' : freight.free ? ' · free' : ` · ${formatPrice(freight.freightCents ?? 0)} freight`}
+            </p>
+          )}
           {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale discount</p>}
         </div>
         <button

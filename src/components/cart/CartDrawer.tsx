@@ -12,6 +12,7 @@ import { useCheckout } from '@/lib/cart/useCheckout'
 import { cartTotals } from '@/lib/cart/totals'
 import { CartLineRow } from './CartLineRow'
 import { FreeFreightBar } from './FreeFreightBar'
+import { FreightRows, FreightQuoteRequired } from './FreightSummary'
 
 /** Slide-over mini cart. Rendered once (from the Navbar); opened via useCart().openDrawer(). */
 export function CartDrawer() {
@@ -24,7 +25,8 @@ export function CartDrawer() {
 
   const rules = data?.rules ?? []
   const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0 }
-  const totals = cartTotals(cart.items, data?.products, rules, opts)
+  const totals = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
+  const freightQuote = totals.freight?.method === 'quote'
 
   // close on route change
   const lastPath = useRef(pathname)
@@ -125,13 +127,19 @@ export function CartDrawer() {
             </div>
 
             <div className="border-t border-slate-200 p-5 space-y-3 bg-white">
-              {totals.priced.length > 0 && <FreeFreightBar toFreeFreight={totals.toFreeFreight} progress={totals.freightProgress} />}
-              {totals.priced.length > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Subtotal ({totals.priced.length} priced line{totals.priced.length > 1 ? 's' : ''})</span>
-                  <span className="text-xl font-black text-slate-900" data-testid="drawer-subtotal">{loading ? '…' : formatPrice(totals.subtotal)}</span>
-                </div>
+              {totals.priced.length > 0 && totals.freeFreightThreshold && (
+                <FreeFreightBar threshold={totals.freeFreightThreshold} toFreeFreight={totals.toFreeFreight} progress={totals.freightProgress} />
               )}
+              {totals.priced.length > 0 && (
+                <dl className="space-y-1.5 text-sm">
+                  <div className="flex items-center justify-between">
+                    <dt className="text-slate-600">Subtotal ({totals.priced.length} priced line{totals.priced.length > 1 ? 's' : ''})</dt>
+                    <dd className="text-xl font-black text-slate-900" data-testid="drawer-subtotal">{loading ? '…' : formatPrice(totals.subtotal)}</dd>
+                  </div>
+                  {totals.freight && !loading && <FreightRows freight={totals.freight} />}
+                </dl>
+              )}
+              {freightQuote && totals.freight && <FreightQuoteRequired freight={totals.freight} compact />}
               {totals.quote.length > 0 && (
                 <p className="text-xs text-orange-800 bg-orange-50 rounded-lg px-3 py-2">
                   {totals.quote.length} item{totals.quote.length > 1 ? 's are' : ' is'} priced by quote and won&apos;t be charged at checkout.
@@ -142,11 +150,11 @@ export function CartDrawer() {
                 <Link href="/cart" className="text-center border border-slate-300 hover:border-slate-400 text-slate-800 font-semibold py-3 rounded-xl text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">
                   View cart
                 </Link>
-                {totals.priced.length > 0 ? (
+                {totals.priced.length > 0 && !freightQuote ? (
                   <button
                     type="button"
                     onClick={() => checkout(totals.priced)}
-                    disabled={checkingOut || loading}
+                    disabled={checkingOut || loading || !totals.freight}
                     className="bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold py-3 rounded-xl text-sm inline-flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                   >
                     <Lock className="w-4 h-4" aria-hidden />

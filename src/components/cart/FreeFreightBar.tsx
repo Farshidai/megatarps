@@ -1,15 +1,15 @@
 import { Truck } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
-import { FREE_FREIGHT_THRESHOLD_CENTS } from '@/lib/cart/constants'
 
-export function FreeFreightBar({ toFreeFreight, progress }: { toFreeFreight: number; progress: number }) {
+/** Only rendered when an admin has set a free-freight threshold (parcel orders). */
+export function FreeFreightBar({ threshold, toFreeFreight, progress }: { threshold: number; toFreeFreight: number; progress: number }) {
   return (
     <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5">
       <p className="text-xs text-slate-700 flex items-center gap-1.5">
         <Truck className="w-4 h-4 text-orange-500" aria-hidden />
         {toFreeFreight > 0 ? (
           <span>
-            Add <strong>{formatPrice(toFreeFreight)}</strong> more for <strong>free freight</strong> (orders over {formatPrice(FREE_FREIGHT_THRESHOLD_CENTS)})
+            Add <strong>{formatPrice(toFreeFreight)}</strong> more for <strong>free parcel freight</strong> (orders over {formatPrice(threshold)})
           </span>
         ) : (
           <span className="font-semibold text-green-700">Your order ships free</span>

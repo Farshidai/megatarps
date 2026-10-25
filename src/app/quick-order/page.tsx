@@ -5,6 +5,7 @@ import { getPricingRules } from '@/lib/products'
 import { getAccountPricing } from '@/lib/accounts'
 import { getCartCatalog } from '@/lib/cart/server'
 import { QuickOrderGrid } from '@/components/cart/QuickOrderGrid'
+import { getFreightConfig } from '@/lib/freight-server'
 
 export const metadata: Metadata = {
   title: 'Quick Order: order tarps by SKU',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function QuickOrderPage() {
   await connection() // per-request: live catalog + the buyer's wholesale discount
-  const [catalog, rules, account] = await Promise.all([getCartCatalog(), getPricingRules(), getAccountPricing()])
+  const [catalog, rules, account, freight] = await Promise.all([getCartCatalog(), getPricingRules(), getAccountPricing(), getFreightConfig()])
   const wholesaleDiscountPercent = account.status === 'approved' ? account.wholesaleDiscountPercent : 0
   // only the fields the pricing engine needs reach the browser
   const publicRules = rules.map((r) => ({
@@ -39,7 +40,7 @@ export default async function QuickOrderPage() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <QuickOrderGrid catalog={catalog} rules={publicRules} wholesaleDiscountPercent={wholesaleDiscountPercent} />
+        <QuickOrderGrid catalog={catalog} rules={publicRules} wholesaleDiscountPercent={wholesaleDiscountPercent} freight={freight} />
       </div>
     </div>
   )

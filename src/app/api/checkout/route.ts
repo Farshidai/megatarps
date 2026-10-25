@@ -17,7 +17,8 @@ import {
   priceCheckoutLines,
   type PricedLine,
 } from '@/lib/cart/checkout-pricing'
-import { FREE_FREIGHT_THRESHOLD_CENTS, STANDARD_FREIGHT_CENTS } from '@/lib/cart/constants'
+import { calculateFreight, type FreightResult } from '@/lib/freight'
+import { getFreightConfig } from '@/lib/freight-server'
 
 type SessionCreateParams = NonNullable<Parameters<Stripe['checkout']['sessions']['create']>[0]>
 
@@ -40,30 +41,47 @@ export async function POST(request: Request) {
   }
 
   let priced: { lines: PricedLine[]; subtotal_cents: number }
+  let freight: FreightResult
   let account: Awaited<ReturnType<typeof getAccountPricing>>
   try {
     const lines = parseCheckoutBody(body)
-    const [products, rules, acct] = await Promise.all([
+    const [products, rules, acct, freightConfig] = await Promise.all([
       getProductsBySkus(lines.map((l) => l.sku)),
       getPricingRules(),
       getAccountPricing(),
+      getFreightConfig(),
     ])
     account = acct
     const wholesaleDiscountPercent = acct.status === 'approved' ? Math.min(Math.max(acct.wholesaleDiscountPercent || 0, 0), 90) : 0
     priced = priceCheckoutLines(lines, products, rules, { wholesaleDiscountPercent })
+    // Freight: server weights + server rates only. Nothing from the request is used.
+    freight = calculateFreight(
+      priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unitWeightLb: l.unit_weight_lb })),
+      freightConfig,
+      priced.subtotal_cents,
+    )
+    if (freight.method === 'quote' || freight.freightCents == null) {
+      throw new CheckoutError(`Freight quote required: ${freight.reason}`, 409, {
+        code: 'freight_quote_required',
+        quote_url: '/bulk-quote?from=cart',
+        total_weight_lb: freight.totalWeightLb,
+        unknown_weight: freight.unknownWeightSkus,
+      })
+    }
   } catch (e) {
     if (e instanceof CheckoutError) return Response.json({ error: e.message, details: e.details }, { status: e.status })
     console.error('checkout pricing error', e)
     return Response.json({ error: 'Could not price your cart. Please try again.' }, { status: 500 })
   }
 
-  const shipping_cents = priced.subtotal_cents >= FREE_FREIGHT_THRESHOLD_CENTS ? 0 : STANDARD_FREIGHT_CENTS
+  const shipping_cents = freight.freightCents ?? 0
   const orderNumber = newOrderNumber()
   const summary = {
     order_number: orderNumber,
     lines: priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unit_price_cents: l.unit_price_cents, line_total_cents: l.line_total_cents })),
     subtotal_cents: priced.subtotal_cents,
     shipping_cents,
+    freight: { method: freight.method, total_weight_lb: freight.totalWeightLb, billable_weight_lb: freight.billableWeightLb, freight_cents: shipping_cents },
     total_cents: priced.subtotal_cents + shipping_cents,
   }
 
@@ -74,7 +92,7 @@ export async function POST(request: Request) {
       demo: true,
       url: `/checkout/success?demo=1&order=${orderNumber}`,
       // exactly what would be sent to Stripe (lets QA / scripts verify server pricing)
-      stripe_line_items: buildStripeLineItems(priced.lines).map((li) => ({ sku: li.price_data.product_data.metadata.sku, quantity: li.quantity, unit_amount: li.price_data.unit_amount })),
+      stripe_line_items: buildStripeLineItems(priced.lines, freight).map((li) => ({ sku: li.price_data.product_data.metadata.sku, quantity: li.quantity, unit_amount: li.price_data.unit_amount })),
     })
   }
 
@@ -98,6 +116,7 @@ export async function POST(request: Request) {
     status: 'pending',
     payment_status: 'pending',
     payment_method: 'stripe_checkout',
+    shipping_method: `${freight.method} ${freight.totalWeightLb} lb`,
     shipping_address: {},
   }
   let ins = await supabase.from('orders').insert(orderRow).select('id').single()
@@ -117,27 +136,18 @@ export async function POST(request: Request) {
   const params: SessionCreateParams = {
     mode: 'payment',
     payment_method_types: ['card', 'us_bank_account'],
-    line_items: buildStripeLineItems(priced.lines),
+    line_items: buildStripeLineItems(priced.lines, freight),
     client_reference_id: orderId,
     customer_email: account.email ?? undefined,
     metadata: {
       order_id: orderId,
       order_number: orderNumber,
       source: 'cart',
+      freight: `${freight.method}:${shipping_cents}:${freight.totalWeightLb}`,
       ...compactItemsMetadata(priced.lines),
     },
     payment_intent_data: { metadata: { order_id: orderId, order_number: orderNumber } },
     shipping_address_collection: { allowed_countries: ['US'] },
-    shipping_options: [
-      {
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: shipping_cents, currency: 'usd' },
-          display_name: shipping_cents ? 'Standard freight (3–7 business days)' : 'Free freight (3–7 business days)',
-          delivery_estimate: { minimum: { unit: 'business_day', value: 3 }, maximum: { unit: 'business_day', value: 7 } },
-        },
-      },
-    ],
     phone_number_collection: { enabled: true },
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancel?order=${orderNumber}`,

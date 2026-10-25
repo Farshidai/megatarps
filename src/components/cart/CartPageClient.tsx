@@ -7,9 +7,9 @@ import { useCart } from '@/lib/cart/useCart'
 import { usePricingData } from '@/lib/cart/usePricingData'
 import { useCheckout } from '@/lib/cart/useCheckout'
 import { cartTotals } from '@/lib/cart/totals'
-import { FREE_FREIGHT_THRESHOLD_CENTS, STANDARD_FREIGHT_CENTS } from '@/lib/cart/constants'
 import { CartLineRow } from './CartLineRow'
 import { FreeFreightBar } from './FreeFreightBar'
+import { FreightRows, FreightQuoteRequired } from './FreightSummary'
 
 export function CartPageClient() {
   const cart = useCart()
@@ -17,8 +17,9 @@ export function CartPageClient() {
   const { checkout, loading: checkingOut, error } = useCheckout()
   const rules = data?.rules ?? []
   const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0 }
-  const t = cartTotals(cart.items, data?.products, rules, opts)
-  const freight = t.freeFreight ? 0 : STANDARD_FREIGHT_CENTS
+  const t = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
+  const freightQuote = t.freight?.method === 'quote'
+  const freightCents = t.freight?.freightCents ?? 0
 
   if (!cart.hydrated) {
     return <div className="h-64 rounded-2xl bg-white border border-slate-200 animate-pulse" aria-label="Loading cart" />
@@ -87,7 +88,7 @@ export function CartPageClient() {
               <div className="pt-5 flex items-start justify-between gap-3 flex-wrap">
                 <div>
                   <h2 id="quote-heading" className="font-bold text-slate-900 flex items-center gap-2"><FileText className="w-4 h-4 text-orange-500" aria-hidden />Priced by quote</h2>
-                  <p className="text-sm text-slate-500 mt-1">Pallet and project items. These are not charged at checkout; we&apos;ll quote them within 4 business hours.</p>
+                  <p className="text-sm text-slate-500 mt-1">Pallet and project items. These are not charged at checkout; our team will send you a quote.</p>
                 </div>
                 <Link href="/bulk-quote?from=cart" className="text-sm bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 py-2 rounded-lg">Request quote</Link>
               </div>
@@ -103,23 +104,30 @@ export function CartPageClient() {
               <dl className="space-y-2 text-sm">
                 <div className="flex justify-between"><dt className="text-slate-600">Subtotal</dt><dd className="font-semibold text-slate-900" data-testid="cart-subtotal">{formatPrice(t.subtotal)}</dd></div>
                 {t.savings > 0 && <div className="flex justify-between text-green-700"><dt>Volume savings</dt><dd className="font-semibold">−{formatPrice(t.savings)}</dd></div>}
-                <div className="flex justify-between"><dt className="text-slate-600">Freight</dt><dd className="font-semibold text-slate-900">{freight ? formatPrice(freight) : 'FREE'}</dd></div>
+                {t.freight && <FreightRows freight={t.freight} />}
                 <div className="flex justify-between text-slate-400"><dt>Tax</dt><dd>Calculated at checkout</dd></div>
-                <div className="flex justify-between border-t border-slate-100 pt-3 text-base"><dt className="font-bold text-slate-900">Estimated total</dt><dd className="font-black text-slate-900 text-xl">{formatPrice(t.subtotal + freight)}</dd></div>
+                <div className="flex justify-between border-t border-slate-100 pt-3 text-base">
+                  <dt className="font-bold text-slate-900">{freightQuote ? 'Items total' : 'Estimated total'}</dt>
+                  <dd className="font-black text-slate-900 text-xl" data-testid="cart-total">{formatPrice(t.subtotal + (freightQuote ? 0 : freightCents))}</dd>
+                </div>
               </dl>
-              <FreeFreightBar toFreeFreight={t.toFreeFreight} progress={t.freightProgress} />
+              {t.freeFreightThreshold && <FreeFreightBar threshold={t.freeFreightThreshold} toFreeFreight={t.toFreeFreight} progress={t.freightProgress} />}
               {opts.wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {opts.wholesaleDiscountPercent}% wholesale discount.</p>}
               {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+              {freightQuote && t.freight ? (
+                <FreightQuoteRequired freight={t.freight} />
+              ) : (
               <button
                 type="button"
                 onClick={() => checkout(t.priced)}
-                disabled={checkingOut || loading || t.unavailable.length > 0}
+                disabled={checkingOut || loading || !t.freight || t.unavailable.length > 0}
                 className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 text-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
                 data-testid="checkout-button"
               >
                 <Lock className="w-5 h-5" aria-hidden />
-                {checkingOut ? 'Redirecting to secure checkout…' : `Checkout · ${formatPrice(t.subtotal)}`}
+                {checkingOut ? 'Redirecting to secure checkout…' : `Checkout · ${formatPrice(t.subtotal + freightCents)}`}
               </button>
+              )}
               <p className="text-xs text-slate-400 text-center flex items-center justify-center gap-3">
                 <span className="inline-flex items-center gap-1"><CreditCard className="w-3.5 h-3.5" aria-hidden />Card</span>
                 <span className="inline-flex items-center gap-1"><Landmark className="w-3.5 h-3.5" aria-hidden />ACH bank transfer</span>
@@ -128,7 +136,7 @@ export function CartPageClient() {
               {t.quote.length > 0 && <p className="text-xs text-slate-500">Checkout covers the {t.priced.length} priced line{t.priced.length > 1 ? 's' : ''} only. Quote items stay in your cart.</p>}
             </>
           ) : (
-            <p className="text-sm text-slate-500">Everything in your cart is priced by quote. Send it to our team and we&apos;ll reply within 4 business hours.</p>
+            <p className="text-sm text-slate-500">Everything in your cart is priced by quote. Send it to our team and we&apos;ll reply with pricing and freight.</p>
           )}
 
           <div className="border-t border-slate-100 pt-4">
@@ -142,7 +150,7 @@ export function CartPageClient() {
             </Link>
             <p className="text-xs text-slate-400 text-center mt-2">Big job, pallet quantities or net terms? Send the whole cart for a quote.</p>
           </div>
-          <p className="text-xs text-slate-400">Free freight on orders over {formatPrice(FREE_FREIGHT_THRESHOLD_CENTS)}.</p>
+          <p className="text-xs text-slate-400">Freight is calculated by ship weight. Orders over {data?.freight ? Math.round(data.freight.settings.parcel_max_order_lb) : 150} lb ship by truck (LTL).</p>
         </aside>
       </div>
     </div>

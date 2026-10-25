@@ -102,7 +102,8 @@ async function handleSession(supabase: Admin, type: string, session: Session) {
         payment_status: paidNow ? 'paid' : 'processing',
         stripe_payment_id: paymentIntentId(session),
         shipping_address: shippingFromSession(session),
-        shipping_cents: session.total_details?.amount_shipping ?? undefined,
+        // shipping_cents is NOT taken from Stripe for cart orders: freight is a server-priced
+        // line item and is already stored on the pending order row.
         tax_cents: session.total_details?.amount_tax ?? 0,
         total_cents: session.amount_total ?? undefined,
         payment_method: session.payment_method_types?.join(',') ?? 'stripe_checkout',

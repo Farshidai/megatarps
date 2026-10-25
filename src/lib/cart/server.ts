@@ -13,7 +13,7 @@ export async function getProductsBySkus(skus: string[]): Promise<Product[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('products')
-    .select('id, xpose_sku, name, slug, tarp_type, thickness_mil, width_ft, length_ft, color, retail_price_cents, units_per_half_pallet, units_per_full_pallet, image_urls, active, in_stock')
+    .select('*, product_line:product_lines(weight_oz_per_sqyd)')
     .in('xpose_sku', unique)
     .eq('active', true)
   if (error) {

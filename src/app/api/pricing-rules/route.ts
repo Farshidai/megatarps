@@ -1,10 +1,11 @@
 // GET /api/pricing-rules?skus=A,B,C
 // Display-only pricing data for the mini cart: active volume rules, the buyer's wholesale
-// discount, and slim product rows for the requested SKUs. Checkout never trusts any of this;
+// discount, slim product rows (with ship weight) for the requested SKUs, and freight rates. Checkout never trusts any of this;
 // /api/checkout re-prices everything server-side.
 import { getPricingRules } from '@/lib/products'
 import { getAccountPricing } from '@/lib/accounts'
 import { getCartCatalog } from '@/lib/cart/server'
+import { getFreightConfig } from '@/lib/freight-server'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -15,10 +16,11 @@ export async function GET(request: Request) {
     .slice(0, 100)
 
   try {
-    const [rules, account, products] = await Promise.all([
+    const [rules, account, products, freight] = await Promise.all([
       getPricingRules(),
       getAccountPricing(),
       skus.length ? getCartCatalog(skus) : Promise.resolve([]),
+      getFreightConfig(),
     ])
     return Response.json(
       {
@@ -33,6 +35,7 @@ export async function GET(request: Request) {
         })),
         wholesaleDiscountPercent: account.status === 'approved' ? account.wholesaleDiscountPercent : 0,
         products,
+        freight,
       },
       { headers: { 'Cache-Control': 'private, no-store' } },
     )

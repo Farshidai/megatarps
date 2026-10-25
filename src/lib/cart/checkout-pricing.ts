@@ -4,6 +4,7 @@
 import { unitPriceCents, discountForQuantity, isQuoteOnly, type PricingRule, type PriceOptions } from '@/lib/pricing'
 import type { Product } from '@/types'
 import { MAX_CART_LINES, MAX_LINE_QUANTITY } from './constants'
+import { productWeightLb, formatLb, type FreightResult } from '@/lib/freight'
 
 export interface CheckoutLineInput {
   sku: string
@@ -21,6 +22,8 @@ export interface PricedLine {
   volume_discount_percent: number
   unit_price_cents: number
   line_total_cents: number
+  /** ship weight per unit (lb), null = unknown */
+  unit_weight_lb: number | null
 }
 
 export class CheckoutError extends Error {
@@ -85,6 +88,7 @@ export function priceCheckoutLines(
       volume_discount_percent: discountForQuantity(p, l.quantity, rules),
       unit_price_cents: unit,
       line_total_cents: unit * l.quantity,
+      unit_weight_lb: productWeightLb(p as Parameters<typeof productWeightLb>[0]),
     }
   })
   return { lines: priced, subtotal_cents: priced.reduce((s, l) => s + l.line_total_cents, 0) }
@@ -122,9 +126,9 @@ export function parseCompactItems(metadata: Record<string, string> | null | unde
   return out
 }
 
-/** Stripe Checkout line_items built ONLY from server-priced lines. */
-export function buildStripeLineItems(lines: PricedLine[]) {
-  return lines.map((l) => ({
+/** Stripe Checkout line_items built ONLY from server-priced lines + server-computed freight. */
+export function buildStripeLineItems(lines: PricedLine[], freight?: FreightResult) {
+  const items = lines.map((l) => ({
     quantity: l.quantity,
     price_data: {
       currency: 'usd' as const,
@@ -137,4 +141,20 @@ export function buildStripeLineItems(lines: PricedLine[]) {
       },
     },
   }))
+  if (freight && freight.method !== 'quote' && freight.freightCents && freight.freightCents > 0) {
+    items.push({
+      quantity: 1,
+      price_data: {
+        currency: 'usd' as const,
+        unit_amount: freight.freightCents,
+        product_data: {
+          name: `Freight – ${freight.method === 'ltl' ? 'LTL truck' : 'parcel'}, ${formatLb(freight.totalWeightLb)} lb`,
+          description: `Billed weight ${freight.billableWeightLb} lb`,
+          images: [],
+          metadata: { sku: 'FREIGHT', product_id: '' },
+        },
+      },
+    })
+  }
+  return items
 }
