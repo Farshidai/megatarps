@@ -42,3 +42,26 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS market_price_checked_at DATE;
 DO $$ BEGIN
   ALTER TABLE products ADD CONSTRAINT products_market_price_nonnegative CHECK (market_price_cents IS NULL OR market_price_cents >= 0);
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- Pallet-first pricing (Farshid's pallet plan).
+-- unit = 'each'  : min/max_quantity are pieces, discount_from_retail_percent applies (unchanged).
+-- unit = 'pallet': min/max_quantity are FULL pallets of the product (qty >= N x units_per_full_pallet);
+--                  unit price = retail x price_multiplier. requires_account = approved accounts only.
+ALTER TABLE pricing_rules ADD COLUMN IF NOT EXISTS unit TEXT NOT NULL DEFAULT 'each';
+ALTER TABLE pricing_rules ADD COLUMN IF NOT EXISTS price_multiplier NUMERIC;
+ALTER TABLE pricing_rules ADD COLUMN IF NOT EXISTS requires_account BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE pricing_rules ADD COLUMN IF NOT EXISTS label TEXT;
+DO $$ BEGIN
+  ALTER TABLE pricing_rules ADD CONSTRAINT pricing_rules_unit_check CHECK (unit IN ('each', 'pallet'));
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  ALTER TABLE pricing_rules ADD CONSTRAINT pricing_rules_multiplier_range CHECK (price_multiplier IS NULL OR (price_multiplier > 0 AND price_multiplier <= 1));
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- Per-unit price floor (cost x 1.15) enforced by the pricing engine on every tier.
+-- It is public on purpose: the engine needs it client-side, and it equals the lowest
+-- price already shown on the product page.
+ALTER TABLE products ADD COLUMN IF NOT EXISTS min_unit_price_cents INTEGER;
+DO $$ BEGIN
+  ALTER TABLE products ADD CONSTRAINT products_min_unit_price_nonnegative CHECK (min_unit_price_cents IS NULL OR min_unit_price_cents >= 0);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;

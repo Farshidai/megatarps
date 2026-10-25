@@ -4,9 +4,10 @@ import { cache } from 'react'
 import type { Metadata } from 'next'
 import { CheckCircle, Truck, ShieldCheck, Clock, Flame } from 'lucide-react'
 import { getProductBySlug, getRelatedProducts, getPricingRules } from '@/lib/products'
-import { isQuoteOnly, priceTiers, lowestUnitPriceCents } from '@/lib/pricing'
+import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents } from '@/lib/pricing'
+import { getAccountPricing } from '@/lib/accounts'
 import {
-  toPublicProduct, seoTitle, seoDescription, gradeLabel, gaugeLabel, dimsLabel, isAccessory, type CatalogProduct,
+  toPublicProduct, seoTitle, seoDescription, gradeLabel, gaugeLabel, dimsLabel, isAccessory, isPalletSku, type CatalogProduct,
 } from '@/lib/catalog'
 import { AddToCartOrRFQ } from '@/components/products/AddToCartOrRFQ'
 import { ProductCard } from '@/components/products/ProductCard'
@@ -44,7 +45,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params
-  const [product, rules] = await Promise.all([loadProduct(slug), getPricingRules()])
+  const [product, rules, account] = await Promise.all([loadProduct(slug), getPricingRules(), getAccountPricing()])
+  const accountApproved = account.status === 'approved'
   if (!product) notFound()
 
   const related = (await getRelatedProducts(product)).map(toPublicProduct)
@@ -54,6 +56,9 @@ export default async function ProductPage({ params }: PageProps) {
   const low = quoteOnly ? 0 : lowestUnitPriceCents(product, rules)
   const lowTier = tiers.find((t) => t.unit_price_cents === low)
   const acc = isAccessory(product)
+  const pallets = palletTiers(product, rules)
+  const bestPallet = pallets[pallets.length - 1]
+  const palletSku = isPalletSku(product)
   const category = product.categories?.find((c) => CATEGORY_LABELS[c])
 
   const specs: Array<[string, string | null | undefined]> = [
@@ -71,11 +76,11 @@ export default async function ProductPage({ params }: PageProps) {
     ['Fire rating', pl?.fire_retardant ? 'Fire retardant' : null],
   ]
   const pack: Array<[string, string | null]> = [
-    ['Sold as', acc && product.pack_quantity && product.pack_quantity > 1 ? `${product.pack_quantity}-pack` : 'Each'],
+    ['Sold as', palletSku ? `1 pallet of ${product.pack_quantity ?? '?'} tarps` : acc && product.pack_quantity && product.pack_quantity > 1 ? `${product.pack_quantity}-pack` : 'Each'],
     ['Units per case', product.units_per_case ? String(product.units_per_case) : null],
     ['Units per half pallet', product.units_per_half_pallet ? String(product.units_per_half_pallet) : null],
     ['Units per full pallet', product.units_per_full_pallet ? String(product.units_per_full_pallet) : null],
-    ['Volume pricing', quoteOnly ? 'By quote' : tiers.length > 1 ? `${tiers.length} tiers, from ${tiers[1].min_quantity} units` : null],
+    ['Volume pricing', quoteOnly ? 'By quote' : pallets.length ? `Wholesale accounts: ${pallets.map((x) => x.label).join(' / ')}` : tiers.length > 1 ? `${tiers.length} tiers, from ${tiers[1].min_quantity} units` : null],
   ]
 
   const features = [
@@ -190,9 +195,20 @@ export default async function ProductPage({ params }: PageProps) {
               <div className="mb-5">
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-4xl font-black text-slate-900 tabular-nums">{formatPrice(product.retail_price_cents)}</span>
-                  <span className="text-slate-500">/ unit</span>
+                  <span className="text-slate-500">{palletSku ? '/ pallet' : '/ unit'}</span>
                 </div>
-                {lowTier && lowTier.min_quantity > 1 && (
+                {palletSku && product.pack_quantity ? (
+                  <p className="text-sm text-slate-600 mt-1">
+                    {product.pack_quantity} tarps · <strong>{formatPrice(Math.round(product.retail_price_cents / product.pack_quantity))}/tarp</strong>
+                  </p>
+                ) : null}
+                {bestPallet && (
+                  <p className="text-sm text-slate-600 mt-1">
+                    Pallet of {bestPallet.units_per_pallet}: wholesale from <strong className="text-green-700">{formatPrice(bestPallet.unit_price_cents)}/ea</strong>
+                    {!accountApproved && <> · <Link href="/apply" className="text-orange-600 font-semibold hover:underline">apply for an account</Link></>}
+                  </p>
+                )}
+                {!bestPallet && lowTier && lowTier.min_quantity > 1 && (
                   <p className="text-sm text-slate-600 mt-1">
                     As low as <strong className="text-green-700">{formatPrice(low)}/ea</strong> when you buy {lowTier.min_quantity}+
                   </p>
@@ -201,7 +217,7 @@ export default async function ProductPage({ params }: PageProps) {
             )}
 
             <div className="grid gap-5 xl:grid-cols-1">
-              <TierPriceTable product={product} rules={rules} />
+              <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} />
               <div className="rounded-2xl ring-1 ring-slate-200 p-4 sm:p-5">
                 <AddToCartOrRFQ product={product} rules={rules} />
               </div>
@@ -219,8 +235,8 @@ export default async function ProductPage({ params }: PageProps) {
 
             <div className="mt-5 grid grid-cols-3 gap-2.5">
               {[
-                { icon: Truck, label: 'Ships from Kansas City' },
-                { icon: Clock, label: 'Quotes in ~4 business hrs' },
+                { icon: Truck, label: 'Kansas City based · Midwest freight' },
+                { icon: Clock, label: 'Quotes within 1 business day' },
                 { icon: ShieldCheck, label: 'Net terms for approved accounts' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center text-center gap-1.5 bg-slate-50 rounded-xl p-3">

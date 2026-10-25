@@ -3,8 +3,8 @@ import { cache } from 'react'
 import { ArrowUpRight, Flame } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { getPricingRules } from '@/lib/products'
-import { isQuoteOnly, lowestUnitPriceCents, priceTiers, type PricingRule } from '@/lib/pricing'
-import { gaugeLabel, isAccessory, type CatalogProduct } from '@/lib/catalog'
+import { isQuoteOnly, lowestUnitPriceCents, priceTiers, palletTiers, type PricingRule } from '@/lib/pricing'
+import { gaugeLabel, isAccessory, isPalletSku, type CatalogProduct } from '@/lib/catalog'
 import { ProductImage } from '@/components/products/ProductImage'
 import type { Product } from '@/types'
 
@@ -25,6 +25,10 @@ export async function ProductCard({ product: base, rules }: ProductCardProps) {
   const low = quoteOnly ? 0 : lowestUnitPriceCents(product, r)
   const best = tiers.find((t) => t.unit_price_cents === low) ?? null
   const hasVolume = best != null && best.min_quantity > 1
+  const pallets = quoteOnly ? [] : palletTiers(product, r)
+  const bestPallet = pallets[pallets.length - 1]
+  const palletSku = isPalletSku(product)
+  const palletQty = product.units_per_full_pallet
   const fr = product.product_line?.fire_retardant
   const gauge = gaugeLabel(product)
   const acc = isAccessory(product)
@@ -92,7 +96,9 @@ export async function ProductCard({ product: base, rules }: ProductCardProps) {
           {quoteOnly ? (
             <div className="flex items-end justify-between gap-2">
               <div>
-                <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5">Wholesale</p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5">
+                  {palletQty ? `Pallet of ${palletQty}` : 'Wholesale'}
+                </p>
                 <p className="text-sm font-bold text-orange-600">Pricing by quote</p>
               </div>
               <span className="text-[11px] font-semibold text-slate-500 group-hover:text-orange-600 transition-colors">Get quote →</span>
@@ -102,7 +108,7 @@ export async function ProductCard({ product: base, rules }: ProductCardProps) {
               <div className="flex items-baseline justify-between gap-2">
                 <p className="text-lg sm:text-xl font-black text-slate-900 leading-none tabular-nums">
                   {formatPrice(product.retail_price_cents)}
-                  <span className="text-xs font-semibold text-slate-400">/ea</span>
+                  <span className="text-xs font-semibold text-slate-400">{palletSku ? '/pallet' : '/ea'}</span>
                 </p>
                 {!product.in_stock ? null : (
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-700">
@@ -110,7 +116,17 @@ export async function ProductCard({ product: base, rules }: ProductCardProps) {
                   </span>
                 )}
               </div>
-              {hasVolume && best && (
+              {bestPallet && (
+                <p className="mt-1.5 text-xs text-slate-700 font-semibold">
+                  Pallet of {bestPallet.units_per_pallet} from <span className="text-green-700 tabular-nums">{formatPrice(bestPallet.unit_price_cents)}/ea</span>
+                </p>
+              )}
+              {palletSku && product.pack_quantity ? (
+                <p className="mt-1.5 text-xs text-slate-700 font-semibold">
+                  {product.pack_quantity} tarps · {formatPrice(Math.round(product.retail_price_cents / product.pack_quantity))}/tarp
+                </p>
+              ) : null}
+              {!bestPallet && !palletSku && hasVolume && best && (
                 <p className="mt-1.5 text-xs text-slate-600">
                   As low as <span className="font-bold text-green-700 tabular-nums">{formatPrice(best.unit_price_cents)}/ea</span> at {best.min_quantity}+
                 </p>

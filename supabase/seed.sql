@@ -14,17 +14,17 @@ INSERT INTO product_lines
   (id, name, thickness_mil, material, weave_count, weight_oz_per_sqyd, grommet_type, grommet_spacing_inches,
    uv_resistant, waterproof, mildew_resistant, fire_retardant, reinforced_corners, sewn_in_rope, description)
 VALUES
-  ('5mil-light', '5-Mil Light Duty Poly', 5, 'Polyethylene', '10x10', 1.5, 'Aluminum', 18,
+  ('5mil-light', '5-Mil Light Duty Poly', 5, 'Polyethylene', '8x8', 3.6, 'Aluminum', 36,
    true, true, true, false, false, false, 'Lightweight poly tarp for temporary use. Great for camping, home projects, furniture covers, and general outdoor use.'),
-  ('7mil-standard', '7-Mil Standard Duty Poly', 7, 'Polyethylene', '12x12', 2.0, 'Aluminum', 18,
+  ('7mil-standard', '7-Mil Standard Duty Poly', 7, 'Polyethylene', '10x10', 3.65, 'Aluminum', 36,
    true, true, true, false, false, false, 'Multi-purpose 7-mil poly tarp for versatile indoor and outdoor use. Works -50F to 180F. Balanced durability for equipment covers, truck beds, and construction ground protection.'),
-  ('10mil-heavy', '10-Mil Heavy Duty Poly', 10, 'Polyethylene', '12x12', 2.5, 'Aluminum', 18,
+  ('10mil-heavy', '10-Mil Heavy Duty Poly', 10, 'Polyethylene', '12x12', 4.25, 'Aluminum', 18,
    true, true, true, false, true, false, 'Professional-grade 10-mil poly for demanding applications. Reinforced corners for extra durability. Ideal for construction sites, debris covers, and outdoor storage.'),
-  ('12mil-xheavy', '12-Mil Extreme Duty Poly', 12, 'Polyethylene', '14x14', 3.0, 'Aluminum', 18,
+  ('12mil-xheavy', '12-Mil Extra Heavy Duty Poly', 12, 'Polyethylene', '14x14', 6, 'Aluminum', 18,
    true, true, true, false, true, true, 'Extreme duty 12-mil with sewn-in rope perimeter for maximum strength. Built for roofing, scaffold enclosures, and heavy-duty outdoor use. Lasts 1-3+ years.'),
-  ('16mil-super', '16-Mil Super Heavy Duty Poly', 16, 'Polyethylene', '14x14', 4.0, 'Aluminum', 18,
+  ('16mil-super', '16-Mil Super Heavy Duty Poly', 16, 'Polyethylene', '16x16', 8, 'Aluminum', 18,
    true, true, true, false, true, true, 'Industrial-grade super heavy-duty poly. Used by contractors and farmers for long-term outdoor applications and permanent storage structures.'),
-  ('20mil-ultra', '20-Mil Ultra Heavy Duty Poly', 20, 'Polyethylene', '16x16', 5.0, 'Aluminum', 18,
+  ('20mil-ultra', '20-Mil Ultra Heavy Duty Poly', 20, 'Polyethylene', '16x16', 11, 'Aluminum', 18,
    true, true, true, false, true, true, 'Ultra-heavy 20-mil tarp for extreme conditions. Maximum strength for permanent commercial covers, extreme weather, and years of continuous use.'),
   ('fr-poly', 'Fire Retardant Poly Tarp', 16, 'Fire Retardant Polyethylene', '14x14', 4.0, 'Aluminum', 18,
    true, true, true, true, true, false, 'NFPA 701 rated fire retardant. Self-extinguishing when flame removed. Required for welding areas, electrical work, and OSHA-regulated job sites.'),
@@ -124,5 +124,14 @@ VALUES
   (25, 49, 16.0,  true),
   (50, 99, 20.0,  true),
   (100, NULL, 25.0, true);
+
+-- Pallet tiers (Farshid's plan): approved wholesale accounts pay a share of the guest price
+-- when buying N full pallets of a product. 0.90 / 0.85 / 0.81 of the competitor per-tarp price,
+-- expressed relative to guest (0.95). Needs migrations/0002_catalog.sql.
+INSERT INTO pricing_rules (unit, min_quantity, max_quantity, price_multiplier, discount_from_retail_percent, requires_account, label, priority, active)
+VALUES
+  ('pallet', 1, NULL, 0.90 / 0.95, NULL, true, '1 pallet',   0, true),
+  ('pallet', 2, NULL, 0.85 / 0.95, NULL, true, '2+ pallets', 0, true),
+  ('pallet', 3, NULL, 0.81 / 0.95, NULL, true, '3+ pallets', 0, true);
 
 -- Total: 24 products seeded

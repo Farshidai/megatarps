@@ -10,7 +10,7 @@
 //
 // Usage: node scripts/build-seed-catalog.mjs
 import { PGlite } from '@electric-sql/pglite'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync } from 'node:fs'
 
 const src = new PGlite()
 await src.exec(readFileSync('supabase/catalog-232.sql', 'utf8').replace(/CREATE EXTENSION[^;]*;/gi, ''))
@@ -203,6 +203,40 @@ for (const x of xpose.values()) {
   knownNorm.add(x.sku)
   rows.push(`  (${s(x.sku)}, ${s(productName(p, x.color))}, ${s(slug)}, ${s(def.line)}, ${arr(cats)}, ${s(def.type)}, ${n(def.mil)}, ${w}, ${l}, ${s(x.color)}, ${s(HEX[x.color] ?? null)}, 0, 0, ${n(x.case_pack)}, true, true, '[]'::jsonb)`)
 }
+// ─── The Tarps Wholesaler (Xpose's own store) ────────────────────────────────
+// supabase/pricing/tarps-wholesaler.csv: every per-unit and pallet variant from
+// thetarpswholesaler.com/products/<handle>.json (collected 2026-10-25).
+PREFIX_DEFS.BMT = { line: 'mesh', key: 'mesh', mil: null, type: 'mesh', slug: 'mesh' }
+const PREFIX_COLOR = {
+  BT: 'Blue', BRT: 'Brown', BTH: 'Blue', STH: 'Silver/Black', MTGB: 'Green/Black', WHD: 'White', STHD: 'Silver', THD: 'Tan',
+  BHD: 'Brown', UHD: 'Brown/White', CTG10: 'Green', CTT10: 'Tan', CTOD10: 'Olive Drab', CTW10: 'White',
+  CVT20: 'Clear', CVT30: 'Clear', CVTFR: 'Clear', BMT: 'Black',
+}
+const ttw = readCsv('supabase/pricing/tarps-wholesaler.csv').map((r) => ({ ...r, units: +r.units, cents: +r.price_cents, w: +r.width_ft, l: +r.length_ft }))
+const ttwSingles = new Map(ttw.filter((r) => r.kind === 'single').map((r) => [r.sku, r]))
+const ttwPallets = new Map()
+for (const r of ttw.filter((r) => r.kind !== 'single')) {
+  const cur = ttwPallets.get(r.sku) ?? { sku: r.sku, half: null, full: null, half_cents: null, full_cents: null, url: r.source_url }
+  if (r.kind === 'half_pallet') { cur.half = r.units; cur.half_cents = r.cents } else { cur.full = r.units; cur.full_cents = r.cents }
+  ttwPallets.set(r.sku, cur)
+}
+// Store SKUs we don't carry yet -> quote-only products (same style as the Xpose catalog adds)
+const addedTtw = []
+for (const x of ttwSingles.values()) {
+  if (knownNorm.has(x.sku)) continue
+  const prefix = x.sku.split('-')[0]
+  const def = PREFIX_DEFS[prefix]
+  if (!def || !x.w || !x.l) continue
+  const w = Math.min(x.w, x.l), l = Math.max(x.w, x.l)
+  const color = PREFIX_COLOR[prefix]
+  const p = { width_ft: w, length_ft: l, product_line_id: def.key, thickness_mil: def.mil }
+  const cats = sizeCats.get(`${def.line}:${w}x${l}`) ?? (def.type === 'clear-vinyl' ? ['construction-roofing', 'industrial-warehouse'] : null) ?? sizeCats.get(`${w}x${l}`) ?? catsForArea(w * l)
+  const colorSlug = color === 'Clear' ? '' : `-${color.toLowerCase().replace(/[^a-z]+/g, '')}`
+  const slug = uniqueSlug(`${def.slug}${colorSlug}-${w}x${l}`)
+  addedTtw.push(x.sku)
+  knownNorm.add(x.sku)
+  rows.push(`  (${s(x.sku)}, ${s(productName(p, color))}, ${s(slug)}, ${s(def.line)}, ${arr(cats)}, ${s(def.type)}, ${n(def.mil)}, ${w}, ${l}, ${s(color)}, ${s(HEX[color] ?? null)}, 0, 0, NULL, true, true, '[]'::jsonb)`)
+}
 out += rows.join(',\n')
 
 const upsertTail = `
@@ -264,16 +298,18 @@ out += upsertTail
 
 out += `
 -- ------------------------------------------------------------
--- Pallet quantities encoded in the Shopify bulk-pallet SKUs (…-HP16 = 16 per
--- half pallet, …-FP12 = 12 per full pallet). Only fills blanks.
+-- Shopify bulk-pallet SKUs (…-HP16 = a half pallet of 16 tarps, …-FP12 = a full pallet of 12):
+-- the sellable unit IS a pallet, so the tarp count goes in pack_quantity (pieces per unit).
+-- units_per_*_pallet stays NULL on these so per-tarp pallet tiers never apply to them.
 -- ------------------------------------------------------------
-UPDATE products SET units_per_half_pallet = (regexp_match(xpose_sku, '-HP([0-9]+)$'))[1]::int
-  WHERE xpose_sku ~ '-HP[0-9]+$' AND units_per_half_pallet IS NULL;
-UPDATE products SET units_per_full_pallet = (regexp_match(xpose_sku, '-FP([0-9]+)$'))[1]::int
-  WHERE xpose_sku ~ '-FP[0-9]+$' AND units_per_full_pallet IS NULL;
+UPDATE products SET pack_quantity = (regexp_match(xpose_sku, '-(HP|FP)([0-9]+)$'))[2]::int
+  WHERE xpose_sku ~ '-(HP|FP)[0-9]+$' AND pack_quantity IS NULL;
+UPDATE products SET units_per_half_pallet = NULL, units_per_full_pallet = NULL
+  WHERE xpose_sku ~ '-(HP|FP)[0-9]+$';
 
 -- Supplier catalog: ${products.length} tarps + ${accessories.length} accessories from catalog-232.sql, plus
--- ${added.length} tarps from the official Xpose catalog (supabase/pricing/xpose-catalog.csv)
+-- ${added.length} tarps from the official Xpose catalog (supabase/pricing/xpose-catalog.csv), plus
+-- ${addedTtw.length} more sizes listed on thetarpswholesaler.com (supabase/pricing/tarps-wholesaler.csv)
 -- (${existing} already in seed.sql and kept as-is).
 `
 
@@ -293,33 +329,208 @@ UPDATE product_lines SET weight_oz_per_sqyd = 18, grommet_spacing_inches = 18 WH
 `
 
 // ─── Market reference prices (public retail; reference only, never sets retail) ──
-const market = readCsv('supabase/pricing/market-reference.csv')
-  .map((r) => ({ ...r, sku: norm(r.sku), cents: Number(r.market_price_cents) }))
-  .filter((r) => Number.isInteger(r.cents) && r.cents > 0)
+// Priority: The Tarps Wholesaler (Xpose's own store) > TractorSupply / Walmart / eBay / WebstaurantStore.
+const TTW_SOURCE = 'The Tarps Wholesaler (Xpose store)'
+const marketBySku = new Map()
+for (const r of readCsv('supabase/pricing/market-reference.csv')) {
+  const cents = Number(r.market_price_cents)
+  if (Number.isInteger(cents) && cents > 0) marketBySku.set(norm(r.sku), { sku: norm(r.sku), cents, source: r.source_name, url: r.source_url, checked: r.checked_at })
+}
+const otherMarket = new Map(marketBySku)
+for (const r of ttwSingles.values()) marketBySku.set(r.sku, { sku: r.sku, cents: r.cents, source: TTW_SOURCE, url: r.source_url, checked: r.checked_at })
+const market = [...marketBySku.values()]
 const marketMatched = market.filter((r) => knownNorm.has(r.sku))
 const marketUnmatched = market.filter((r) => !knownNorm.has(r.sku)).map((r) => r.sku)
 out += `
 -- ------------------------------------------------------------
--- Market reference prices (${marketMatched.length} SKUs) from supabase/pricing/market-reference.csv.
--- Reference only: retail_price_cents is NEVER set from these (pricing is Farshid's call).
--- Matches xpose_sku with or without the marketplace "-X" suffix.
+-- Market reference prices (${marketMatched.length} SKUs): The Tarps Wholesaler (Xpose's own store,
+-- supabase/pricing/tarps-wholesaler.csv) first, else supabase/pricing/market-reference.csv.
+-- Reference only: never used as the sell price. Matches xpose_sku with or without "-X".
 -- ------------------------------------------------------------
 UPDATE products p SET
   market_price_cents = v.cents, market_price_source = v.source, market_price_url = v.url, market_price_checked_at = v.checked::date
 FROM (VALUES
-${marketMatched.map((r) => `  (${s(r.sku)}, ${r.cents}, ${s(r.source_name)}, ${s(r.source_url)}, ${s(r.checked_at)})`).join(',\n')}
+${marketMatched.map((r) => `  (${s(r.sku)}, ${r.cents}, ${s(r.source)}, ${s(r.url)}, ${s(r.checked)})`).join(',\n')}
 ) AS v(sku, cents, source, url, checked)
 WHERE regexp_replace(upper(p.xpose_sku), '-X$', '') = v.sku;
+
+-- Shopify listings without an Xpose SKU: same mil / size / color as an Xpose SKU
+UPDATE products p SET market_price_cents = q.market_price_cents, market_price_source = q.market_price_source,
+  market_price_url = q.market_price_url, market_price_checked_at = q.market_price_checked_at
+FROM products q
+WHERE p.xpose_sku IN ('MT-30X40-10MIL', 'MT-30X40-10MIL-SB') AND q.xpose_sku = 'STH-3040' AND p.market_price_cents IS NULL;
+
+-- ------------------------------------------------------------
+-- Pallet quantities from The Tarps Wholesaler "Bulk Pallet" variants (…-HP48 / …-FP96).
+-- ${ttwPallets.size} SKUs. Only fills blanks; never applied to the Shopify pallet SKUs themselves.
+-- ------------------------------------------------------------
+UPDATE products p SET
+  units_per_half_pallet = COALESCE(p.units_per_half_pallet, v.half_qty),
+  units_per_full_pallet = COALESCE(p.units_per_full_pallet, v.full_qty)
+FROM (VALUES
+${[...ttwPallets.values()].map((r) => `  (${s(r.sku)}, ${n(r.half)}, ${n(r.full)})`).join(',\n')}
+) AS v(sku, half_qty, full_qty)
+WHERE regexp_replace(upper(p.xpose_sku), '-X$', '') = v.sku AND p.xpose_sku !~ '-(HP|FP)[0-9]+$';
+-- Shopify per-unit 7/10-mil listings (no Xpose SKU): take the pallet size of the same mil + size
+UPDATE products p SET
+  units_per_half_pallet = COALESCE(p.units_per_half_pallet, q.units_per_half_pallet),
+  units_per_full_pallet = COALESCE(p.units_per_full_pallet, q.units_per_full_pallet)
+FROM products q
+WHERE p.xpose_sku LIKE 'MT-%' AND p.thickness_mil IN (7, 10) AND p.tarp_type = 'poly'
+  AND q.xpose_sku ~ CASE p.thickness_mil WHEN 7 THEN '^BTH-' ELSE '^STH-' END
+  AND q.width_ft = p.width_ft AND q.length_ft = p.length_ft;
+`
+
+// ─── Farshid's pallet plan (supabase/pricing/pallet-plan.csv) ────────────────
+// Real Xpose half/full pallet quantities per mil + size and his price plan:
+// guest (retail) = competitor full-pallet per-tarp × 0.95; approved account 1 / 2+ / 3+ pallets
+// = × 0.90 / 0.85 / 0.81 (seeded as pallet rules in seed.sql, relative to guest).
+// Safety: never below cost × 1.15 (min_unit_price_cents, enforced by the engine on every tier),
+// never above the market single-unit price. Flagged rows fall back to cost × 1.35.
+const PLAN_COLOR_LINES = { 5: '5mil-light', 7: '7mil-standard', 10: '10mil-heavy' }
+const plan = readFileSync('supabase/pricing/pallet-plan.csv', 'utf8').split(/\r?\n/)
+  .filter((l) => l && !l.startsWith('#') && !l.startsWith('size,'))
+  .map((line, ord) => {
+    const c = [...line.matchAll(/("([^"]|"")*"|[^,]*)(,|$)/g)].map((m) => m[1].replace(/^"|"$/g, ''))
+    const [size, mil, color, half, , full, , comp, cost, flag = ''] = c
+    const [w, l] = size.split('x').map(Number)
+    const fullUnknown = !full || /full pallet qty unknown|SUSPECT: full listed/i.test(flag)
+    const fallback = !comp || /SUSPECT|uses half-pallet listing/i.test(flag)
+    return { ord, mil: +mil, w, l, color: color.toLowerCase(), half: half ? +half : null, full: fullUnknown ? null : +full,
+      comp_cents: comp ? Math.round(Number(comp) * 100) : null, cost: cost ? Number(cost) : null, fallback, flag }
+  })
+function palletPlanSql() {
+  const vals = plan.map((r) => `  (${r.ord}, ${r.mil}, ${r.w}, ${r.l}, ${s(r.color)}, ${n(r.half)}, ${n(r.full)}, ${n(r.comp_cents)}, ${r.fallback})`).join(',\n')
+  const match = `p.tarp_type = 'poly' AND p.thickness_mil = plan.mil
+      AND p.product_line_id IN (${Object.values(PLAN_COLOR_LINES).map(s).join(', ')})
+      AND LEAST(p.width_ft, p.length_ft) = LEAST(plan.w, plan.l) AND GREATEST(p.width_ft, p.length_ft) = GREATEST(plan.w, plan.l)`
+  // one plan row per product: same color first, else the first row for that mil + size
+  const pick = `SELECT DISTINCT ON (p.id) p.id, plan.* FROM products p JOIN plan ON ${match}
+    ORDER BY p.id, (lower(p.color) = plan.color) DESC, plan.ord`
+  return `
+-- ------------------------------------------------------------
+-- PALLET QUANTITIES from Farshid's plan (real Xpose half/full pallet counts), all colors of the
+-- same mil + size unless a color-specific row exists. Unknown / suspect counts keep the
+-- The Tarps Wholesaler value set above. Overrides earlier values (this is the reference).
+-- ------------------------------------------------------------
+WITH plan(ord, mil, w, l, color, half_qty, full_qty, comp_cents, fallback) AS (VALUES
+${vals}
+), pick AS (${pick})
+UPDATE products p SET
+  units_per_half_pallet = COALESCE(pick.half_qty, p.units_per_half_pallet),
+  units_per_full_pallet = COALESCE(pick.full_qty, p.units_per_full_pallet)
+FROM pick WHERE p.id = pick.id AND p.xpose_sku !~ '-(HP|FP)[0-9]+$';
+-- A "half" pallet that isn't smaller than the full one is a data error: drop the half count.
+UPDATE products SET units_per_half_pallet = NULL WHERE units_per_half_pallet >= units_per_full_pallet;
+
+-- ------------------------------------------------------------
+-- PRICES — Farshid's plan. Per tarp: guest = competitor full-pallet per-tarp × 0.95
+-- (fallback cost × 1.35 → next .99 for flagged rows / no competitor price), capped at the
+-- market single-unit price, floored at cost × 1.15. min_unit_price_cents = cost × 1.15 is
+-- the floor the pricing engine enforces on every tier (pallet tiers, account discounts).
+-- Shopify pallet SKUs: per-tarp price × tarps on the pallet.
+-- Sets retail where it is still 0, plus the 4 Shopify 10-mil listings the plan re-prices.
+-- ------------------------------------------------------------
+WITH plan(ord, mil, w, l, color, half_qty, full_qty, comp_cents, fallback) AS (VALUES
+${vals}
+), pick AS (${pick}),
+calc AS (
+  SELECT p.id, COALESCE(p.pack_quantity, 1) AS pack,
+    p.cost_price_cents::numeric / CASE WHEN p.xpose_sku ~ '-(HP|FP)[0-9]+$' THEN COALESCE(p.pack_quantity, 1) ELSE 1 END AS unit_cost,
+    pick.comp_cents, pick.fallback, p.market_price_cents
+  FROM products p JOIN pick ON pick.id = p.id
+  WHERE p.cost_price_cents > 0
+), priced AS (
+  SELECT id, pack, ceil(unit_cost * 1.15)::int AS floor_cents,
+    GREATEST(ceil(unit_cost * 1.15),
+      LEAST(COALESCE(market_price_cents, 2147483647),
+        CASE WHEN fallback OR comp_cents IS NULL THEN ceil((unit_cost * 1.35 + 1) / 100.0) * 100 - 1
+             ELSE round(comp_cents * 0.95) END))::int AS guest_cents
+  FROM calc
+)
+UPDATE products p SET
+  retail_price_cents = CASE WHEN p.xpose_sku ~ '-(HP|FP)[0-9]+$' THEN priced.guest_cents * priced.pack ELSE priced.guest_cents END,
+  min_unit_price_cents = CASE WHEN p.xpose_sku ~ '-(HP|FP)[0-9]+$' THEN priced.floor_cents * priced.pack ELSE priced.floor_cents END
+FROM priced
+WHERE p.id = priced.id
+  AND (p.retail_price_cents = 0 OR p.xpose_sku IN ('MT-20X30-10MIL', 'MT-30X40-10MIL', 'MT-30X40-10MIL-SB', 'MT-40X60-10MIL'));
+`
+}
+
+// ─── Supplier cost (All In Safety quote 2025-11-03) ───────────────────────────
+const quote = readFileSync('supabase/pricing/supplier-quote-2025-11-03.csv', 'utf8').split(/\r?\n/)
+  .filter((l) => l && !l.startsWith('#') && !l.startsWith('mil,'))
+  .map((l) => { const [mil, w, len, usd] = l.split(','); return { mil: +mil, w: +w, l: +len, cents: Math.round(Number(usd) * 100) } })
+out += `
+-- ------------------------------------------------------------
+-- SUPPLIER COST — All In Safety quote 2025-11-03; reconfirm before ordering.
+-- Per-unit cost applied to every color of the same mil + size (7 mil = BTH line,
+-- 10 mil = STH silver/black + MTGB green/black + the Shopify 10-mil listings).
+-- Shopify pallet SKUs (…-HP72 / …-FP20) get cost × units on the pallet.
+-- Fills blanks only (admin / CSV edits win).
+-- ------------------------------------------------------------
+WITH q(mil, w, l, cents) AS (VALUES
+${quote.map((r) => `  (${r.mil}, ${r.w}, ${r.l}, ${r.cents})`).join(',\n')}
+)
+UPDATE products p SET cost_price_cents = q.cents * CASE WHEN p.xpose_sku ~ '-(HP|FP)[0-9]+$' THEN p.pack_quantity ELSE 1 END
+FROM q
+WHERE p.tarp_type = 'poly' AND p.thickness_mil = q.mil
+  AND p.product_line_id IN ('7mil-standard', '10mil-heavy')
+  AND LEAST(p.width_ft, p.length_ft) = LEAST(q.w, q.l) AND GREATEST(p.width_ft, p.length_ft) = GREATEST(q.w, q.l)
+  AND COALESCE(p.cost_price_cents, 0) = 0
+  AND (p.xpose_sku !~ '-(HP|FP)[0-9]+$' OR p.pack_quantity IS NOT NULL);
+
+${palletPlanSql()}
 `
 writeFileSync('supabase/seed-catalog.sql', out)
 
-// Suggested retail = market - 10% (exact cents) for import via /admin/products CSV import.
-const sugg = marketMatched
-  .map((r) => ({ sku: skuBySku.get(r.sku) ?? r.sku, retail: Math.round(r.cents * 0.9) }))
-  .sort((a, b) => a.sku.localeCompare(b.sku))
+// ─── Derived CSVs (computed against the real seeded data) ─────────────────────
+const db = new PGlite()
+await db.exec(`CREATE SCHEMA IF NOT EXISTS auth; CREATE TABLE IF NOT EXISTS auth.users (id uuid primary key);
+  CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql AS 'select null::uuid';`)
+const migs = readdirSync('supabase/migrations').filter((f) => f.endsWith('.sql')).sort().map((f) => `supabase/migrations/${f}`)
+for (const f of ['supabase/schema.sql', ...migs, 'supabase/seed.sql', 'supabase/seed-catalog.sql']) {
+  await db.exec(readFileSync(f, 'utf8').replace(/CREATE EXTENSION[^;]*;/gi, ''))
+}
+const all = (await db.query(`select xpose_sku, name, thickness_mil, width_ft, length_ft, color, cost_price_cents, retail_price_cents,
+  min_unit_price_cents, market_price_cents, market_price_source, units_per_full_pallet, units_per_half_pallet, pack_quantity
+  from products order by thickness_mil, width_ft * length_ft, xpose_sku`)).rows
+const money = (c) => (c / 100).toFixed(2)
+const ceil99 = (c) => Math.ceil((c + 1) / 100) * 100 - 1
+const costed = all.filter((r) => r.cost_price_cents > 0)
+writeFileSync('supabase/pricing/supplier-cost.csv',
+  ['sku,cost', ...costed.map((r) => `${r.xpose_sku},${money(r.cost_price_cents)}`)].join('\n') + '\n')
+writeFileSync('supabase/pricing/suggested-retail-cost35.csv',
+  ['sku,retail', ...costed.map((r) => `${r.xpose_sku},${money(ceil99(r.cost_price_cents * 1.35))}`)].join('\n') + '\n')
+writeFileSync('supabase/pricing/suggested-retail-cost30.csv',
+  ['sku,retail', ...costed.map((r) => `${r.xpose_sku},${money(ceil99(r.cost_price_cents * 1.30))}`)].join('\n') + '\n')
+// market − 10% for everything with a market price (exact cents)
+const withMarket = all.filter((r) => r.market_price_cents > 0)
 writeFileSync('supabase/pricing/suggested-retail.csv',
-  ['sku,retail', ...sugg.map((r) => `${r.sku},${(r.retail / 100).toFixed(2)}`)].join('\n') + '\n')
+  ['sku,retail', ...withMarket.map((r) => `${r.xpose_sku},${money(Math.round(r.market_price_cents * 0.9))}`)].join('\n') + '\n')
+// Sanity: our cost×1.35 retail vs The Tarps Wholesaler per-unit price
+const isPalletSku = (sku) => /-(HP|FP)\d+$/.test(sku)
+const notBelow = costed.filter((r) => !isPalletSku(r.xpose_sku) && r.market_price_cents && r.retail_price_cents >= r.market_price_cents * 0.9)
 
-console.log(`seed-catalog.sql: ${products.length} tarps + ${accessories.length} accessories from catalog-232 (${existing} overlap with seed.sql) + ${added.length} new tarps from the Xpose catalog`)
+console.log(`seed-catalog.sql: ${products.length} tarps + ${accessories.length} accessories from catalog-232 (${existing} overlap with seed.sql) + ${added.length} from the Xpose catalog + ${addedTtw.length} from The Tarps Wholesaler`)
 console.log(`Xpose catalog: ${xpose.size} SKUs; matched ${matchedExisting} existing catalog-232 SKUs; units_per_case set on ${casePackMatched} products`)
-console.log(`market prices: ${marketMatched.length} matched${marketUnmatched.length ? `, unmatched: ${marketUnmatched.join(' ')}` : ''}; suggested-retail.csv: ${sugg.length} rows`)
+console.log(`market prices: ${marketMatched.length} matched (${marketMatched.filter((r) => r.source === TTW_SOURCE).length} from The Tarps Wholesaler)${marketUnmatched.length ? `; unmatched: ${marketUnmatched.join(' ')}` : ''}`)
+console.log(`pallet qty: full ${all.filter((r) => r.units_per_full_pallet).length}, half ${all.filter((r) => r.units_per_half_pallet).length} products`)
+console.log(`supplier cost on ${costed.length} SKUs; priced ${costed.filter((r) => r.retail_price_cents > 0).length}; retail within 10% of (or above) market: ${notBelow.map((r) => r.xpose_sku).join(' ') || 'none'}`)
+console.log(`plan rows falling back to cost x 1.35: ${plan.filter((r) => r.fallback && r.cost).map((r) => `${r.w}x${r.l} ${r.mil}mil ${r.color}`).join('; ')}`)
+if (process.argv.includes('--report')) {
+  const m = (r, f) => Math.max(r.min_unit_price_cents || 0, Math.round(r.retail_price_cents * f))
+  console.log('sku | mil | size | color | cost | guest | 1 pallet | 2+ | 3+ | margin@3+ | half/full | market | other market')
+  for (const r of costed) {
+    const pal = isPalletSku(r.xpose_sku)
+    const k = pal ? r.pack_quantity : 1
+    const p3 = pal ? null : m(r, 0.81 / 0.95)
+    const other = otherMarket.get(norm(r.xpose_sku))
+    console.log([r.xpose_sku, r.thickness_mil, `${r.width_ft}x${r.length_ft}`, r.color, money(r.cost_price_cents / k), money(r.retail_price_cents / k),
+      pal ? '' : money(m(r, 0.9 / 0.95)), pal ? '' : money(m(r, 0.85 / 0.95)), pal ? '' : money(p3),
+      pal ? `(pallet of ${k})` : `${(((p3 - r.cost_price_cents) / p3) * 100).toFixed(1)}%`,
+      `${r.units_per_half_pallet ?? '-'}/${r.units_per_full_pallet ?? '-'}`,
+      r.market_price_cents ? `${money(r.market_price_cents)} ${r.market_price_source === TTW_SOURCE ? 'TTW' : r.market_price_source}` : '',
+      other ? `${money(other.cents)} ${other.source}` : ''].join(' | '))
+  }
+}

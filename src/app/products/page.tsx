@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   return {
     title: job ? `Wholesale Tarps for ${job.label}` : 'Wholesale Heavy-Duty Tarps — Shop by Size, Type & Thickness',
     description: job
-      ? `${job.blurb} Volume pricing from 5 units, case and pallet quotes. Ships from Kansas City.`
+      ? `${job.blurb} Volume pricing from 5 units, case and pallet quotes. Kansas City based, Midwest freight.`
       : 'Browse 240+ poly, canvas, mesh, clear vinyl and fire-retardant tarps plus tie-downs and straps. 5 to 20 mil. Volume pricing from 5 units, pallet quotes for contractors.',
     alternates: { canonical: job && !filtered ? `/products?job=${query.job}` : '/products' },
     robots: filtered ? { index: false, follow: true } : undefined,
