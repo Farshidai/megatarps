@@ -10,6 +10,11 @@
 // A product that has pallet pricing (units_per_full_pallet set AND at least one pallet rule
 // applies) is priced pallet-first: 'each' volume tiers are NOT applied to it, so a guest
 // buying 100 pieces can't undercut an approved account's pallet price.
+// Bulk-pallet / multi-pack SKUs (pack_quantity > 1, e.g. 20X20-7MIL-HP72) are already a
+// pallet: no piece-volume tiers for them.
+// The approved account's extra wholesaleDiscountPercent applies ONLY to products without
+// pallet pricing (and not to pack_quantity > 1 SKUs); it never stacks on pallet tiers or on
+// contract prices.
 // Every price is clamped to the product's min_unit_price_cents (cost floor) when set,
 // and never above retail.
 //
@@ -75,7 +80,7 @@ export interface ContractPrice {
 }
 
 export interface PriceOptions {
-  /** Extra % off for approved wholesale accounts, applied on top of the tier. */
+  /** Extra % off for approved wholesale accounts. Only for products WITHOUT pallet pricing (see accountDiscountApplies). */
   wholesaleDiscountPercent?: number
   /** Approved wholesale account: unlocks rules with requires_account = true (pallet tiers). */
   accountApproved?: boolean
@@ -88,6 +93,8 @@ export interface PriceOptions {
 /** Fields the engine reads. Pallet/floor fields are optional so existing callers keep working. */
 export type PricedProduct = Pick<Product, 'retail_price_cents' | 'tarp_type' | 'thickness_mil'> & {
   units_per_full_pallet?: number | null
+  /** > 1 = bulk-pallet / multi-pack SKU: no piece tiers, no extra account %. */
+  pack_quantity?: number | null
   /** Hard floor per unit (e.g. cost × 1.15). Ignored when null/0. */
   min_unit_price_cents?: number | null
   /** Identity, used only to match contract prices (Product: id + xpose_sku; cart entries: id + sku). */
@@ -136,8 +143,18 @@ export function hasPalletPricing(product: PricedProduct, rules: PricingRule[]): 
   return applicablePalletRules(product, rules).length > 0
 }
 
+/** Bulk-pallet / multi-pack SKU (one unit = a pallet or pack): no piece-volume tiers. */
+export function isBulkPackSku(product: Pick<PricedProduct, 'pack_quantity'>): boolean {
+  return Number(product.pack_quantity ?? 1) > 1
+}
+
+/** Does the approved account's extra % apply? Only to products without pallet pricing. */
+export function accountDiscountApplies(product: PricedProduct, rules: PricingRule[]): boolean {
+  return !hasPalletPricing(product, rules) && !isBulkPackSku(product)
+}
+
 export function discountForQuantity(product: PricedProduct, qty: number, rules: PricingRule[]): number {
-  if (hasPalletPricing(product, rules)) return 0
+  if (hasPalletPricing(product, rules) || isBulkPackSku(product)) return 0
   let d = 0
   for (const r of applicableRules(product, rules)) {
     if (qty >= r.min_quantity && (r.max_quantity == null || qty <= r.max_quantity)) d = Number(r.discount_from_retail_percent ?? 0)
@@ -172,7 +189,7 @@ function clamp(product: PricedProduct, cents: number): number {
 function tierUnitPriceCents(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions): number {
   const volume = discountForQuantity(product, qty, rules)
   const pallet = palletMultiplier(product, qty, rules, opts)
-  const wholesale = opts.wholesaleDiscountPercent ?? 0
+  const wholesale = accountDiscountApplies(product, rules) ? opts.wholesaleDiscountPercent ?? 0 : 0
   const price = product.retail_price_cents * (1 - volume / 100) * pallet * (1 - wholesale / 100)
   return clamp(product, Math.round(price))
 }
@@ -233,7 +250,7 @@ export function lineTotalCents(product: PricedProduct, qty: number, rules: Prici
 /** Piece-volume tier table for display: 1-unit row plus one row per 'each' rule (single row for pallet-priced products). */
 export function priceTiers(product: PricedProduct, rules: PricingRule[], opts: PriceOptions = {}): PriceTier[] {
   if (isQuoteOnly(product)) return []
-  const rs = hasPalletPricing(product, rules) ? [] : applicableRules(product, rules)
+  const rs = hasPalletPricing(product, rules) || isBulkPackSku(product) ? [] : applicableRules(product, rules)
   const firstMin = rs[0]?.min_quantity ?? Infinity
   const tiers: PriceTier[] = []
   const guest = { ...opts, accountApproved: false } // piece tiers never include account-only pallet pricing
@@ -305,7 +322,7 @@ export function priceBreakpoints(product: PricedProduct, rules: PricingRule[], o
   const add = (n: number | null | undefined) => {
     if (n != null && Number.isFinite(n) && n >= 1) qs.add(Math.floor(n))
   }
-  if (!hasPalletPricing(product, rules)) {
+  if (!hasPalletPricing(product, rules) && !isBulkPackSku(product)) {
     for (const r of applicableRules(product, rules)) {
       add(r.min_quantity)
       if (r.max_quantity != null) add(r.max_quantity + 1)

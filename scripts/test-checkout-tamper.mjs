@@ -35,7 +35,7 @@ async function checkout(body, raw = false) {
 const hasPalletRules = catalog.pricing_rules.some((r) => r.unit === 'pallet' && r.active !== false)
 function expectedUnit(product, qty) {
   let d = 0
-  const palletPriced = hasPalletRules && product.units_per_full_pallet > 0
+  const palletPriced = (hasPalletRules && product.units_per_full_pallet > 0) || product.pack_quantity > 1 // pack / pallet SKUs: no piece tiers
   if (!palletPriced) for (const r of catalog.pricing_rules) {
     if (r.active === false || (r.unit && r.unit !== 'each')) continue
     if (r.tarp_type && r.tarp_type !== product.tarp_type) continue

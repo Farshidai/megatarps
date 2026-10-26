@@ -23,7 +23,20 @@ export function TierPriceTable({ product, rules, opts, accountApproved = false, 
     return <PalletPriceTable product={product} rules={rules} opts={opts} accountApproved={accountApproved} contracts={contracts} className={className} />
   }
 
+  // the buyer's real prices (floor + account % applied); merge rows the floor makes identical,
+  // and show the ACTUAL saving vs retail rather than the rule's nominal %
   const tiers = priceTiers(product, rules, opts)
+    .map((t) => ({ ...t, discount_percent: Math.max(0, Math.round((1 - t.unit_price_cents / product.retail_price_cents) * 1000) / 10) }))
+    .reduce<ReturnType<typeof priceTiers>>((acc, t) => {
+      const prev = acc[acc.length - 1]
+      if (prev && prev.unit_price_cents === t.unit_price_cents) {
+        prev.max_quantity = t.max_quantity
+        prev.label = t.max_quantity == null ? `${prev.min_quantity}+` : `${prev.min_quantity}–${t.max_quantity}`
+        return acc
+      }
+      acc.push({ ...t })
+      return acc
+    }, [])
   const best = tiers[tiers.length - 1]
 
   return (
@@ -136,7 +149,7 @@ function PalletPriceTable({ product, rules, opts, accountApproved, contracts, cl
         </div>
       ) : (
         <p className="px-4 py-3 bg-green-50 border-t border-green-100 text-xs text-green-800">
-          Your wholesale pricing applies automatically at checkout for full pallets.
+          Your pallet pricing is applied to your quotes and to your account. Full pallets ship by LTL truck freight, so they are ordered through a quote.
         </p>
       )}
       <PackInfo product={product} />

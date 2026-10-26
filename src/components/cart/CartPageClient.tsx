@@ -109,7 +109,7 @@ export function CartPageClient() {
                 </div>
               </dl>
               {t.freeFreightThreshold && <FreeFreightBar threshold={t.freeFreightThreshold} toFreeFreight={t.toFreeFreight} progress={t.freightProgress} />}
-              {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale discount.</p>}
+              {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Your {wholesaleDiscountPercent}% account discount is included on items without pallet pricing.</p>}
               {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
               {freightQuote && t.freight ? (
                 <FreightQuoteRequired freight={t.freight} />

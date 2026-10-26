@@ -81,7 +81,7 @@ export function applicantApprovedEmail(p: P) {
       `<p>Hi ${h(p.contact_name)},</p>
        <p>Your wholesale account for <strong>${h(p.company_name)}</strong> is approved. Here are your account terms:</p>
        <ul style="font-size:14px;line-height:1.7">
-         <li>Wholesale discount: <strong>${h(p.wholesale_discount_percent ?? 0)}%</strong> on top of volume tier pricing</li>
+         <li>Wholesale discount: <strong>${h(p.wholesale_discount_percent ?? 0)}%</strong> extra on items without pallet pricing</li>
          <li>Payment terms: <strong>${h(terms)}</strong></li>
          ${p.credit_limit_cents ? `<li>Credit limit: <strong>${h(formatCents(p.credit_limit_cents))}</strong></li>` : ''}
          <li>Tax-exempt purchasing: <strong>${p.tax_exempt ? 'Yes' : 'No'}</strong></li>

@@ -241,7 +241,7 @@ export function QuickOrderGrid({ catalog, wholesaleDiscountPercent, freight: fre
               {freight.method === 'quote' ? ' (freight quoted separately)' : freight.free ? ' · free' : ` · ${formatPrice(freight.freightCents ?? 0)} freight`}
             </p>
           )}
-          {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale discount</p>}
+          {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Your {wholesaleDiscountPercent}% account discount is included on items without pallet pricing</p>}
         </div>
         <button
           type="button"

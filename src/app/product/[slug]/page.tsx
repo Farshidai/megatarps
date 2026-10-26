@@ -4,7 +4,7 @@ import { cache } from 'react'
 import type { Metadata } from 'next'
 import { CheckCircle, Truck, ShieldCheck, Clock, Flame } from 'lucide-react'
 import { getProductBySlug, getRelatedProducts, getPricingRules } from '@/lib/products'
-import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents, priceSchedule } from '@/lib/pricing'
+import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents, priceSchedule, accountDiscountApplies } from '@/lib/pricing'
 import { priceOptionsFor } from '@/lib/cart/server'
 import { getAccountPricing } from '@/lib/accounts'
 import {
@@ -52,12 +52,14 @@ export default async function ProductPage({ params }: PageProps) {
   const accountApproved = account.status === 'approved'
   if (!product) notFound()
 
+  const accountOpts = priceOptionsFor(account)
+  const tableOpts = { wholesaleDiscountPercent: accountOpts.wholesaleDiscountPercent ?? 0 }
   const related = await getRelatedProducts(product) // server-rendered cards only
-  const schedule = priceSchedule(product, rules, priceOptionsFor(account))
+  const schedule = priceSchedule(product, rules, accountOpts)
   const pl = product.product_line
   const quoteOnly = isQuoteOnly(product)
-  const tiers = priceTiers(product, rules)
-  const low = quoteOnly ? 0 : lowestUnitPriceCents(product, rules)
+  const tiers = priceTiers(product, rules, tableOpts)
+  const low = quoteOnly ? 0 : lowestUnitPriceCents(product, rules, tableOpts)
   const lowTier = tiers.find((t) => t.unit_price_cents === low)
   const acc = isAccessory(product)
   const pallets = palletTiers(product, rules)
@@ -221,12 +223,12 @@ export default async function ProductPage({ params }: PageProps) {
             )}
 
             <div className="grid gap-5 xl:grid-cols-1">
-              <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
+              <TierPriceTable product={product} rules={rules} opts={tableOpts} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
               <div className="rounded-2xl ring-1 ring-slate-200 p-4 sm:p-5">
                 <AddToCartOrRFQ
                   product={toPublicProduct(product)}
                   schedule={schedule}
-                  wholesaleDiscountPercent={accountApproved ? account.wholesaleDiscountPercent : 0}
+                  wholesaleDiscountPercent={accountApproved && accountDiscountApplies(product, rules) ? account.wholesaleDiscountPercent : 0}
                   contractPrices={accountApproved ? account.contractPrices ?? [] : []}
                 />
               </div>

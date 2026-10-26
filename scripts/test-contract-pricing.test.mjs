@@ -61,8 +61,8 @@ test('best matching min_quantity ≤ qty is used', () => {
 test('contract price ignores the cost floor (min_unit_price_cents)', () => {
   const c = [cp({ sku: 'mt-30x40-10mil', unit_price_cents: 6900 })] // matched by SKU, case-insensitive
   assert.equal(unitPriceCents(tarp, 1, RULES, { accountApproved: true }), 8709)
-  // normal price with a big account discount is clamped to the floor...
-  assert.equal(unitPriceCents(tarp, 1, RULES, { accountApproved: true, wholesaleDiscountPercent: 30 }), 7176)
+  // the normal (pallet-tier) price is clamped to the floor...
+  assert.equal(unitPriceCents({ ...tarp, retail_price_cents: 7300 }, 126, RULES, { accountApproved: true }), 7176)
   assert.equal(unitPriceCents(tarp, 1, RULES, approved(c)), 6900)
   assert.equal(unitPriceCents(tarp, 84, RULES, approved(c)), 6900, 'below the $71.76 floor on purpose')
 })
