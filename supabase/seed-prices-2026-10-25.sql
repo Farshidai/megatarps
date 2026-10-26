@@ -29,3 +29,8 @@ UPDATE products SET retail_price_cents = 171000, min_unit_price_cents = 149316 W
 UPDATE products SET retail_price_cents = 292580, min_unit_price_cents = 287040 WHERE xpose_sku = '40X60-10MIL-FP20';  -- market 153.99/tarp (full_pallet STH-4060) 
 UPDATE products SET retail_price_cents = 14629, min_unit_price_cents = 14352 WHERE xpose_sku = 'MT-40X60-10MIL';  -- market 153.99/tarp (full_pallet STH-4060) 
 UPDATE products SET retail_price_cents = 14629, min_unit_price_cents = 14352 WHERE xpose_sku = 'STH-4060';  -- market 153.99/tarp (full_pallet STH-4060) 
+
+-- Products with a price but no known cost (old Shopify listings, accessories): no volume
+-- discounts below the listed price until a real cost is entered (QA blocker 4).
+UPDATE products SET min_unit_price_cents = retail_price_cents
+WHERE (cost_price_cents IS NULL OR cost_price_cents = 0) AND retail_price_cents > 0 AND min_unit_price_cents IS NULL;
