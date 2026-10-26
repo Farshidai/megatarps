@@ -28,11 +28,11 @@ function sample(sku: string, row: Omit<ContractPriceRow, 'product_id' | 'sku' | 
 
 export function demoContractPrices(): ContractPriceRow[] {
   return [
-    // 30x40 10-mil: normal account price $80.12 (guest $87.09 − 8%); contract $74.50 from a quote.
-    // At 2+ pallets the tier price ($71.76) is lower, so the tier price applies there.
+    // 30x40 10-mil: guest $71.76 = cost floor, so the normal account price can't go lower.
+    // Farshid agreed $69.90 on a quote: contract prices deliberately ignore the floor.
     sample('MT-30X40-10MIL', {
       id: 'demo-cp-0001',
-      unit_price_cents: 7450,
+      unit_price_cents: 6990,
       min_quantity: 1,
       valid_until: day(76).slice(0, 10),
       source_quote_id: DEMO_SOURCE_QUOTE_ID,
@@ -41,12 +41,12 @@ export function demoContractPrices(): ContractPriceRow[] {
       created_at: day(-14),
       updated_at: day(-14),
     }),
-    // 20x30 10-mil: normal account price $39.15 ($42.55 − 8%); contract $36.50 for 10+.
-    // Below 10 the normal price applies; at 2+ pallets the $35.88 floor price is lower and wins.
+    // 20x30 10-mil: normal account price $35.88 (guest $38.30 − 8%, held at the cost floor);
+    // contract $34.50 for 5+. Below 5 units the normal price applies.
     sample('MT-20X30-10MIL', {
       id: 'demo-cp-0002',
-      unit_price_cents: 3650,
-      min_quantity: 10,
+      unit_price_cents: 3450,
+      min_quantity: 5,
       valid_until: day(41).slice(0, 10),
       source_quote_id: null,
       note: 'Phone order, agreed price (demo)',
