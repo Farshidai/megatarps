@@ -1,5 +1,6 @@
 // REVIEW: Farshid must confirm. Standard B2B returns wording; the return window,
 // restocking fee and refund timing are placeholders until you confirm them.
+import { DAMAGE_REPORT_WINDOW, RETURN_WINDOW_DAYS, REFUND_TIME } from '@/lib/site'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PolicyPage, Placeholder } from '@/components/seo/PolicyPage'
@@ -29,7 +30,7 @@ export default function ReturnsPage() {
         <h2>Damaged, defective or wrong items</h2>
         <p>
           If an item arrives damaged or defective, or we shipped the wrong item or quantity, report it within{' '}
-          <Placeholder>5 business days of delivery</Placeholder> with your order number and photos. We will replace the
+          <Placeholder>{DAMAGE_REPORT_WINDOW}</Placeholder> with your order number and photos. We will replace the
           item or issue a refund or credit, and we cover the return freight. For freight damage, please also follow the
           inspection steps in our <Link href="/shipping">Shipping &amp; Freight Policy</Link>.
         </p>
@@ -40,7 +41,7 @@ export default function ReturnsPage() {
         <ul>
           <li>
             Unused items in their original, unopened packaging can be returned within{' '}
-            <Placeholder>30 days of delivery</Placeholder>.
+            <Placeholder>{RETURN_WINDOW_DAYS} days of delivery</Placeholder>.
           </li>
           <li>You need a return authorization (RA) number from us before sending anything back. Returns without an RA may be refused.</li>
           <li>The buyer pays return shipping unless the return is due to our error.</li>
@@ -63,7 +64,7 @@ export default function ReturnsPage() {
         <h2>Refunds</h2>
         <p>
           Once we receive and inspect the return, we refund the original payment method or, for net-terms accounts, credit
-          the account, within <Placeholder>5–10 business days</Placeholder>. Original shipping and freight charges are not
+          the account, within <Placeholder>{REFUND_TIME}</Placeholder>. Original shipping and freight charges are not
           refunded unless the return is due to our error.
         </p>
       </section>

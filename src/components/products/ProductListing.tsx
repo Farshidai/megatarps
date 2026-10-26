@@ -74,7 +74,7 @@ export async function ProductListing({ basePath, query, fixedCategory, title, su
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden />
               {filtered.length} product{filtered.length !== 1 ? 's' : ''}
             </span>
-            <span className="text-slate-500">{pricedCount} priced online · {filtered.length - pricedCount} by quote · volume pricing from 5 units</span>
+            <span className="text-slate-500">{pricedCount} priced online · {filtered.length - pricedCount} by quote · pallet pricing for approved accounts</span>
           </p>
         </div>
       </div>

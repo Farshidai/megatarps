@@ -1,4 +1,5 @@
 'use client'
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import { site } from '@/lib/site'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -171,7 +172,7 @@ export function BulkQuoteForm({ products, defaultEmail }: Props) {
           Request <span className="font-mono font-bold text-slate-900">{result.quote_number}</span> is with our team.
         </p>
         <p className="text-slate-600 mb-6">
-          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong> within one business day.
+          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong>, usually within {QUOTE_RESPONSE_TIME}.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {result.token && (
@@ -422,7 +423,7 @@ export function BulkQuoteForm({ products, defaultEmail }: Props) {
             {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden /> : <Send className="w-5 h-5" aria-hidden />}
             {submitting ? 'Sending…' : 'Request quote'}
           </button>
-          <p className="text-center text-xs text-slate-400">Priced quote within 1 business day · No obligation</p>
+          <p className="text-center text-xs text-slate-400">Priced quote, usually within {QUOTE_RESPONSE_TIME} · No obligation</p>
         </div>
       </aside>
     </form>

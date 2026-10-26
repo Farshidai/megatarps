@@ -20,13 +20,13 @@ VALUES
   ('canvas-10oz', '10 oz Cotton Canvas Tarp', NULL, 'Cotton Canvas', NULL, 10, 'Rust-Proof Metal', 24,
    false, false, false, false, false, false, '10oz cotton canvas tarp. Water-resistant (not waterproof). Double stitched hem. Breathable — ideal for covering items that need air circulation. Perfect for machinery, vehicles, and materials that should not trap moisture.'),
   ('clear-20mil', 'Clear Vinyl Tarp (20 Mil)', 20, 'PVC Vinyl', NULL, NULL, 'Brass', 24,
-   true, true, true, false, false, false, 'Heavy duty 20 mil clear vinyl tarp. Optically super clear for visibility. 100% waterproof. Cold resistant to -30°F. Ideal for enclosures, windbreaks, restaurant patios, and any application where see-through weatherproofing is needed.'),
+   true, true, true, false, false, false, 'Heavy duty 20-mil clear PVC vinyl tarp with brass grommets. See-through, for enclosures, windbreaks and patios where visibility matters.'),
   ('clear-30mil', 'Clear Vinyl Tarp (30 Mil)', 30, 'PVC Vinyl', NULL, NULL, 'Brass', 24,
-   true, true, true, false, false, false, 'Super heavy duty 30 mil clear vinyl tarp. Maximum clarity and thickness for permanent installations. 100% waterproof. Cold resistant. Best for commercial enclosures and high-wind environments.'),
+   true, true, true, false, false, false, 'Super heavy duty 30-mil clear PVC vinyl tarp with brass grommets, the thickest clear vinyl we carry. For enclosures and longer-term installations.'),
   ('fr-clear', 'Fire Retardant Clear Vinyl Tarp', 20, 'PVC Vinyl', NULL, NULL, 'Brass', 24,
-   true, true, true, true, false, false, 'Fire retardant 20 mil clear vinyl tarp. Meets fire code requirements. 100% waterproof. Optically clear. Required for commercial construction in many jurisdictions. Ideal for welding curtains and fire-rated enclosures.'),
+   true, true, true, true, false, false, 'Fire-retardant 20-mil clear PVC vinyl tarp for welding curtains and enclosures. Ask us for the supplier''s fire-test certification before relying on it for a code requirement.'),
   ('mesh', 'Mesh Tarp', NULL, 'Polypropylene', NULL, NULL, 'Brass', 24,
-   true, false, true, false, false, false, 'Black mesh polypropylene tarp. Double-stitched hems, tear resistant. Provides 60% shade while allowing airflow. Perfect for shade structures, privacy screens, debris containment, dump trucks, and fence covers.')
+   true, false, true, false, false, false, 'Black polypropylene mesh tarp with double-stitched hems and grommets. About 60% shade while letting air through. Used for shade, privacy screens, debris containment, dump trucks and fence covers.')
 ON CONFLICT (id) DO NOTHING;
 
 -- ------------------------------------------------------------
@@ -672,6 +672,20 @@ UPDATE product_lines SET weave_count = '14x14', weight_oz_per_sqyd = 6,    gromm
 UPDATE product_lines SET weave_count = '16x16', weight_oz_per_sqyd = 8,    grommet_spacing_inches = 18 WHERE id = '16mil-super';
 UPDATE product_lines SET weave_count = '16x16', weight_oz_per_sqyd = 11,   grommet_spacing_inches = 18 WHERE id = '20mil-ultra';
 UPDATE product_lines SET weight_oz_per_sqyd = 18, grommet_spacing_inches = 18 WHERE id = 'fr-clear';
+
+-- ------------------------------------------------------------
+-- Product-line descriptions: factual spec language only (QA claims review, Oct 2026).
+-- Removed unverified claims (temperature ranges, lifespans, "100% waterproof",
+-- "meets fire code"). UPDATE so databases seeded earlier get the new text too.
+-- ------------------------------------------------------------
+UPDATE product_lines SET description = 'Multi-purpose 7-mil poly tarp with a 10x10 weave and aluminum grommets. For indoor and outdoor use: equipment covers, truck beds and ground protection on job sites.' WHERE id = '7mil-standard';
+UPDATE product_lines SET description = 'Extra heavy duty 12-mil poly tarp with a 14x14 weave, sewn-in rope hems and reinforced corners. Used for roofing, scaffold enclosures and heavy-duty outdoor covers.' WHERE id = '12mil-xheavy';
+UPDATE product_lines SET description = 'Super heavy duty 16-mil poly tarp with a 16x16 weave and reinforced corners. Used by contractors and farms for longer-term outdoor covers and storage.' WHERE id = '16mil-super';
+UPDATE product_lines SET description = 'Ultra heavy duty 20-mil poly tarp, the thickest poly we carry, with a 16x16 weave and reinforced corners. Used for semi-permanent covers and harsh-weather exposure.' WHERE id = '20mil-ultra';
+UPDATE product_lines SET description = 'Heavy duty 20-mil clear PVC vinyl tarp with brass grommets. See-through, for enclosures, windbreaks and patios where visibility matters.' WHERE id = 'clear-20mil';
+UPDATE product_lines SET description = 'Super heavy duty 30-mil clear PVC vinyl tarp with brass grommets, the thickest clear vinyl we carry. For enclosures and longer-term installations.' WHERE id = 'clear-30mil';
+UPDATE product_lines SET description = 'Fire-retardant 20-mil clear PVC vinyl tarp for welding curtains and enclosures. Ask us for the supplier''s fire-test certification before relying on it for a code requirement.' WHERE id = 'fr-clear';
+UPDATE product_lines SET description = 'Black polypropylene mesh tarp with double-stitched hems and grommets. About 60% shade while letting air through. Used for shade, privacy screens, debris containment, dump trucks and fence covers.' WHERE id = 'mesh';
 
 -- ------------------------------------------------------------
 -- Market reference prices (503 SKUs): The Tarps Wholesaler (Xpose's own store,

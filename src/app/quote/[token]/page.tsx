@@ -77,7 +77,7 @@ export default async function QuotePage({
           )}
           {status === 'pending' && (
             <Banner tone="amber" icon={<Clock className="w-5 h-5" aria-hidden />} title="We’re pricing your request">
-              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within one business day.
+              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within {site.claims.quoteResponse}.
             </Banner>
           )}
           {status === 'expired' && (
@@ -204,8 +204,8 @@ export default async function QuotePage({
                 <li>Prices are in US dollars and valid until the date shown, subject to stock at time of acceptance.</li>
                 <li>Freight is LTL truck to the delivery type shown. Liftgate, residential and limited-access deliveries must be requested before shipment; reclassification fees from the carrier are billed at cost.</li>
                 <li>Inspect pallets on arrival and note any damage on the carrier’s bill of lading before signing.</li>
-                <li>Payment by card at acceptance, or on Net terms for approved wholesale accounts. Orders typically ship within 2 business days of payment or approval.</li>
-                <li>Unused, unopened product may be returned within 30 days; freight is non-refundable. Custom and pallet orders are final sale unless defective.</li>
+                <li>Payment by card at acceptance, or on Net terms for approved wholesale accounts. Orders typically ship within {site.claims.shipWithin} of payment or approval.</li>
+                <li>Unused, unopened product may be returned within {site.claims.returnWindowDays} days; freight is non-refundable. Custom and pallet orders are final sale unless defective.</li>
               </ol>
               <p className="mt-4 text-slate-400">Questions about this quote? Call (913) 313-2691 or reply to your quote email and reference {q.quote_number}.</p>
             </section>

@@ -76,9 +76,9 @@ export function mailHref(subject?: string): string {
 export const JOBS = [
   { slug: 'roofing', label: 'Roofing', blurb: 'Storm dry-in and roof cover. 12–16 mil, sewn-in rope edge.', image: '/images/hero-jobsite.webp' },
   { slug: 'construction', label: 'Construction', blurb: 'Site cover, debris, material storage. 10–16 mil.', image: '/images/category-construction.webp' },
-  { slug: 'agriculture', label: 'Agriculture', blurb: 'Hay, grain and equipment cover. UV-treated 12–20 mil.', image: '/images/category-agriculture.webp' },
-  { slug: 'warehouse', label: 'Warehouse', blurb: 'Pallet, rack and dust cover. 7–10 mil by the case.', image: '/images/category-industrial.webp' },
-  { slug: 'scaffolding', label: 'Scaffolding', blurb: 'Enclosures and wind screens. Fire-retardant, mesh, clear.', image: '/images/category-general.webp' },
+  { slug: 'agriculture', label: 'Agriculture', blurb: 'Hay, grain and equipment cover. UV-treated 12–20 mil.', image: '/images/pallet-20x20-10mil.jpg' } /* was category-agriculture.webp: baked-in "DELIVERED FAST" */,
+  { slug: 'warehouse', label: 'Warehouse', blurb: 'Pallet, rack and dust cover. 7–10 mil by the case.', image: '/images/pallet-20x30.jpg' } /* was category-industrial.webp: baked-in "ALWAYS HAVE STOCK / Fast delivery" */,
+  { slug: 'scaffolding', label: 'Scaffolding', blurb: 'Enclosures and wind screens. Fire-retardant, mesh, clear.', image: '/images/tarp-10mil-reversible.jpg' } /* was category-general.webp: baked-in "stops leaks instantly" */,
 ] as const
 
 export type JobSlug = (typeof JOBS)[number]['slug']

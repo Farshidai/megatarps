@@ -1,3 +1,4 @@
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
@@ -247,7 +248,7 @@ export default async function ProductPage({ params }: PageProps) {
             <div className="mt-5 grid grid-cols-3 gap-2.5">
               {[
                 { icon: Truck, label: 'Kansas City based · Midwest freight' },
-                { icon: Clock, label: 'Quotes within 1 business day' },
+                { icon: Clock, label: `Quotes usually within ${QUOTE_RESPONSE_TIME}` },
                 { icon: ShieldCheck, label: 'Net terms for approved accounts' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center text-center gap-1.5 bg-slate-50 rounded-xl p-3">

@@ -1,3 +1,4 @@
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import { Suspense } from 'react'
 import { BulkQuoteForm } from '@/components/forms/BulkQuoteForm'
 import { getPublicPickerCatalog } from '@/lib/quotes/catalog'
@@ -9,7 +10,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Request a Wholesale Quote — Pallets & Bulk Tarps',
   description:
-    'Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote, usually within one business day.',
+    `Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote, usually within ${QUOTE_RESPONSE_TIME}.`,
 }
 
 export default async function BulkQuotePage() {
@@ -29,7 +30,7 @@ export default async function BulkQuotePage() {
 
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           {[
-            { icon: Clock, title: 'Fast quote turnaround', desc: 'We aim to reply within one business day' },
+            { icon: Clock, title: 'Fast quote turnaround', desc: `We aim to reply within ${QUOTE_RESPONSE_TIME}` },
             { icon: Truck, title: 'LTL freight quoted', desc: 'Dock, liftgate or jobsite delivery' },
             { icon: BadgeDollarSign, title: 'Accept & pay online', desc: 'Card, or Net terms for approved accounts' },
           ].map(({ icon: Icon, title, desc }) => (

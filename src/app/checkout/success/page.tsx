@@ -1,3 +1,4 @@
+import { ACH_CLEARING } from '@/lib/site'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Stripe from 'stripe'
@@ -48,7 +49,7 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
           {session?.amount_total != null && <p className="mt-1 text-slate-500">Total charged {formatPrice(session.amount_total)}</p>}
           <p className="mt-4 text-slate-600">
             {pending
-              ? 'Your bank payment (ACH) is processing. We start fulfilment as soon as it clears, usually within 4 business days.'
+              ? `Your bank payment (ACH) is processing. We start fulfilment as soon as it clears, which takes ${ACH_CLEARING}.`
               : 'We are preparing your order now. You will get a confirmation email with tracking when it ships.'}
             {email && <> Confirmation goes to <strong>{email}</strong>.</>}
           </p>

@@ -1,5 +1,6 @@
 // REVIEW: Farshid must confirm. Standard B2B shipping/freight wording; check every
 // <Placeholder> (processing time, pickup, claim window) against how you actually ship.
+import { SHIP_WITHIN, DAMAGE_REPORT_WINDOW } from '@/lib/site'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PolicyPage, Placeholder } from '@/components/seo/PolicyPage'
@@ -39,7 +40,7 @@ export default function ShippingPage() {
         <h2>Order processing</h2>
         <p>
           In-stock orders placed on business days usually leave our facility within{' '}
-          <Placeholder>1–2 business days</Placeholder>. Pallet and quote orders ship on the date confirmed with your order.
+          <Placeholder>{SHIP_WITHIN}</Placeholder>. Pallet and quote orders ship on the date confirmed with your order.
           We will tell you promptly if an item is back-ordered.
         </p>
       </section>
@@ -92,7 +93,7 @@ export default function ShippingPage() {
         </ul>
         <p>
           Report shortages, visible damage and concealed damage found after unpacking within{' '}
-          <Placeholder>5 business days of delivery</Placeholder> to <a href={mailHref('Freight damage report')}>{site.email}</a>{' '}
+          <Placeholder>{DAMAGE_REPORT_WINDOW}</Placeholder> to <a href={mailHref('Freight damage report')}>{site.email}</a>{' '}
           with your order number and photos. We will file the carrier claim and arrange a replacement or credit. Freight
           signed for as clean, or reported late, may not be recoverable from the carrier.
         </p>
