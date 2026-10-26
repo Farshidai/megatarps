@@ -6,6 +6,8 @@ import { getAdminNotes, getContractorDiscountPercent, isContractorApproved, getQ
 import { getPickerCatalog } from '@/lib/quotes/catalog'
 import { getAppUrl } from '@/lib/quotes/emails'
 import { unitPriceCents } from '@/lib/pricing'
+import { isDemoMode } from '@/lib/demo'
+import { createAdminClient } from '@/lib/supabase/server'
 import { DELIVERY_LABELS, STATUS_LABELS, STATUS_STYLES, effectiveStatus, nowMs } from '@/lib/quotes/types'
 import { QuoteBuilder, type BuilderLine } from './QuoteBuilder'
 import { CopyLink } from './CopyLink'
@@ -36,6 +38,12 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
   const bySku = new Map(catalog.raw.map((p) => [p.xpose_sku.toLowerCase(), p]))
   const costs: Record<string, number> = {}
   for (const p of catalog.raw) if (p.cost_price_cents) costs[p.id] = p.cost_price_cents
+  // getPickerCatalog() reads with the public (anon) client, which can't see cost_price_cents
+  // (0099_column_privileges). Load cost with the service role here, on this admin-only page.
+  if (!isDemoMode()) {
+    const { data } = await (await createAdminClient()).from('products').select('id, cost_price_cents').gt('cost_price_cents', 0)
+    for (const r of (data ?? []) as { id: string; cost_price_cents: number }[]) costs[r.id] = r.cost_price_cents
+  }
 
   const lines: BuilderLine[] = quote.items.map((it, i) => {
     const p = (it.product_id && byId.get(it.product_id)) || (it.sku ? bySku.get(it.sku.toLowerCase()) : undefined)

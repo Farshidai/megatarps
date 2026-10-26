@@ -27,7 +27,7 @@ async function loadSession(id: string) {
 export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
   const { session_id, demo, order } = await searchParams
   const session = session_id ? await loadSession(session_id) : null
-  const isDemo = demo === '1'
+  const isDemo = demo === '1' && isDemoMode() // ?demo=1 means nothing on the live site
   const orderNumber = session?.metadata?.order_number ?? (isDemo ? order : undefined)
   const pending = session && session.payment_status === 'unpaid' // ACH clears in a few business days
   const email = session?.customer_details?.email

@@ -15,6 +15,7 @@ export function toPicker(p: Product): PickerProduct {
     thickness_mil: p.thickness_mil,
     retail_price_cents: p.retail_price_cents,
     units_per_full_pallet: p.units_per_full_pallet,
+    min_unit_price_cents: (p as Product & { min_unit_price_cents?: number | null }).min_unit_price_cents ?? null,
     quote_only: isQuoteOnly(p),
   }
 }

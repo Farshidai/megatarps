@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/admin'
 import { formatPrice } from '@/lib/utils'
 import type { Metadata } from 'next'
 
@@ -13,6 +14,8 @@ const STATUS_STYLES: Record<string, string> = {
 }
 
 export default async function AdminOrdersPage() {
+  // Re-check here: layouts don't re-render on client navigation, so the layout gate alone isn't enough.
+  await requireAdmin('/admin/orders')
   const supabase = await createAdminClient()
 
   const { data: orders } = await supabase
