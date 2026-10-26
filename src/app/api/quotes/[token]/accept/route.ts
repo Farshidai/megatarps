@@ -3,6 +3,7 @@ import { addEvent, createOrderFromQuote, getQuoteByToken, transitionQuote, updat
 import { netTermsFor, termsLabel } from '@/lib/quotes/auth'
 import { emailAdminStatus, emailCustomerOrderConfirmed } from '@/lib/quotes/emails'
 import { effectiveStatus } from '@/lib/quotes/types'
+import { autoSaveQuoteContractPrices } from '@/lib/quote-contracts'
 
 export async function POST(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
@@ -36,6 +37,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
 
   const label = termsLabel(terms)
   await addEvent(q.id, 'accepted', `Accepted on ${label} — order ${orderNumber}${po ? ` · PO ${po}` : ''}`)
+  // Net terms are only for approved accounts (netTermsFor above), so save the accepted line
+  // prices as the client's contract prices (90 days, min qty 1), as the quote email promises.
+  const cp = await autoSaveQuoteContractPrices(updated, true)
+  if (cp.saved > 0 || cp.demo) await addEvent(q.id, 'accepted', cp.demo ? 'Demo: contract prices would be saved (not saved in demo)' : `Saved ${cp.saved} contract price${cp.saved === 1 ? '' : 's'} to the client's account (90 days)`).catch(() => {})
   await Promise.all([
     emailAdminStatus(updated, `Accepted on ${label} — order ${orderNumber}`, po ? `Customer PO: ${po}` : '').catch(() => {}),
     emailCustomerOrderConfirmed(updated, orderNumber, label).catch(() => {}),

@@ -14,6 +14,10 @@ import Stripe from 'stripe'
 import { createAdminClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo'
 import { parseCompactItems } from '@/lib/cart/checkout-pricing'
+import { autoSaveQuoteContractPrices } from '@/lib/quote-contracts'
+import { isContractorApproved } from '@/lib/quotes/store'
+import type { QuoteLine } from '@/lib/quotes/types'
+import { quotePaidByEvent } from '@/lib/quotes/payment-state'
 
 type Session = Stripe.Checkout.Session
 type Admin = Awaited<ReturnType<typeof createAdminClient>>
@@ -91,6 +95,9 @@ function paymentIntentId(session: Session): string | null {
 async function handleSession(supabase: Admin, type: string, session: Session) {
   const meta = session.metadata ?? {}
   const paidNow = session.payment_status === 'paid' || session.payment_status === 'no_payment_required'
+  // A quote becomes 'ordered' only once the money is in: card → checkout.session.completed with
+  // payment_status 'paid'; ACH → checkout.session.async_payment_succeeded (completed is 'unpaid').
+  const quotePaid = quotePaidByEvent(type, session.payment_status)
 
   let patch: Record<string, unknown>
   let onlyIfPending = false
@@ -141,7 +148,7 @@ async function handleSession(supabase: Admin, type: string, session: Session) {
     if (created.duplicate) {
       // lost a race with a concurrent retry; fall through to the conditional update
     } else {
-      await markQuoteOrdered(supabase, meta.quote_id)
+      if (quotePaid) await markQuoteOrdered(supabase, meta.quote_id, orderId)
       return { order_id: orderId, created: true }
     }
   }
@@ -152,7 +159,7 @@ async function handleSession(supabase: Admin, type: string, session: Session) {
   const { error } = await q
   if (error) throw error
 
-  if (type === 'checkout.session.completed') await markQuoteOrdered(supabase, meta.quote_id, orderId)
+  if (quotePaid) await markQuoteOrdered(supabase, meta.quote_id, orderId)
   return { order_id: orderId, updated: true }
 }
 
@@ -202,11 +209,21 @@ async function createOrderFromSession(supabase: Admin, session: Session, orderNu
 
 async function markQuoteOrdered(supabase: Admin, quoteId: string | undefined, orderId?: string) {
   if (!quoteId) return
-  const { error } = await supabase
+  const { data: moved, error } = await supabase
     .from('quotes')
     .update({ status: 'ordered', updated_at: new Date().toISOString() })
     .eq('id', quoteId)
     .in('status', ['pending', 'quoted', 'accepted'])
+    .select('id, quote_number, contractor_id, items')
   if (error) throw error
   if (orderId) await supabase.from('orders').update({ quote_id: quoteId }).eq('id', orderId).is('quote_id', null)
+  // First time this quote is paid: an approved account's accepted prices become its contract
+  // prices (90 days, min qty 1). Retried events don't match the status filter, so this runs once.
+  const q = moved?.[0] as { id: string; quote_number: string; contractor_id: string | null; items: QuoteLine[] } | undefined
+  if (q?.contractor_id) {
+    const cp = await autoSaveQuoteContractPrices({ ...q, items: q.items ?? [] }, await isContractorApproved(q.contractor_id))
+    if (cp.saved > 0) {
+      await supabase.from('quote_events').insert({ quote_id: q.id, type: 'paid', note: `Saved ${cp.saved} contract price${cp.saved === 1 ? '' : 's'} to the client's account (90 days)` })
+    }
+  }
 }

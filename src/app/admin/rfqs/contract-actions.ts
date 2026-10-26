@@ -8,7 +8,8 @@ import { requireAdmin } from '@/lib/admin'
 import { isDemoMode } from '@/lib/demo'
 import { getQuoteById } from '@/lib/quotes/store'
 import { effectiveStatus } from '@/lib/quotes/types'
-import { adminProductsByIdsOrSkus, adminUpsertContractPrices, type ContractPriceUpsert } from '@/lib/contract-prices'
+import { adminUpsertContractPrices } from '@/lib/contract-prices'
+import { contractRowsFromQuote, loadProductsForQuoteItems } from '@/lib/quote-contracts'
 import { CONTRACT_SAVE_STATUSES, parseMinQty, parseValidUntil } from '@/lib/contract-prices-input'
 import { formatPrice } from '@/lib/utils'
 
@@ -60,31 +61,13 @@ export async function saveQuoteAsContractPrices(input: SaveContractInput): Promi
     }
   }
 
-  const products = await adminProductsByIdsOrSkus({
-    ids: chosen.map((c) => c.item.product_id ?? '').filter(Boolean),
-    skus: chosen.map((c) => c.item.sku),
-  })
-  const byId = new Map(products.map((p) => [p.id, p]))
-  const bySku = new Map(products.map((p) => [p.xpose_sku.toLowerCase(), p]))
-
-  const rows = new Map<string, ContractPriceUpsert>()
-  for (const { item, min_quantity } of chosen) {
-    const product = (item.product_id && byId.get(item.product_id)) || bySku.get(item.sku.toLowerCase())
-    if (!product) return { ok: false, error: `“${item.name || item.sku}” is a custom line, not a catalog product, so it can’t be a contract price` }
-    rows.set(`${product.id}:${min_quantity}`, {
-      contractor_id: quote.contractor_id,
-      product_id: product.id,
-      sku: product.xpose_sku,
-      unit_price_cents: item.unit_price_cents,
-      min_quantity,
-      valid_until: validUntil,
-      source_quote_id: quote.id,
-      note: `From quote ${quote.quote_number}`,
-      created_by: admin.email,
-    })
+  // shared with the automatic save on accept / payment (src/lib/quote-contracts.ts)
+  const products = await loadProductsForQuoteItems(chosen.map((c) => c.item))
+  const { rows: list, skipped } = contractRowsFromQuote(quote, chosen, products, { validUntil, createdBy: admin.email })
+  if (skipped.length) {
+    const item = skipped[0]
+    return { ok: false, error: `“${item.name || item.sku}” is a custom line, not a catalog product, so it can’t be a contract price` }
   }
-
-  const list = [...rows.values()]
   const summary = list.map((r) => `${r.sku} ${formatPrice(r.unit_price_cents)}${r.min_quantity > 1 ? ` @${r.min_quantity}+` : ''}`).join(', ')
   if (admin.demo || isDemoMode()) {
     return {
