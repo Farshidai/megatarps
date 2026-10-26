@@ -13,7 +13,9 @@ Run each file in the Supabase SQL editor, in this exact order (all are safe to r
    - `supabase/seed-weights.sql` — real packed shipping weights (10-mil)
    - `supabase/seed-prices-2026-10-25.sql` — guest prices = Xpose store pallet price −5%, floor cost × 1.15
    - `supabase/seed-market-amazon-2026-10-25.sql` — Amazon reference prices (admin-only)
+   - `supabase/seed-market-ttw-2026-10-25.sql` — The Tarps Wholesaler (Xpose store) single / half-pallet / full-pallet
+     prices (admin-only, 814 rows). Generated: `node scripts/build-market-seed.mjs`. Feeds **Reprice from market** on `/admin/products`.
 4. Keep existing customers approved after 0003 (all existing profiles become `pending`):
    `UPDATE contractor_profiles SET account_status='approved', approved_at=now(), approved_by='mfirooz@megatarps.com' WHERE id IN (...);`
 
-Local check of the whole chain: `node scripts/build-demo-data.mjs supabase/seed.sql supabase/seed-catalog.sql supabase/seed-weights.sql supabase/seed-prices-2026-10-25.sql supabase/seed-market-amazon-2026-10-25.sql`
+Local check of the whole chain: `node scripts/build-demo-data.mjs supabase/seed.sql supabase/seed-catalog.sql supabase/seed-weights.sql supabase/seed-prices-2026-10-25.sql supabase/seed-market-amazon-2026-10-25.sql supabase/seed-market-ttw-2026-10-25.sql`
