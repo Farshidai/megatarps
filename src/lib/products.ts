@@ -11,11 +11,11 @@ export const PUBLIC_PRODUCT_COLUMNS = [
   'thickness_mil', 'width_ft', 'length_ft', 'coverage_sqft', 'color', 'color_hex',
   'retail_price_cents', 'units_per_half_pallet', 'units_per_full_pallet', 'units_per_case',
   'pack_quantity', 'accessory_type', 'size_label', 'material', 'image_urls', 'active',
-  'in_stock', 'created_at', 'updated_at', 'shipping_weight_lb',
+  'in_stock', 'created_at', 'updated_at', 'shipping_weight_lb', 'min_unit_price_cents',
 ].join(', ')
 const PRODUCT_SELECT = `${PUBLIC_PRODUCT_COLUMNS}, product_line:product_lines(*)`
 export const PUBLIC_RULE_COLUMNS =
-  'id, tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent, priority, active'
+  'id, tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent, priority, active, unit, price_multiplier, requires_account, label'
 
 /** Active volume pricing rules (tier table source). */
 export async function getPricingRules(): Promise<PricingRule[]> {

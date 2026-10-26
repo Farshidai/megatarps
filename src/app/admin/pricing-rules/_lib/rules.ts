@@ -11,6 +11,9 @@ export interface RuleInput {
   discount_from_retail_percent: number
   priority: number
   active: boolean
+  unit: 'each' | 'pallet'
+  price_multiplier: number | null
+  requires_account: boolean
 }
 
 export function validateRule(raw: unknown): { ok: true; rule: RuleInput } | { ok: false; error: string } {
@@ -24,15 +27,31 @@ export function validateRule(raw: unknown): { ok: true; rule: RuleInput } | { ok
   if (min_quantity === null || !Number.isInteger(min_quantity) || min_quantity < 1 || min_quantity > 1_000_000) return { ok: false, error: 'Min quantity must be a whole number ≥ 1.' }
   const max_quantity = int(r.max_quantity)
   if (max_quantity !== null && (!Number.isInteger(max_quantity) || max_quantity < min_quantity)) return { ok: false, error: 'Max quantity must be empty (no limit) or ≥ min quantity.' }
-  const discount = Number(r.discount_from_retail_percent)
-  if (!Number.isFinite(discount) || discount < 0 || discount > 90) return { ok: false, error: 'Discount must be between 0 and 90%.' }
+  const unit = r.unit === 'pallet' ? 'pallet' : 'each'
+  let discount = Number(r.discount_from_retail_percent ?? 0)
+  let price_multiplier: number | null = null
+  if (unit === 'pallet') {
+    // Entered as "% of guest price" (e.g. 94.74 = 0.90/0.95); stored as a multiplier
+    const pct = Number(r.price_percent_of_guest)
+    if (!Number.isFinite(pct) || pct < 50 || pct > 100) return { ok: false, error: 'Pallet rules: price must be 50–100% of the guest price.' }
+    price_multiplier = Math.round(pct * 100) / 10000
+    discount = 0
+  } else if (!Number.isFinite(discount) || discount < 0 || discount > 90) return { ok: false, error: 'Discount must be between 0 and 90%.' }
   const priority = int(r.priority) ?? 0
   if (!Number.isInteger(priority) || priority < -100 || priority > 100) return { ok: false, error: 'Priority must be a whole number between -100 and 100.' }
   return {
     ok: true,
-    rule: { tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent: Math.round(discount * 100) / 100, priority, active: r.active !== false },
+    rule: {
+      tarp_type, thickness_mil, min_quantity, max_quantity, discount_from_retail_percent: Math.round(discount * 100) / 100, priority,
+      active: r.active !== false, unit, price_multiplier, requires_account: unit === 'pallet' ? r.requires_account !== false : r.requires_account === true,
+    },
   }
 }
+
+export const qtyLabel = (r: Pick<PricingRule, 'min_quantity' | 'max_quantity' | 'unit'>) =>
+  r.unit === 'pallet'
+    ? `${r.min_quantity}${r.max_quantity == null ? '+' : r.max_quantity === r.min_quantity ? '' : `–${r.max_quantity}`} full pallet${r.min_quantity === 1 && r.max_quantity !== null ? '' : 's'}`
+    : `${r.min_quantity}${r.max_quantity == null ? '+' : `–${r.max_quantity}`}`
 
 export const scopeLabel = (r: Pick<PricingRule, 'tarp_type' | 'thickness_mil'>) =>
   `${r.tarp_type ?? 'All types'}${r.thickness_mil ? ` · ${r.thickness_mil} mil` : ''}`
@@ -41,7 +60,7 @@ export const scopeLabel = (r: Pick<PricingRule, 'tarp_type' | 'thickness_mil'>) 
 export function ruleWarnings(rules: PricingRule[]): string[] {
   const warnings: string[] = []
   const groups = new Map<string, PricingRule[]>()
-  for (const r of rules.filter((r) => r.active !== false)) {
+  for (const r of rules.filter((r) => r.active !== false && r.unit !== 'pallet')) {
     const k = scopeLabel(r)
     groups.set(k, [...(groups.get(k) ?? []), r])
   }

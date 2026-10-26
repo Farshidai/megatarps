@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     ])
     account = acct
     const wholesaleDiscountPercent = acct.status === 'approved' ? Math.min(Math.max(acct.wholesaleDiscountPercent || 0, 0), 90) : 0
-    priced = priceCheckoutLines(lines, products, rules, { wholesaleDiscountPercent })
+    priced = priceCheckoutLines(lines, products, rules, { wholesaleDiscountPercent, accountApproved: acct.status === 'approved' })
     // Freight: server weights + server rates only. Nothing from the request is used.
     freight = calculateFreight(
       priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unitWeightLb: l.unit_weight_lb })),

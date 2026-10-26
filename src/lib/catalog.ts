@@ -8,27 +8,31 @@ import { CATEGORY_LABELS } from '@/lib/utils'
 /** Product plus the pack columns added by migrations/0002_catalog.sql. */
 export type CatalogProduct = Product & {
   units_per_case?: number | null
+  min_unit_price_cents?: number | null
   pack_quantity?: number | null
   accessory_type?: string | null
   size_label?: string | null
   material?: string | null
 }
 
-/** Remove admin-only fields before a product is passed to a client component or JSON-LD. */
+/** Remove admin-only fields (cost, market research) before a product is passed to a client component or JSON-LD. */
+const PRIVATE_FIELDS = ['cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at']
 export function toPublicProduct<T extends Product>(p: T): T {
-  const { cost_price_cents: _cost, ...rest } = p
-  void _cost
-  return rest as T
+  const out = { ...p } as Record<string, unknown>
+  for (const k of PRIVATE_FIELDS) delete out[k]
+  return out as T
 }
 
 export const isAccessory = (p: Pick<Product, 'tarp_type'>) => p.tarp_type === 'accessory'
+/** Shopify bulk-pallet listings (…-HP72 / …-FP20): one unit = one pallet of pack_quantity tarps. */
+export const isPalletSku = (p: Pick<Product, 'xpose_sku'>) => /-(HP|FP)\d+$/.test(p.xpose_sku)
 export const isFireRetardant = (p: Product) => Boolean(p.product_line?.fire_retardant)
 
 const GRADES: Record<number, string> = {
   5: 'Multipurpose',
   7: 'Standard Duty',
   10: 'Heavy Duty',
-  12: 'Extreme Duty',
+  12: 'Extra Heavy Duty',
   16: 'Super Heavy Duty',
   20: 'Ultra Heavy Duty',
   30: 'Super Heavy Duty',
@@ -77,8 +81,8 @@ export function seoDescription(p: CatalogProduct): string {
   const head = isAccessory(p) ? p.name : `${gradeLabel(p)}${bits.length ? `, ${bits.join(', ')}` : ''}`
   const price = isQuoteOnly(p)
     ? 'Wholesale pricing by quote for contractors, farms and warehouses.'
-    : 'Volume pricing from 5 units, pallet quantities available.'
-  return `${head}. ${price} Ships from Kansas City. SKU ${p.xpose_sku}.`
+    : 'Case and pallet pricing for contractors and wholesale accounts.'
+  return `${head}. ${price} Kansas City based, Midwest freight. SKU ${p.xpose_sku}.`
 }
 
 // ─── Jobs ("Shop by job") ────────────────────────────────────────────────────

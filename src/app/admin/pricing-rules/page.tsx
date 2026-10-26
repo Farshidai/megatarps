@@ -31,16 +31,16 @@ export default async function AdminPricingRulesPage() {
   let loadError: string | null = null
   if (auth.demo) {
     rules = demoPricingRules
-    samples = demoProducts.filter((p) => p.retail_price_cents > 0).map((p) => ({ sku: p.xpose_sku, name: p.name, retail_price_cents: p.retail_price_cents, tarp_type: p.tarp_type, thickness_mil: p.thickness_mil }))
+    samples = demoProducts.filter((p) => p.retail_price_cents > 0).map((p) => { const x = p as typeof p & { min_unit_price_cents?: number | null }; return { sku: x.xpose_sku, name: x.name, retail_price_cents: x.retail_price_cents, tarp_type: x.tarp_type, thickness_mil: x.thickness_mil, units_per_full_pallet: x.units_per_full_pallet, min_unit_price_cents: x.min_unit_price_cents } })
   } else {
     const supabase = await createAdminClient()
     const [r, p] = await Promise.all([
       supabase.from('pricing_rules').select('*').order('min_quantity'),
-      supabase.from('products').select('xpose_sku, name, retail_price_cents, tarp_type, thickness_mil').gt('retail_price_cents', 0).eq('active', true).order('name').limit(500),
+      supabase.from('products').select('xpose_sku, name, retail_price_cents, tarp_type, thickness_mil, units_per_full_pallet, min_unit_price_cents').gt('retail_price_cents', 0).eq('active', true).order('name').limit(500),
     ])
     if (r.error) loadError = r.error.message
     rules = (r.data as PricingRule[]) ?? []
-    samples = (p.data ?? []).map((x) => ({ sku: x.xpose_sku, name: x.name, retail_price_cents: x.retail_price_cents, tarp_type: x.tarp_type, thickness_mil: x.thickness_mil }))
+    samples = (p.data ?? []).map((x) => ({ sku: x.xpose_sku, name: x.name, retail_price_cents: x.retail_price_cents, tarp_type: x.tarp_type, thickness_mil: x.thickness_mil, units_per_full_pallet: x.units_per_full_pallet, min_unit_price_cents: x.min_unit_price_cents }))
   }
 
   return (

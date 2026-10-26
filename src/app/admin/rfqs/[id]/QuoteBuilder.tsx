@@ -25,6 +25,7 @@ interface Props {
   products: PickerProduct[]
   rules: PricingRule[]
   wholesalePct: number
+  accountApproved?: boolean
   costs: Record<string, number>
   customerEmail: string | null
   sentAt: string | null
@@ -68,7 +69,7 @@ function MoneyInput({ id, cents, onChange, disabled, label, className = '' }: {
   )
 }
 
-export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, costs, customerEmail, sentAt, initial }: Props) {
+export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, accountApproved = false, costs, customerEmail, sentAt, initial }: Props) {
   const router = useRouter()
   const byId = useMemo(() => new Map(products.map((p) => [p.id, p])), [products])
   const editable = EDITABLE.includes(status)
@@ -87,7 +88,7 @@ export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, c
 
   const suggested = (l: Pick<BuilderLine, 'product_id' | 'quantity'>, qty = l.quantity) => {
     const p = l.product_id ? byId.get(l.product_id) : undefined
-    return p ? unitPriceCents(p, qty, rules, { wholesaleDiscountPercent: wholesalePct }) : 0
+    return p ? unitPriceCents(p, qty, rules, { wholesaleDiscountPercent: wholesalePct, accountApproved }) : 0
   }
 
   const update = (key: string, patch: Partial<BuilderLine>) => setLines((ls) => ls.map((l) => (l.key === key ? { ...l, ...patch } : l)))

@@ -260,6 +260,18 @@ export async function getContractorDiscountPercent(contractorId: string | null):
   }
 }
 
+/** True when the quote's contractor has an approved wholesale account (unlocks pallet pricing). */
+export async function isContractorApproved(contractorId: string | null): Promise<boolean> {
+  if (!contractorId || isDemoMode()) return false
+  try {
+    const supabase = await createAdminClient()
+    const { data } = await supabase.from('contractor_profiles').select('account_status').eq('id', contractorId).maybeSingle()
+    return (data as { account_status?: string } | null)?.account_status === 'approved'
+  } catch {
+    return false
+  }
+}
+
 /** Does a contractor_profiles row exist for this user? (quotes.contractor_id has an FK to it.) */
 export async function contractorProfileExists(userId: string): Promise<boolean> {
   if (isDemoMode()) return false

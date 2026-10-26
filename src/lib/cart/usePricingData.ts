@@ -9,6 +9,7 @@ import type { FreightConfig } from '@/lib/freight'
 export interface PricingData {
   rules: PricingRule[]
   wholesaleDiscountPercent: number
+  accountApproved: boolean
   products: Record<string, CatalogEntry>
   freight: FreightConfig | null
 }
@@ -24,10 +25,11 @@ export function usePricingData(skus: string[], enabled = true): { data: PricingD
     let cancelled = false
     fetch(`/api/pricing-rules?skus=${encodeURIComponent(key)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((json: { rules: PricingRule[]; wholesaleDiscountPercent: number; products: CatalogEntry[]; freight?: FreightConfig }) => {
+      .then((json: { rules: PricingRule[]; wholesaleDiscountPercent: number; accountApproved?: boolean; products: CatalogEntry[]; freight?: FreightConfig }) => {
         const data: PricingData = {
           rules: json.rules ?? [],
           wholesaleDiscountPercent: json.wholesaleDiscountPercent ?? 0,
+          accountApproved: json.accountApproved === true,
           products: Object.fromEntries((json.products ?? []).map((p) => [p.sku, p])),
           freight: json.freight ?? null,
         }

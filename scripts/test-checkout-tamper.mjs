@@ -42,7 +42,7 @@ function expectedUnit(product, qty) {
 
 // Independent ship-weight + freight expectation (Xpose spec oz/sq yd by mil, placeholder parcel brackets).
 const SPEC = { 5: 3.6, 7: 3.65, 10: 4.25, 12: 6, 16: 8, 20: 11 }
-const weightLb = (p) => (SPEC[p.thickness_mil] && p.width_ft ? (p.width_ft * p.length_ft) / 9 * SPEC[p.thickness_mil] / 16 : null)
+const weightLb = (p) => (Number(p.shipping_weight_lb) > 0 ? Number(p.shipping_weight_lb) * (p.pack_quantity || 1) : SPEC[p.thickness_mil] && p.width_ft ? (p.width_ft * p.length_ft) / 9 * SPEC[p.thickness_mil] / 16 * (p.pack_quantity || 1) : null)
 function expectedFreight(totalLb) {
   const lb = Math.ceil(Math.round(totalLb * 100) / 100)
   if (totalLb <= 20) return 1200 + 40 * lb
@@ -52,9 +52,11 @@ function expectedFreight(totalLb) {
 }
 
 const priced = catalog.products.filter((p) => p.active && p.in_stock && p.retail_price_cents > 0)
+// single-unit products priced only by the piece tiers (no pallet pricing, not a pallet SKU)
+const simple = priced.filter((p) => !(p.pack_quantity > 1) && !p.units_per_full_pallet && !p.min_unit_price_cents)
 const QTY = 5
 // most expensive tarp whose QTY units still ship parcel (≤ 150 lb)
-const target = [...priced].filter((p) => weightLb(p) && weightLb(p) * QTY <= 150).sort((a, b) => b.retail_price_cents - a.retail_price_cents)[0]
+const target = [...simple].filter((p) => weightLb(p) && weightLb(p) * QTY <= 150).sort((a, b) => b.retail_price_cents - a.retail_price_cents)[0]
 const cheap = [...priced].sort((a, b) => a.retail_price_cents - b.retail_price_cents)[0]
 const heavy = [...priced].filter((p) => weightLb(p)).sort((a, b) => weightLb(b) - weightLb(a))[0]
 const noWeight = priced.find((p) => !weightLb(p))

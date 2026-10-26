@@ -24,7 +24,7 @@ export function CartDrawer() {
   const { checkout, loading: checkingOut, error } = useCheckout()
 
   const rules = data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0 }
+  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true }
   const totals = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
   const freightQuote = totals.freight?.method === 'quote'
 

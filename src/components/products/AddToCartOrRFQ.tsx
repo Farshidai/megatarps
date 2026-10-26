@@ -26,7 +26,7 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
   // Rules come from the page; the wholesale % (approved accounts) comes from the server.
   const { data } = usePricingData([], true)
   const rules = rulesProp ?? data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0 }
+  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true }
 
   const quoteOnly = isQuoteOnly(product)
   const unit = unitPriceCents(product, qty, rules, opts)

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Building2, Mail, Phone, Truck, CalendarDays, MapPin, MessageSquare, Bot } from 'lucide-react'
 import { requireAdmin } from '@/lib/admin'
-import { getAdminNotes, getContractorDiscountPercent, getQuoteById, listEvents } from '@/lib/quotes/store'
+import { getAdminNotes, getContractorDiscountPercent, isContractorApproved, getQuoteById, listEvents } from '@/lib/quotes/store'
 import { getPickerCatalog } from '@/lib/quotes/catalog'
 import { getAppUrl } from '@/lib/quotes/emails'
 import { unitPriceCents } from '@/lib/pricing'
@@ -24,12 +24,13 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
   const quote = await getQuoteById(id)
   if (!quote) notFound()
 
-  const [events, notes, catalog, wholesalePct, appUrl] = await Promise.all([
+  const [events, notes, catalog, wholesalePct, appUrl, accountApproved] = await Promise.all([
     listEvents(quote.id),
     getAdminNotes(quote.id),
     getPickerCatalog(),
     getContractorDiscountPercent(quote.contractor_id),
     getAppUrl(),
+    isContractorApproved(quote.contractor_id),
   ])
   const byId = new Map(catalog.raw.map((p) => [p.id, p]))
   const bySku = new Map(catalog.raw.map((p) => [p.xpose_sku.toLowerCase(), p]))
@@ -38,7 +39,7 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
 
   const lines: BuilderLine[] = quote.items.map((it, i) => {
     const p = (it.product_id && byId.get(it.product_id)) || (it.sku ? bySku.get(it.sku.toLowerCase()) : undefined)
-    const suggested = p ? unitPriceCents(p, it.quantity, catalog.rules, { wholesaleDiscountPercent: wholesalePct }) : 0
+    const suggested = p ? unitPriceCents(p, it.quantity, catalog.rules, { wholesaleDiscountPercent: wholesalePct, accountApproved }) : 0
     return {
       key: `${i}-${it.sku}`,
       product_id: p?.id ?? it.product_id ?? null,
@@ -78,6 +79,7 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
             products={catalog.products}
             rules={catalog.rules}
             wholesalePct={wholesalePct}
+            accountApproved={accountApproved}
             costs={costs}
             initial={{
               lines,

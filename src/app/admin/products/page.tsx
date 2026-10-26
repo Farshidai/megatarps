@@ -29,12 +29,12 @@ export default async function AdminProductsPage() {
   let rows: EditorRow[] = []
   let loadError: string | null = null
   if (auth.demo) {
-    rows = demoProducts.map(toRow)
+    rows = demoProducts.map((p) => toRow(p as Parameters<typeof toRow>[0]))
   } else {
     const supabase = await createAdminClient()
     const { data, error } = await supabase
       .from('products')
-      .select('xpose_sku, name, slug, tarp_type, thickness_mil, width_ft, length_ft, retail_price_cents, cost_price_cents, in_stock, active, image_urls, product_line:product_lines(name)')
+      .select('xpose_sku, name, slug, tarp_type, thickness_mil, width_ft, length_ft, retail_price_cents, cost_price_cents, in_stock, active, image_urls, market_price_cents, market_price_source, market_price_url, market_price_checked_at, product_line:product_lines(name)')
       .order('tarp_type')
       .order('thickness_mil', { nullsFirst: false })
       .order('width_ft')
@@ -49,7 +49,7 @@ export default async function AdminProductsPage() {
         <h1 className="text-2xl font-black text-slate-900">Products &amp; prices</h1>
         <p className="text-sm text-slate-500 mt-1">
           Edit cost and retail inline, or round-trip a CSV (<code className="text-xs bg-slate-100 px-1 rounded">sku,cost,retail,in_stock</code>).
-          Retail $0 = quote-only (can&apos;t be bought online). Volume tiers come from <a href="/admin/pricing-rules" className="text-orange-600 font-semibold hover:underline">Pricing Rules</a>.
+          Retail $0 = quote-only (can&apos;t be bought online). Market = public retail seen elsewhere (reference only — it never sets your price). Volume tiers come from <a href="/admin/pricing-rules" className="text-orange-600 font-semibold hover:underline">Pricing Rules</a>.
         </p>
       </div>
       {auth.demo && (
@@ -72,6 +72,7 @@ function toRow(p: {
   xpose_sku: string; name: string; slug: string; tarp_type: string; thickness_mil: number | null; width_ft: number; length_ft: number
   retail_price_cents: number; cost_price_cents?: number | null; in_stock: boolean; active: boolean; image_urls?: string[] | null
   product_line?: { name: string } | null
+  market_price_cents?: number | null; market_price_source?: string | null; market_price_url?: string | null; market_price_checked_at?: string | null
 }): EditorRow {
   return {
     sku: p.xpose_sku,
@@ -85,5 +86,9 @@ function toRow(p: {
     in_stock: p.in_stock,
     active: p.active,
     has_image: Array.isArray(p.image_urls) && p.image_urls.length > 0,
+    market_cents: p.market_price_cents ?? null,
+    market_source: p.market_price_source ?? null,
+    market_url: p.market_price_url ?? null,
+    market_checked: p.market_price_checked_at ? String(p.market_price_checked_at).slice(0, 10) : null,
   }
 }

@@ -16,8 +16,8 @@ const { chromium } = loadPlaywright()
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:3102'
 const OUT = new URL('../docs/screens/', import.meta.url).pathname
-const PRICED = '/product/20-x-30-heavy-duty-poly-tarp-10-mil'
-const QUOTE_ONLY = '/product/15x30-heavy-duty-poly-tarp-10-mil-pallet'
+const PRICED = '/product/20-x-30-extreme-duty-poly-tarp-12-mil'
+const QUOTE_ONLY = '/product/16mil-brown-4x20'
 
 let failures = 0
 const ok = (c, m) => { console.log(`${c ? 'PASS' : 'FAIL'}  ${m}`); if (!c) failures++ }
@@ -52,7 +52,7 @@ async function run(viewport, tag) {
   const box = page.getByTestId('buy-box')
   await box.scrollIntoViewIfNeeded()
   await page.screenshot({ path: `${OUT}b-buybox-${tag}.png`, fullPage: false })
-  const sw = await page.getByTestId('ship-weight-info').innerText(); ok(/Ship weight ≈ 17\.7 lb each/.test(sw), `[${tag}] buy box shows ship weight ≈ 17.7 lb each`)
+  const sw = await page.getByTestId('ship-weight-info').innerText(); ok(/Ship weight ≈ 25 lb each/.test(sw), `[${tag}] buy box shows ship weight ≈ 25 lb each`)
   ok(!(await page.getByTestId('ltl-notice').isVisible().catch(() => false)), `[${tag}] 5 units (89 lb) ships parcel, no LTL notice`)
   await qty.fill('9')
   await page.waitForTimeout(150)
@@ -69,7 +69,7 @@ async function run(viewport, tag) {
   await page.waitForSelector('[data-testid="drawer-subtotal"]:not(:has-text("…"))')
   ok(await drawer.isVisible(), `[${tag}] drawer opens after Add to Cart`)
   ok((await page.getByTestId('cart-count').innerText()) === '5', `[${tag}] navbar badge shows 5 units`)
-  ok((await page.getByTestId('freight-amount').innerText()) === '$69.50', `[${tag}] drawer freight: 88.6 lb parcel = $25 + 89 × $0.50 = $69.50`)
+  ok((await page.getByTestId('freight-amount').innerText()) === '$87.50', `[${tag}] drawer freight: 125 lb parcel = $25 + 125 × $0.50 = $87.50`)
   await page.screenshot({ path: `${OUT}b-drawer-${tag}.png` })
   await page.keyboard.press('Escape')
   ok(!(await drawer.isVisible().catch(() => false)), `[${tag}] Escape closes drawer`)
@@ -127,13 +127,13 @@ async function run(viewport, tag) {
   // ---- parcel-weight cart → checkout (demo) → success clears priced lines, keeps quote lines
   await page.evaluate(() => {
     const s = JSON.parse(localStorage.getItem('megatarps_cart_v1'))
-    s.items = s.items.filter((i) => i.quote_only || i.sku === 'MT-20X30-10MIL').map((i) => (i.quote_only ? i : { ...i, quantity: 5 }))
+    s.items = s.items.filter((i) => i.quote_only || i.sku === 'MT-20X30-12MIL').map((i) => (i.quote_only ? i : { ...i, quantity: 5 }))
     localStorage.setItem('megatarps_cart_v1', JSON.stringify(s))
   })
   await page.reload({ waitUntil: 'load' })
   await page.getByTestId('cart-subtotal').waitFor()
-  ok((await page.getByTestId('freight-amount').innerText()) === '$69.50', `[${tag}] cart freight line $69.50 (parcel)`)
-  ok(/88\.6 lb/.test(await page.getByTestId('ship-weight').innerText()), `[${tag}] cart shows total ship weight 88.6 lb`)
+  ok((await page.getByTestId('freight-amount').innerText()) === '$87.50', `[${tag}] cart freight line $87.50 (parcel)`)
+  ok(/125 lb/.test(await page.getByTestId('ship-weight').innerText()), `[${tag}] cart shows total ship weight 125 lb`)
   await page.screenshot({ path: `${OUT}b-freight-cart-${tag}.png`, fullPage: tag === 'desktop' })
   await page.getByTestId('checkout-button').click()
   await page.waitForURL(/\/checkout\/success\?demo=1/)
@@ -162,7 +162,7 @@ async function run(viewport, tag) {
     await page.locator('[role=listbox] [role=option]').first().click()
     await page.getByRole('spinbutton', { name: 'Calculator row 1 quantity' }).fill('2')
     const res = await page.getByTestId('calc-result').innerText()
-    ok(/142 lb/.test(res) && /\$96\.00/.test(res), `[${tag}] calculator: 2 × 40x60 10-mil = 141.7 lb (bills 142) → $25 + 142 × $0.50 = $96.00`)
+    ok(/146 lb/.test(res) && /\$98\.00/.test(res), `[${tag}] calculator: 2 × 40x60 10-mil = 146 lb (real packed weight 73 lb each) → $25 + 146 × $0.50 = $98.00`)
     await page.setViewportSize({ width: 1440, height: 1300 })
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({ path: `${OUT}b-freight-admin-${tag}.png` })

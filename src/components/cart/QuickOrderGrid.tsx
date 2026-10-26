@@ -26,6 +26,7 @@ interface Props {
   catalog: CatalogEntry[]
   rules: PricingRule[]
   wholesaleDiscountPercent: number
+  accountApproved?: boolean
   freight: FreightConfig
 }
 
@@ -37,9 +38,9 @@ function rowQty(r: Row): number | null {
   return Number.isInteger(n) && n >= 1 && n <= MAX_LINE_QUANTITY ? n : null
 }
 
-export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, freight: freightConfig }: Props) {
+export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accountApproved = false, freight: freightConfig }: Props) {
   const cart = useCart()
-  const opts = { wholesaleDiscountPercent }
+  const opts = { wholesaleDiscountPercent, accountApproved }
   const [rows, setRows] = useState<Row[]>(() => [blank(), blank(), blank(), blank(), blank()])
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')

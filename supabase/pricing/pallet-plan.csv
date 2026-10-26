@@ -1,0 +1,22 @@
+# Source: Farshid's "Pe TARPULINE" Google Sheet, tab "whole" (Xpose/All In Safety bulk pallet listings + his cost + his Mega price plan). Prices are NOT current; quantities are the reference.
+# competitor_* = Xpose bulk-pallet listing price per tarp (Amazon/The Tarps Wholesaler). cost = All In Safety quote 2025-11-03.
+# Mega plan per tarp = competitor_full_per_tarp x: guest 0.95 | 1 pallet 0.90 | 2+ pallets 0.85 | 3+ pallets 0.81
+size,mil,color,half_pallet_qty,half_pallet_listing,full_pallet_qty,full_pallet_listing,competitor_full_per_tarp,cost,flag
+15x30,10,silver/black,72,2799.99,144,4699.99,32.64,23.40,
+15x30,10,green/black,,,144,5549.99,38.54,23.40,
+20x20,10,silver/black,72,2549.99,144,4249.99,29.51,20.80,
+20x20,10,green/black,,,144,4299.99,29.86,20.80,
+20x30,10,silver/black,48,2599.99,96,4299.99,44.79,31.20,
+20x40,10,silver/black,30,2249.99,,,75.00,,full pallet qty unknown (likely 60); no cost quoted
+30x40,10,silver/black,22,2399.99,42,3849.99,91.67,62.40,
+30x50,10,green/black,18,2649.99,36,2999.99,147.22,78.00,full qty 36 from tab 3-12; per-tarp competitor uses half-pallet listing
+40x60,10,silver/black,,,20,3669.99,183.50,124.80,
+20x20,7,blue/brown,72,2499.99,144,4099.99,28.47,17.80,
+20x30,7,blue/brown,,,,,,26.80,no pallet listing
+30x40,7,blue/brown,24,2399.99,48,3999.99,83.33,54.20,
+30x50,7,blue/brown,16,2199.99,16,3499.99,137.50,67.40,SUSPECT: full listed as 16 (same as half); likely 32. Use half-pallet per-tarp 137.50
+40x60,7,blue/brown,,,12,3999.99,333.33,108.20,SUSPECT: $333/tarp is far above single retail ($104-143); do not use, fall back
+20x30,5,blue,84,2417.99,168,3920.99,23.34,,no cost
+20x30,5,brown,84,2391.99,168,3863.99,23.00,,no cost
+30x40,5,blue,,,84,3899.99,46.43,,no cost
+30x40,5,brown,42,2379.99,84,3836.99,45.68,,no cost

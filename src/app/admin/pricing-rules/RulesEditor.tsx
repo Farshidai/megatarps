@@ -2,10 +2,10 @@
 
 import { useMemo, useState, useTransition } from 'react'
 import { Plus, Pencil, Trash2, Check, X, AlertTriangle } from 'lucide-react'
-import { priceTiers, applicableRules, type PricingRule } from '@/lib/pricing'
+import { priceTiers, applicableRules, applicablePalletRules, palletTiers, type PricingRule } from '@/lib/pricing'
 import { formatPrice } from '@/lib/utils'
 import { createRule, updateRule, deleteRule, type RuleResult } from './actions'
-import { RULE_TARP_TYPES, ruleWarnings, scopeLabel } from './_lib/rules'
+import { RULE_TARP_TYPES, ruleWarnings, scopeLabel, qtyLabel } from './_lib/rules'
 
 export interface SampleProduct {
   sku: string
@@ -13,6 +13,8 @@ export interface SampleProduct {
   retail_price_cents: number
   tarp_type: string
   thickness_mil: number | null
+  units_per_full_pallet?: number | null
+  min_unit_price_cents?: number | null
 }
 
 interface Draft {
@@ -21,17 +23,24 @@ interface Draft {
   min_quantity: string
   max_quantity: string
   discount_from_retail_percent: string
+  unit: 'each' | 'pallet'
+  price_percent_of_guest: string
+  requires_account: boolean
   priority: string
   active: boolean
 }
 
-const EMPTY: Draft = { tarp_type: '', thickness_mil: '', min_quantity: '', max_quantity: '', discount_from_retail_percent: '', priority: '0', active: true }
+const EMPTY: Draft = { tarp_type: '', thickness_mil: '', min_quantity: '', max_quantity: '', discount_from_retail_percent: '', priority: '0', active: true, unit: 'each', price_percent_of_guest: '', requires_account: false }
+const pctOfGuest = (r: PricingRule) => Math.round(Number(r.price_multiplier ?? 1) * 10000) / 100
 const toDraft = (r: PricingRule): Draft => ({
   tarp_type: r.tarp_type ?? '',
   thickness_mil: r.thickness_mil ? String(r.thickness_mil) : '',
   min_quantity: String(r.min_quantity),
   max_quantity: r.max_quantity == null ? '' : String(r.max_quantity),
   discount_from_retail_percent: String(Number(r.discount_from_retail_percent ?? 0)),
+  unit: r.unit === 'pallet' ? 'pallet' : 'each',
+  price_percent_of_guest: r.unit === 'pallet' ? String(pctOfGuest(r)) : '',
+  requires_account: !!r.requires_account,
   priority: String(r.priority ?? 0),
   active: r.active !== false,
 })
@@ -41,6 +50,9 @@ const fromDraft = (d: Draft) => ({
   min_quantity: d.min_quantity,
   max_quantity: d.max_quantity || null,
   discount_from_retail_percent: d.discount_from_retail_percent,
+  unit: d.unit,
+  price_percent_of_guest: d.price_percent_of_guest,
+  requires_account: d.requires_account,
   priority: d.priority || 0,
   active: d.active,
 })
@@ -60,7 +72,8 @@ export function RulesEditor({ initialRules, samples }: { initialRules: PricingRu
   const warnings = useMemo(() => ruleWarnings(rules), [rules])
   const sample = samples.find((s) => s.sku === sampleSku)
   const tiers = sample ? priceTiers(sample, rules) : []
-  const used = sample ? new Set(applicableRules(sample, rules).map((r) => r.id)) : new Set<string | undefined>()
+  const pTiers = sample ? palletTiers(sample, rules) : []
+  const used = sample ? new Set([...applicableRules(sample, rules), ...applicablePalletRules(sample, rules)].map((r) => r.id)) : new Set<string | undefined>()
 
   function begin(id: string, d: Draft) {
     setEditing(id)
@@ -115,8 +128,27 @@ export function RulesEditor({ initialRules, samples }: { initialRules: PricingRu
         </div>
       </td>
       <td className="px-3 py-2">
-        <label className="sr-only" htmlFor={`${key}-disc`}>Discount percent</label>
-        <input id={`${key}-disc`} value={draft.discount_from_retail_percent} onChange={(e) => setDraft({ ...draft, discount_from_retail_percent: e.target.value })} placeholder="%" inputMode="decimal" className={`${field} w-20`} />
+        <div className="flex flex-col gap-1">
+          <label className="sr-only" htmlFor={`${key}-unit`}>Rule unit</label>
+          <select id={`${key}-unit`} value={draft.unit} onChange={(e) => setDraft({ ...draft, unit: e.target.value as Draft['unit'], requires_account: e.target.value === 'pallet' })} className={`${field} w-32`}>
+            <option value="each">% off retail (pieces)</option>
+            <option value="pallet">% of guest (pallets)</option>
+          </select>
+          {draft.unit === 'pallet' ? (
+            <>
+              <label className="sr-only" htmlFor={`${key}-pog`}>Price as percent of guest price</label>
+              <input id={`${key}-pog`} value={draft.price_percent_of_guest} onChange={(e) => setDraft({ ...draft, price_percent_of_guest: e.target.value })} placeholder="e.g. 94.74" inputMode="decimal" className={`${field} w-24`} />
+              <label className="text-[11px] text-slate-600 flex items-center gap-1">
+                <input type="checkbox" checked={draft.requires_account} onChange={(e) => setDraft({ ...draft, requires_account: e.target.checked })} className="w-3.5 h-3.5 accent-orange-500" /> Accounts only
+              </label>
+            </>
+          ) : (
+            <>
+              <label className="sr-only" htmlFor={`${key}-disc`}>Discount percent</label>
+              <input id={`${key}-disc`} value={draft.discount_from_retail_percent} onChange={(e) => setDraft({ ...draft, discount_from_retail_percent: e.target.value })} placeholder="%" inputMode="decimal" className={`${field} w-20`} />
+            </>
+          )}
+        </div>
       </td>
       <td className="px-3 py-2">
         <label className="sr-only" htmlFor={`${key}-prio`}>Priority</label>
@@ -150,7 +182,7 @@ export function RulesEditor({ initialRules, samples }: { initialRules: PricingRu
                 <th scope="col" className="px-3 py-2.5 font-semibold">Tarp type</th>
                 <th scope="col" className="px-3 py-2.5 font-semibold">Mil</th>
                 <th scope="col" className="px-3 py-2.5 font-semibold">Quantity</th>
-                <th scope="col" className="px-3 py-2.5 font-semibold">Off retail</th>
+                <th scope="col" className="px-3 py-2.5 font-semibold">Price</th>
                 <th scope="col" className="px-3 py-2.5 font-semibold">Priority</th>
                 <th scope="col" className="px-3 py-2.5 font-semibold text-center">Active</th>
                 <th scope="col" className="px-3 py-2.5"><span className="sr-only">Actions</span></th>
@@ -165,8 +197,14 @@ export function RulesEditor({ initialRules, samples }: { initialRules: PricingRu
                   <tr key={r.id} className={`${r.active === false ? 'opacity-50' : ''} ${used.has(r.id) ? 'bg-sky-50/50' : ''}`}>
                     <td className="px-3 py-2.5 text-slate-800">{r.tarp_type ?? <span className="text-slate-500">All types</span>}</td>
                     <td className="px-3 py-2.5 text-slate-700">{r.thickness_mil ? `${r.thickness_mil} mil` : <span className="text-slate-400">Any</span>}</td>
-                    <td className="px-3 py-2.5 font-semibold text-slate-900 tabular-nums">{r.min_quantity}{r.max_quantity == null ? '+' : `–${r.max_quantity}`}</td>
-                    <td className="px-3 py-2.5 font-bold text-green-700 tabular-nums">−{Number(r.discount_from_retail_percent ?? 0)}%</td>
+                    <td className="px-3 py-2.5 font-semibold text-slate-900 tabular-nums">{qtyLabel(r)}</td>
+                    <td className="px-3 py-2.5 font-bold text-green-700 tabular-nums">
+                      {r.unit === 'pallet' ? (
+                        <>{pctOfGuest(r)}% of guest{r.requires_account && <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 rounded px-1.5 py-0.5">Accounts</span>}</>
+                      ) : (
+                        <>−{Number(r.discount_from_retail_percent ?? 0)}%</>
+                      )}
+                    </td>
                     <td className="px-3 py-2.5 text-slate-500 tabular-nums">{r.priority ?? 0}</td>
                     <td className="px-3 py-2.5 text-center">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${r.active !== false ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>{r.active !== false ? 'On' : 'Off'}</span>
@@ -217,7 +255,22 @@ export function RulesEditor({ initialRules, samples }: { initialRules: PricingRu
               ))}
             </tbody>
           </table>
-        ) : (
+        ) : null}
+        {sample && pTiers.length > 0 && (
+          <table className="mt-3 w-full text-sm">
+            <caption className="text-left text-xs font-semibold text-slate-500 pb-1">Wholesale accounts · {sample.units_per_full_pallet} per pallet</caption>
+            <tbody className="divide-y divide-slate-100">
+              {pTiers.map((t) => (
+                <tr key={t.label}>
+                  <td className="py-1.5 font-semibold text-slate-800">{t.label}</td>
+                  <td className="py-1.5 text-right tabular-nums font-bold">{formatPrice(t.unit_price_cents)}</td>
+                  <td className="py-1.5 text-right tabular-nums text-slate-500">{formatPrice(t.pallet_total_cents)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {!sample && (
           <p className="mt-3 text-sm text-slate-500">No priced products yet — set retail prices in Products first.</p>
         )}
         <p className="mt-3 text-xs text-slate-500">Rows highlighted in blue are the rules this product uses.</p>

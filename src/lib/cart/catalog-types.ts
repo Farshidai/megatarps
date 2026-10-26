@@ -21,12 +21,14 @@ export interface CatalogEntry {
   units_per_case: number | null
   units_per_half_pallet: number | null
   units_per_full_pallet: number | null
+  /** price floor (cost × 1.15) — engine never prices below this */
+  min_unit_price_cents: number | null
   /** ship weight per unit in lb (null = unknown → freight quote) */
   unit_weight_lb: number | null
 }
 
 export function toCatalogEntry(p: Product): CatalogEntry {
-  const extra = p as Product & { units_per_case?: number | null }
+  const extra = p as Product & { units_per_case?: number | null; min_unit_price_cents?: number | null }
   return {
     id: p.id,
     sku: p.xpose_sku,
@@ -44,6 +46,7 @@ export function toCatalogEntry(p: Product): CatalogEntry {
     units_per_case: extra.units_per_case ?? null,
     units_per_half_pallet: p.units_per_half_pallet ?? null,
     units_per_full_pallet: p.units_per_full_pallet ?? null,
+    min_unit_price_cents: extra.min_unit_price_cents ?? null,
     unit_weight_lb: productWeightLb(p as Parameters<typeof productWeightLb>[0]),
   }
 }

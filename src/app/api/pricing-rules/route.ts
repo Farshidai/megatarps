@@ -34,6 +34,7 @@ export async function GET(request: Request) {
           active: r.active,
         })),
         wholesaleDiscountPercent: account.status === 'approved' ? account.wholesaleDiscountPercent : 0,
+        accountApproved: account.status === 'approved',
         products,
         freight,
       },
