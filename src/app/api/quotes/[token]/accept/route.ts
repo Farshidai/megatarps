@@ -1,6 +1,7 @@
 // Accept on Net terms (approved wholesale accounts only) → creates the order, invoiced.
 import { addEvent, createOrderFromQuote, getQuoteByToken, transitionQuote, updateQuote } from '@/lib/quotes/store'
-import { netTermsFor, termsLabel } from '@/lib/quotes/auth'
+import { netTermsFor, termsLabel, creditPositionFor } from '@/lib/quotes/auth'
+import { checkCreditLimit } from '@/lib/quotes/credit'
 import { emailAdminStatus, emailCustomerOrderConfirmed } from '@/lib/quotes/emails'
 import { effectiveStatus } from '@/lib/quotes/types'
 import { autoSaveQuoteContractPrices } from '@/lib/quote-contracts'
@@ -21,6 +22,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
 
   const { allowed, terms } = await netTermsFor(q)
   if (!allowed) return Response.json({ error: 'Net terms are available to approved wholesale accounts signed in to their own quote.' }, { status: 403 })
+
+  // Credit limit: this quote + the account's open invoiced orders must fit under the limit.
+  let credit
+  try {
+    const pos = await creditPositionFor(q.contractor_id)
+    credit = checkCreditLimit(pos.limitCents, pos.openInvoicedCents, q.total_cents ?? 0)
+  } catch (e) {
+    console.error('credit check failed:', e)
+    return Response.json({ error: 'Could not check your credit limit. Please try again or pay by card / ACH.' }, { status: 503 })
+  }
+  if (!credit.ok) return Response.json({ error: credit.message, credit }, { status: 402 })
 
   const now = new Date().toISOString()
   const updated = await transitionQuote(q.id, ['quoted'], { status: 'ordered', accepted_at: now, payment_method: terms })

@@ -9,6 +9,7 @@ import { getAccountPricing } from '@/lib/accounts'
 import { isDemoMode } from '@/lib/demo'
 import { createAdminClient } from '@/lib/supabase/server'
 import { getProductsBySkus, stripeConfigured } from '@/lib/cart/server'
+import { taxSessionParams } from '@/lib/stripe-tax'
 import {
   buildStripeLineItems,
   CheckoutError,
@@ -158,6 +159,16 @@ export async function POST(request: Request) {
     phone_number_collection: { enabled: true },
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancel?order=${orderNumber}`,
+  }
+
+  // Sales tax: Stripe automatic tax behind STRIPE_AUTOMATIC_TAX=1; tax-exempt approved accounts → exempt customer
+  try {
+    const tax = await taxSessionParams(stripe, account)
+    if (tax.customer) delete params.customer_email // Stripe accepts customer OR customer_email
+    Object.assign(params, tax)
+  } catch (e) {
+    console.error('checkout: tax setup failed', e)
+    return Response.json({ error: 'Could not calculate sales tax. Please try again.' }, { status: 502 })
   }
 
   let session: Stripe.Checkout.Session
