@@ -26,8 +26,14 @@ export default function LoginPage() {
       setLoading(false)
     } else {
       // Honor ?redirect= from src/proxy.ts (internal paths only)
+      // Resolve against our origin so "/\\evil.com" or "/\t/evil.com" can't escape to another site.
       const r = new URLSearchParams(window.location.search).get('redirect')
-      router.push(r && r.startsWith('/') && !r.startsWith('//') ? r : '/account')
+      let dest = '/account'
+      try {
+        const u = new URL(r ?? '', window.location.origin)
+        if (r?.startsWith('/') && u.origin === window.location.origin) dest = u.pathname + u.search + u.hash
+      } catch {}
+      router.push(dest)
       router.refresh()
     }
   }

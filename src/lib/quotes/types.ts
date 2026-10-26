@@ -165,6 +165,8 @@ export interface PickerProduct {
   thickness_mil: number | null
   retail_price_cents: number
   units_per_full_pallet: number | null
+  /** price floor (cost × 1.15); the pricing engine never suggests less */
+  min_unit_price_cents: number | null
   quote_only: boolean
 }
 

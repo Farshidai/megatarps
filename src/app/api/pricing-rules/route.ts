@@ -34,6 +34,11 @@ export async function GET(request: Request) {
           discount_from_retail_percent: r.discount_from_retail_percent,
           priority: r.priority,
           active: r.active,
+          // pallet-first fields: without them the browser treats pallet rules as piece tiers
+          unit: r.unit,
+          price_multiplier: r.price_multiplier,
+          requires_account: r.requires_account,
+          label: r.label,
         })),
         wholesaleDiscountPercent: account.status === 'approved' ? account.wholesaleDiscountPercent : 0,
         accountApproved: account.status === 'approved',

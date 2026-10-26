@@ -21,10 +21,12 @@ export async function sendEmail({
   to,
   subject,
   html,
+  replyTo,
 }: {
   to: string | string[]
   subject: string
   html: string
+  replyTo?: string
 }): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   if (emailDisabled()) {
     console.log(`[email:skipped] to=${Array.isArray(to) ? to.join(',') : to} subject="${subject}"`)
@@ -32,7 +34,7 @@ export async function sendEmail({
   }
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const { error } = await resend.emails.send({ from: EMAIL_FROM, to, subject, html })
+    const { error } = await resend.emails.send({ from: EMAIL_FROM, to, subject, html, ...(replyTo ? { replyTo } : {}) })
     if (error) {
       console.error('[email:error]', error)
       return { ok: false, error: error.message }

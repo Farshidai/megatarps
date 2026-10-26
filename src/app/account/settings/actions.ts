@@ -30,7 +30,14 @@ export async function setDemoAccount(formData: FormData) {
     jar.delete(DEMO_ACCOUNT_COOKIE)
   }
   const back = String(formData.get('back') ?? '/account')
-  redirect(back.startsWith('/') && !back.startsWith('//') ? back : '/account')
+  // same-origin paths only ("/\\evil.com" parses as //evil.com in browsers)
+  const base = 'http://internal.invalid'
+  let dest = '/account'
+  try {
+    const u = new URL(back, base)
+    if (back.startsWith('/') && u.origin === base) dest = u.pathname + u.search + u.hash
+  } catch {}
+  redirect(dest)
 }
 
 async function signedIn() {
