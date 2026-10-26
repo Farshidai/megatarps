@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { ShoppingCart, FileText, Check, TrendingDown, Package, Scale, Truck } from 'lucide-react'
 import { productWeightLb, formatLb } from '@/lib/freight'
 import { formatPrice, cn } from '@/lib/utils'
-import { unitPriceCents, lineTotalCents, isQuoteOnly, type PricingRule } from '@/lib/pricing'
+import { unitPriceCents, lineTotalCents, isQuoteOnly, isContractPriced, contractPricesFor, type PricingRule } from '@/lib/pricing'
+import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import { useCart } from '@/lib/cart/useCart'
 import { usePricingData } from '@/lib/cart/usePricingData'
 import { nextTier, packPresets } from '@/lib/cart/tiers'
@@ -26,14 +27,25 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
   // Rules come from the page; the wholesale % (approved accounts) comes from the server.
   const { data } = usePricingData([], true)
   const rules = rulesProp ?? data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true }
+  const opts = {
+    wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0,
+    accountApproved: data?.accountApproved === true,
+    contractPrices: data?.contractPrices ?? [],
+  }
 
   const quoteOnly = isQuoteOnly(product)
   const unit = unitPriceCents(product, qty, rules, opts)
   const total = lineTotalCents(product, qty, rules, opts)
   const retailTotal = product.retail_price_cents * qty
   const savings = retailTotal - total
-  const nudge = quoteOnly ? null : nextTier(product, qty, rules, opts)
+  const contract = isContractPriced(product, qty, rules, opts)
+  const myContracts = opts.accountApproved && !quoteOnly ? contractPricesFor(product, opts.contractPrices) : []
+  const activeContract = contract ? [...myContracts].reverse().find((c) => qty >= (c.min_quantity || 1)) : undefined
+  // a contract row this qty doesn't reach yet (e.g. "10+"), and that would beat today's price
+  const upcomingContract = myContracts.find((c) => (c.min_quantity || 1) > qty && c.unit_price_cents < unit)
+  const tierNudge = quoteOnly ? null : nextTier(product, qty, rules, opts)
+  // only nudge toward a tier that is really cheaper than what this buyer pays now
+  const nudge = tierNudge && unitPriceCents(product, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
   const presets = packPresets(product, rules)
   const inCart = cart.items.find((i) => i.sku === product.xpose_sku)
   const unitWeight = productWeightLb(product as Parameters<typeof productWeightLb>[0])
@@ -98,6 +110,7 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
               <p className="text-3xl font-black text-slate-900" data-testid="line-total">{formatPrice(total)}</p>
             </div>
             <div className="text-right">
+              {contract && <ContractPriceBadge className="mb-1" />}
               <p className="text-lg font-bold text-slate-900" data-testid="unit-price">{formatPrice(unit)} <span className="text-sm font-medium text-slate-400">/ unit</span></p>
               {savings > 0 && (
                 <p className="text-sm text-green-700 font-semibold">
@@ -120,9 +133,27 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
               </span>
             </button>
           )}
-          {opts.wholesaleDiscountPercent > 0 && (
-            <p className="mt-2 text-xs text-slate-500">Includes your {opts.wholesaleDiscountPercent}% wholesale account discount.</p>
+          {upcomingContract && (
+            <button
+              type="button"
+              onClick={() => setQty(upcomingContract.min_quantity)}
+              className="mt-3 w-full flex items-center gap-2 text-left text-sm bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-3 py-2 hover:bg-emerald-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              data-testid="contract-upcoming"
+            >
+              <TrendingDown className="w-4 h-4 flex-shrink-0" aria-hidden />
+              <span>
+                Your contract price <strong>{formatPrice(upcomingContract.unit_price_cents)}/unit</strong> applies at{' '}
+                <strong>{upcomingContract.min_quantity}+</strong>. Set quantity to {upcomingContract.min_quantity}
+              </span>
+            </button>
           )}
+          {contract ? (
+            <p className="mt-2 text-xs text-emerald-800" data-testid="contract-note">
+              Agreed price for your account{activeContract?.valid_until ? `, valid through ${new Date(`${activeContract.valid_until}T12:00:00`).toLocaleDateString('en-US', { dateStyle: 'medium' })}` : ''}. Applied automatically at checkout.
+            </p>
+          ) : opts.wholesaleDiscountPercent > 0 ? (
+            <p className="mt-2 text-xs text-slate-500">Includes your {opts.wholesaleDiscountPercent}% wholesale account discount.</p>
+          ) : null}
         </div>
       )}
 

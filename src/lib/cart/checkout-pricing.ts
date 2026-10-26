@@ -1,7 +1,7 @@
 // Pure server-side checkout validation + re-pricing. No I/O, so it is easy to test.
 // The browser only ever sends {sku, quantity}; every other field is ignored and every
 // price comes from the product row + pricing rules + the buyer's account standing.
-import { unitPriceCents, discountForQuantity, isQuoteOnly, type PricingRule, type PriceOptions } from '@/lib/pricing'
+import { unitPriceCents, discountForQuantity, isQuoteOnly, isContractPriced, type PricingRule, type PriceOptions } from '@/lib/pricing'
 import type { Product } from '@/types'
 import { MAX_CART_LINES, MAX_LINE_QUANTITY } from './constants'
 import { productWeightLb, formatLb, type FreightResult } from '@/lib/freight'
@@ -24,6 +24,8 @@ export interface PricedLine {
   line_total_cents: number
   /** ship weight per unit (lb), null = unknown */
   unit_weight_lb: number | null
+  /** true when the unit price is the buyer's contract price (server-loaded, never from the request) */
+  contract_price?: boolean
 }
 
 export class CheckoutError extends Error {
@@ -86,6 +88,7 @@ export function priceCheckoutLines(
       quantity: l.quantity,
       retail_price_cents: p.retail_price_cents,
       volume_discount_percent: discountForQuantity(p, l.quantity, rules),
+      contract_price: isContractPriced(p, l.quantity, rules, opts),
       unit_price_cents: unit,
       line_total_cents: unit * l.quantity,
       unit_weight_lb: productWeightLb(p as Parameters<typeof productWeightLb>[0]),
@@ -135,7 +138,7 @@ export function buildStripeLineItems(lines: PricedLine[], freight?: FreightResul
       unit_amount: l.unit_price_cents,
       product_data: {
         name: l.name,
-        description: `SKU ${l.sku}${l.volume_discount_percent ? ` · ${l.volume_discount_percent}% volume pricing` : ''}`,
+        description: `SKU ${l.sku}${l.contract_price ? ' · your contract price' : l.volume_discount_percent ? ` · ${l.volume_discount_percent}% volume pricing` : ''}`,
         images: l.image && /^https:\/\//.test(l.image) ? [l.image] : [],
         metadata: { sku: l.sku, product_id: l.product_id },
       },

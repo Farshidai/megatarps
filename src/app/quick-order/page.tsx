@@ -45,7 +45,7 @@ export default async function QuickOrderPage() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <QuickOrderGrid catalog={catalog} rules={publicRules} wholesaleDiscountPercent={wholesaleDiscountPercent} accountApproved={account.status === 'approved'} freight={freight} />
+        <QuickOrderGrid catalog={catalog} rules={publicRules} wholesaleDiscountPercent={wholesaleDiscountPercent} accountApproved={account.status === 'approved'} contractPrices={account.status === 'approved' ? account.contractPrices ?? [] : []} freight={freight} />
       </div>
     </div>
   )

@@ -5,12 +5,16 @@ import { requireAdmin } from '@/lib/admin'
 import { getAdminNotes, getContractorDiscountPercent, isContractorApproved, getQuoteById, listEvents } from '@/lib/quotes/store'
 import { getPickerCatalog } from '@/lib/quotes/catalog'
 import { getAppUrl } from '@/lib/quotes/emails'
-import { unitPriceCents } from '@/lib/pricing'
+import { isContractActive, type ContractPrice } from '@/lib/pricing'
+import { adminListContractPrices } from '@/lib/contract-prices'
+import { CONTRACT_SAVE_STATUSES, defaultValidUntil } from '@/lib/contract-prices-input'
+import { suggestedUnitPrice } from '@/lib/quotes/suggest'
 import { isDemoMode } from '@/lib/demo'
 import { createAdminClient } from '@/lib/supabase/server'
 import { DELIVERY_LABELS, STATUS_LABELS, STATUS_STYLES, effectiveStatus, nowMs } from '@/lib/quotes/types'
 import { QuoteBuilder, type BuilderLine } from './QuoteBuilder'
 import { CopyLink } from './CopyLink'
+import { SaveContractPrices, type ContractLine } from './SaveContractPrices'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'Quote builder' }
@@ -26,14 +30,20 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
   const quote = await getQuoteById(id)
   if (!quote) notFound()
 
-  const [events, notes, catalog, wholesalePct, appUrl, accountApproved] = await Promise.all([
+  const [events, notes, catalog, wholesalePct, appUrl, accountApproved, contractRows] = await Promise.all([
     listEvents(quote.id),
     getAdminNotes(quote.id),
     getPickerCatalog(),
     getContractorDiscountPercent(quote.contractor_id),
     getAppUrl(),
     isContractorApproved(quote.contractor_id),
+    quote.contractor_id ? adminListContractPrices(quote.contractor_id) : Promise.resolve([]),
   ])
+  // the client's active contract prices feed the suggestions (approved accounts only)
+  const contractPrices: ContractPrice[] = contractRows
+    .filter((r) => isContractActive(r))
+    .map(({ product_id, sku, unit_price_cents, min_quantity, valid_until }) => ({ product_id, sku, unit_price_cents, min_quantity, valid_until }))
+  const priceOpts = { wholesaleDiscountPercent: wholesalePct, accountApproved, contractPrices }
   const byId = new Map(catalog.raw.map((p) => [p.id, p]))
   const bySku = new Map(catalog.raw.map((p) => [p.xpose_sku.toLowerCase(), p]))
   const costs: Record<string, number> = {}
@@ -47,7 +57,7 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
 
   const lines: BuilderLine[] = quote.items.map((it, i) => {
     const p = (it.product_id && byId.get(it.product_id)) || (it.sku ? bySku.get(it.sku.toLowerCase()) : undefined)
-    const suggested = p ? unitPriceCents(p, it.quantity, catalog.rules, { wholesaleDiscountPercent: wholesalePct, accountApproved }) : 0
+    const suggested = p ? suggestedUnitPrice(p, it.quantity, catalog.rules, priceOpts).cents : 0
     return {
       key: `${i}-${it.sku}`,
       product_id: p?.id ?? it.product_id ?? null,
@@ -60,6 +70,10 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
   })
 
   const status = effectiveStatus(quote)
+  const contractLines: ContractLine[] = quote.items.map((it, index) => {
+    const p = (it.product_id && byId.get(it.product_id)) || (it.sku ? bySku.get(it.sku.toLowerCase()) : undefined)
+    return { index, sku: p?.xpose_sku ?? it.sku, name: p?.name ?? it.name, quantity: it.quantity, unit_price_cents: it.unit_price_cents, catalog: !!p }
+  })
   const defaultValid = new Date(nowMs() + 14 * 86400_000).toISOString().slice(0, 10)
   const customerUrl = `${appUrl}/quote/${quote.public_token}`
   const addr = quote.shipping_address
@@ -88,6 +102,7 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
             rules={catalog.rules}
             wholesalePct={wholesalePct}
             accountApproved={accountApproved}
+            contractPrices={contractPrices}
             costs={costs}
             initial={{
               lines,
@@ -104,6 +119,16 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
         </div>
 
         <aside className="space-y-4">
+          <SaveContractPrices
+            quoteId={quote.id}
+            quoteNumber={quote.quote_number}
+            contractorId={quote.contractor_id}
+            eligible={(CONTRACT_SAVE_STATUSES as readonly string[]).includes(status)}
+            statusLabel={STATUS_LABELS[status]}
+            lines={contractLines}
+            defaultValidUntil={defaultValidUntil(nowMs())}
+            existingCount={contractRows.length}
+          />
           <section className="bg-white rounded-xl border border-slate-200 p-5">
             <h2 className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-3">Customer</h2>
             <p className="font-bold text-slate-900">{quote.guest_name}</p>

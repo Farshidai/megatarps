@@ -53,7 +53,13 @@ export async function POST(request: Request) {
     ])
     account = acct
     const wholesaleDiscountPercent = acct.status === 'approved' ? Math.min(Math.max(acct.wholesaleDiscountPercent || 0, 0), 90) : 0
-    priced = priceCheckoutLines(lines, products, rules, { wholesaleDiscountPercent, accountApproved: acct.status === 'approved' })
+    // Contract prices come ONLY from getAccountPricing() (the signed-in approved account's own
+    // rows); anything the browser sends is ignored by parseCheckoutBody.
+    priced = priceCheckoutLines(lines, products, rules, {
+      wholesaleDiscountPercent,
+      accountApproved: acct.status === 'approved',
+      contractPrices: acct.status === 'approved' ? acct.contractPrices ?? [] : [],
+    })
     // Freight: server weights + server rates only. Nothing from the request is used.
     freight = calculateFreight(
       priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unitWeightLb: l.unit_weight_lb })),
@@ -78,7 +84,7 @@ export async function POST(request: Request) {
   const orderNumber = newOrderNumber()
   const summary = {
     order_number: orderNumber,
-    lines: priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unit_price_cents: l.unit_price_cents, line_total_cents: l.line_total_cents })),
+    lines: priced.lines.map((l) => ({ sku: l.sku, quantity: l.quantity, unit_price_cents: l.unit_price_cents, line_total_cents: l.line_total_cents, contract_price: !!l.contract_price })),
     subtotal_cents: priced.subtotal_cents,
     shipping_cents,
     freight: { method: freight.method, total_weight_lb: freight.totalWeightLb, billable_weight_lb: freight.billableWeightLb, freight_cents: shipping_cents },
@@ -108,6 +114,7 @@ export async function POST(request: Request) {
       quantity: l.quantity,
       unit_price_cents: l.unit_price_cents,
       line_total: l.line_total_cents,
+      ...(l.contract_price ? { contract_price: true } : {}),
     })),
     subtotal_cents: priced.subtotal_cents,
     shipping_cents,

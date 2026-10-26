@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { FileText, Layers, Truck, Lock, BadgeCheck } from 'lucide-react'
-import { isQuoteOnly, priceTiers, palletTiers, hasPalletPricing, type PricingRule, type PriceOptions, type PalletTier } from '@/lib/pricing'
+import { FileText, Layers, Truck, Lock, BadgeCheck, Handshake } from 'lucide-react'
+import { isQuoteOnly, priceTiers, palletTiers, hasPalletPricing, contractPricesFor, type PricingRule, type PriceOptions, type PalletTier, type ContractPrice } from '@/lib/pricing'
 import { isPalletSku, type CatalogProduct } from '@/lib/catalog'
 import { formatPrice, cn } from '@/lib/utils'
 
@@ -10,14 +10,17 @@ interface Props {
   opts?: PriceOptions
   /** Approved wholesale account: pallet prices are unlocked. */
   accountApproved?: boolean
+  /** The signed-in approved account's own contract prices; matching rows are highlighted. */
+  contractPrices?: ContractPrice[]
   className?: string
 }
 
 /** Volume pricing table (Qty | Unit price | You save) — or a quote panel for quote-only SKUs. */
-export function TierPriceTable({ product, rules, opts, accountApproved = false, className }: Props) {
+export function TierPriceTable({ product, rules, opts, accountApproved = false, contractPrices, className }: Props) {
   if (isQuoteOnly(product)) return <QuotePanel product={product} className={className} />
+  const contracts = accountApproved ? contractPricesFor(product, contractPrices) : []
   if (hasPalletPricing(product, rules)) {
-    return <PalletPriceTable product={product} rules={rules} opts={opts} accountApproved={accountApproved} className={className} />
+    return <PalletPriceTable product={product} rules={rules} opts={opts} accountApproved={accountApproved} contracts={contracts} className={className} />
   }
 
   const tiers = priceTiers(product, rules, opts)
@@ -46,6 +49,7 @@ export function TierPriceTable({ product, rules, opts, accountApproved = false, 
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
+          <ContractRows product={product} contracts={contracts} mode="save" />
           {tiers.map((t) => {
             const isBest = t === best && tiers.length > 1
             return (
@@ -81,7 +85,7 @@ export function TierPriceTable({ product, rules, opts, accountApproved = false, 
 }
 
 /** Pallet-first table: guest price for any quantity + account-only pallet tiers. */
-function PalletPriceTable({ product, rules, opts, accountApproved, className }: Required<Pick<Props, 'product' | 'rules' | 'accountApproved'>> & Pick<Props, 'opts' | 'className'>) {
+function PalletPriceTable({ product, rules, opts, accountApproved, contracts, className }: Required<Pick<Props, 'product' | 'rules' | 'accountApproved'>> & Pick<Props, 'opts' | 'className'> & { contracts: ContractPrice[] }) {
   const pallets = palletTiers(product, rules, opts)
   const per = pallets[0]?.units_per_pallet ?? product.units_per_full_pallet ?? 0
   const guest = product.retail_price_cents
@@ -105,6 +109,7 @@ function PalletPriceTable({ product, rules, opts, accountApproved, className }: 
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
+          <ContractRows product={product} contracts={contracts} mode="pallet" perPallet={per} />
           <tr>
             <th scope="row" className="text-left px-4 py-2.5 font-semibold text-slate-800">Any quantity</th>
             <td className="text-right px-4 py-2.5 font-black text-slate-900 tabular-nums">{formatPrice(guest)}<span className="text-slate-400 font-medium text-xs">/ea</span></td>
@@ -152,6 +157,45 @@ function PalletRow({ t, locked }: { t: PalletTier; locked: boolean }) {
       </td>
       <td className="text-right px-4 py-2.5 tabular-nums text-slate-600">= {formatPrice(t.pallet_total_cents)}</td>
     </tr>
+  )
+}
+
+/** Highlighted "Your contract price" rows at the top of the tier table (approved accounts only). */
+function ContractRows({ product, contracts, mode, perPallet = 0 }: { product: CatalogProduct; contracts: ContractPrice[]; mode: 'save' | 'pallet'; perPallet?: number }) {
+  if (!contracts.length) return null
+  return (
+    <>
+      {contracts.map((c) => {
+        const pct = Math.round((1 - c.unit_price_cents / product.retail_price_cents) * 1000) / 10
+        return (
+          <tr key={`${c.min_quantity}-${c.unit_price_cents}`} className="bg-emerald-50 ring-1 ring-inset ring-emerald-200" data-testid="tier-contract-row">
+            <th scope="row" className="text-left px-4 py-2.5 font-semibold text-emerald-900">
+              <span className="inline-flex items-center gap-1.5">
+                <Handshake className="w-3.5 h-3.5 text-emerald-600" aria-hidden />
+                Your contract price
+              </span>
+              <span className="block text-[11px] font-normal text-emerald-800">
+                {c.min_quantity > 1 ? `${c.min_quantity.toLocaleString('en-US')}+ units` : 'Any quantity'}
+                {c.valid_until ? ` · through ${new Date(`${c.valid_until}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
+              </span>
+            </th>
+            <td className="text-right px-4 py-2.5 font-black text-emerald-800 tabular-nums align-top">
+              {formatPrice(c.unit_price_cents)}
+              <span className="text-emerald-600/70 font-medium text-xs">/ea</span>
+            </td>
+            <td className="text-right px-4 py-2.5 tabular-nums align-top">
+              {mode === 'pallet' && perPallet > 0 ? (
+                <span className="text-emerald-800">= {formatPrice(c.unit_price_cents * perPallet)}</span>
+              ) : pct > 0 ? (
+                <span className="font-bold text-emerald-700">{formatPct(pct)}</span>
+              ) : (
+                <span className="text-slate-400">—</span>
+              )}
+            </td>
+          </tr>
+        )
+      })}
+    </>
   )
 }
 

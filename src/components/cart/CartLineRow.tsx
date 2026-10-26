@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Trash2, TrendingDown, ImageOff } from 'lucide-react'
 import { formatPrice, cn } from '@/lib/utils'
-import { unitPriceCents, type PricingRule, type PriceOptions } from '@/lib/pricing'
+import { unitPriceCents, isContractPriced, type PricingRule, type PriceOptions } from '@/lib/pricing'
+import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import type { CartItem } from '@/lib/cart/types'
 import type { CatalogEntry } from '@/lib/cart/catalog-types'
 import { nextTier } from '@/lib/cart/tiers'
@@ -24,7 +25,10 @@ interface Props {
 export function CartLineRow({ item, product, rules, opts, onQty, onRemove, compact, loading }: Props) {
   const priced = product && !item.quote_only && !product.quote_only
   const unit = priced ? unitPriceCents(product, item.quantity, rules, opts) : 0
-  const nudge = priced ? nextTier(product, item.quantity, rules, opts) : null
+  const contract = priced ? isContractPriced(product, item.quantity, rules, opts) : false
+  const tierNudge = priced ? nextTier(product, item.quantity, rules, opts) : null
+  // never nudge toward a tier that is not actually cheaper than the price paid now (e.g. a contract price)
+  const nudge = tierNudge && priced && unitPriceCents(product, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
   const href = item.slug ? `/product/${item.slug}` : '#'
   const [imgFailed, setImgFailed] = useState(false)
 
@@ -60,6 +64,7 @@ export function CartLineRow({ item, product, rules, opts, onQty, onRemove, compa
           <div className="text-right">
             {priced ? (
               <>
+                {contract && <ContractPriceBadge size="sm" className="mb-0.5" />}
                 <p className="font-bold text-slate-900" data-testid="cart-line-total">{formatPrice(unit * item.quantity)}</p>
                 <p className="text-xs text-slate-500">
                   {formatPrice(unit)}/unit

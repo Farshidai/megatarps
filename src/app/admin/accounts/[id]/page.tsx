@@ -7,6 +7,11 @@ import { PAYMENT_TERMS, US_STATES, formatCents, paymentTermsLabel } from '@/lib/
 import { getApplication, certificateSignedUrl } from '../data'
 import { approveAccount, rejectAccount } from '../actions'
 import { StatusBadge } from '../StatusBadge'
+import { adminListContractPrices, adminProductsByIdsOrSkus, adminQuoteNumbers } from '@/lib/contract-prices'
+import { defaultValidUntil } from '@/lib/contract-prices-input'
+import { getPricingRules } from '@/lib/products'
+import { isContractActive, isQuoteOnly, unitPriceCents } from '@/lib/pricing'
+import { ContractPricesManager, type ContractTableRow } from './ContractPricesManager'
 
 export const metadata: Metadata = { title: 'Wholesale Application' }
 
@@ -23,6 +28,7 @@ export default async function AdminAccountDetailPage(props: {
   const a = await getApplication(id)
   if (!a) notFound()
   const certUrl = await certificateSignedUrl(a.resale_certificate_path)
+  const contractTable = await loadContractTable(a.id)
 
   const saved = typeof sp.saved === 'string' ? sp.saved : ''
   const demoAction = typeof sp.demo === 'string' ? sp.demo : ''
@@ -179,6 +185,43 @@ export default async function AdminAccountDetailPage(props: {
           </section>
         </div>
       </div>
+
+      <div className="mt-6">
+        <ContractPricesManager contractorId={a.id} rows={contractTable} defaultValidUntil={defaultValidUntil()} approved={isApproved} />
+      </div>
     </div>
   )
+}
+
+/** Contract rows joined with product (incl. cost, admin only), guest price and source quote number. */
+async function loadContractTable(contractorId: string): Promise<ContractTableRow[]> {
+  const rows = await adminListContractPrices(contractorId)
+  if (!rows.length) return []
+  const [products, rules, quoteNumbers] = await Promise.all([
+    adminProductsByIdsOrSkus({ ids: rows.map((r) => r.product_id ?? '') }),
+    getPricingRules(),
+    adminQuoteNumbers(rows.map((r) => r.source_quote_id ?? '')),
+  ])
+  const byId = new Map(products.map((p) => [p.id, p]))
+  return rows.map((r) => {
+    const p = r.product_id ? byId.get(r.product_id) : undefined
+    const quoteOnly = p ? isQuoteOnly(p) : false
+    return {
+      id: r.id,
+      sku: r.sku,
+      product_name: p?.name ?? null,
+      product_slug: p?.active ? p.slug : null,
+      unit_price_cents: r.unit_price_cents,
+      // what a guest pays for min_quantity units today (no account, no contract)
+      guest_price_cents: p && !quoteOnly ? unitPriceCents(p, r.min_quantity || 1, rules) : null,
+      cost_price_cents: p?.cost_price_cents || null,
+      min_quantity: r.min_quantity,
+      valid_until: r.valid_until,
+      expired: !isContractActive(r),
+      quote_only: quoteOnly,
+      source_quote_id: r.source_quote_id ?? null,
+      source_quote_number: r.source_quote_id ? quoteNumbers[r.source_quote_id] ?? null : null,
+      note: r.note,
+    }
+  })
 }

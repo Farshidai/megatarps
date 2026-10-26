@@ -3,7 +3,8 @@
 import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Lock, RotateCcw, Save, Send, Trash2, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-import { unitPriceCents, type PricingRule } from '@/lib/pricing'
+import type { PricingRule, ContractPrice } from '@/lib/pricing'
+import { suggestedUnitPrice } from '@/lib/quotes/suggest'
 import { formatPrice } from '@/lib/utils'
 import { computeTotals, type PickerProduct, type QuoteStatus } from '@/lib/quotes/types'
 import { ProductPicker } from '@/components/quotes/ProductPicker'
@@ -26,6 +27,8 @@ interface Props {
   rules: PricingRule[]
   wholesalePct: number
   accountApproved?: boolean
+  /** The client's active contract prices (used in suggestions when the account is approved). */
+  contractPrices?: ContractPrice[]
   costs: Record<string, number>
   customerEmail: string | null
   sentAt: string | null
@@ -69,7 +72,7 @@ function MoneyInput({ id, cents, onChange, disabled, label, className = '' }: {
   )
 }
 
-export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, accountApproved = false, costs, customerEmail, sentAt, initial }: Props) {
+export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, accountApproved = false, contractPrices = [], costs, customerEmail, sentAt, initial }: Props) {
   const router = useRouter()
   const byId = useMemo(() => new Map(products.map((p) => [p.id, p])), [products])
   const editable = EDITABLE.includes(status)
@@ -86,10 +89,11 @@ export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, a
   const [pending, startTransition] = useTransition()
   const [pendingAction, setPendingAction] = useState<'draft' | 'send' | null>(null)
 
-  const suggested = (l: Pick<BuilderLine, 'product_id' | 'quantity'>, qty = l.quantity) => {
+  const suggestion = (l: Pick<BuilderLine, 'product_id' | 'quantity'>, qty = l.quantity) => {
     const p = l.product_id ? byId.get(l.product_id) : undefined
-    return p ? unitPriceCents(p, qty, rules, { wholesaleDiscountPercent: wholesalePct, accountApproved }) : 0
+    return p ? suggestedUnitPrice(p, qty, rules, { wholesaleDiscountPercent: wholesalePct, accountApproved, contractPrices }) : { cents: 0, contract: false }
   }
+  const suggested = (l: Pick<BuilderLine, 'product_id' | 'quantity'>, qty = l.quantity) => suggestion(l, qty).cents
 
   const update = (key: string, patch: Partial<BuilderLine>) => setLines((ls) => ls.map((l) => (l.key === key ? { ...l, ...patch } : l)))
 
@@ -139,13 +143,14 @@ export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, a
         <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-black text-slate-900">Line items</h2>
           <p className="text-xs text-slate-500">
-            Prices pre-filled from volume tiers{wholesalePct ? ` + ${wholesalePct}% account discount` : ''}. Edit any price.
+            Prices pre-filled from volume tiers{wholesalePct ? ` + ${wholesalePct}% account discount` : ''}{accountApproved && contractPrices.length ? ' or the client’s contract price, whichever is lower' : ''}. Edit any price.
           </p>
         </div>
 
         <div className="divide-y divide-slate-100">
           {lines.map((l, i) => {
-            const sug = suggested(l)
+            const sugInfo = suggestion(l)
+            const sug = sugInfo.cents
             const overridden = l.product_id && sug > 0 && sug !== l.unit_price_cents
             const lineCost = l.product_id ? costs[l.product_id] : 0
             const margin = lineCost && l.unit_price_cents ? Math.round((1 - lineCost / l.unit_price_cents) * 100) : null
@@ -159,7 +164,7 @@ export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, a
                   </p>
                   {sug > 0 && (
                     <p className="text-xs text-slate-500 mt-1">
-                      Tier price {formatPrice(sug)}
+                      {sugInfo.contract ? <span className="font-semibold text-emerald-700">Client contract price</span> : 'Tier price'} {formatPrice(sug)}
                       {overridden && editable && (
                         <button type="button" onClick={() => update(l.key, { unit_price_cents: sug })} className="ml-2 inline-flex items-center gap-0.5 text-orange-600 hover:underline">
                           <RotateCcw className="w-3 h-3" aria-hidden /> reset

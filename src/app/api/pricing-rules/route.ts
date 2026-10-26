@@ -2,6 +2,8 @@
 // Display-only pricing data for the mini cart: active volume rules, the buyer's wholesale
 // discount, slim product rows (with ship weight) for the requested SKUs, and freight rates. Checkout never trusts any of this;
 // /api/checkout re-prices everything server-side.
+// contractPrices: ONLY the signed-in approved account's own active contract prices (from its
+// session via getAccountPricing(); RLS-scoped). Guests / pending / rejected get []. Never other accounts'.
 import { getPricingRules } from '@/lib/products'
 import { getAccountPricing } from '@/lib/accounts'
 import { getCartCatalog } from '@/lib/cart/server'
@@ -40,6 +42,16 @@ export async function GET(request: Request) {
         })),
         wholesaleDiscountPercent: account.status === 'approved' ? account.wholesaleDiscountPercent : 0,
         accountApproved: account.status === 'approved',
+        contractPrices:
+          account.status === 'approved'
+            ? (account.contractPrices ?? []).map((c) => ({
+                product_id: c.product_id,
+                sku: c.sku,
+                unit_price_cents: c.unit_price_cents,
+                min_quantity: c.min_quantity,
+                valid_until: c.valid_until,
+              }))
+            : [],
         products,
         freight,
       },
