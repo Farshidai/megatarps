@@ -6,6 +6,7 @@ import { isDemoMode } from '@/lib/demo'
 import { formatPrice } from '@/lib/utils'
 import { paymentBucket, paymentLabel, type PaymentBucket } from '@/lib/orders/payment-view'
 import { demoAdminOrders, type AdminOrderRow } from '@/lib/orders/demo-orders'
+import { nowMs } from '@/lib/quotes/types'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'Orders' }
@@ -52,7 +53,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
     orders = (data ?? []) as AdminOrderRow[]
   }
 
-  const now = Date.now()
+  const now = nowMs() // request time (server component renders once per request)
   const withBucket = orders.map((o) => ({ o, bucket: paymentBucket(o, now) }))
   const counts = { all: 0, paid: 0, awaiting: 0, abandoned: 0 } as Record<View, number>
   for (const { bucket } of withBucket) {

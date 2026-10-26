@@ -12,3 +12,8 @@ FROM (VALUES
 WHERE p.thickness_mil = 10 AND p.tarp_type = 'poly'
   AND LEAST(p.width_ft, p.length_ft) = w.wd AND GREATEST(p.width_ft, p.length_ft) = w.ln
   AND COALESCE(p.pack_quantity, 1) = 1;
+
+-- Priced accessories (bungee 10-packs). ESTIMATE, not measured: ten 9"/11" ball bungees plus the
+-- bag weigh about 1 lb. Replace with the real packed weight from Xpose / All In Safety when known.
+-- Weight is per sellable unit (the 10-pack). Without it these items forced a freight quote.
+UPDATE products SET shipping_weight_lb = 1.0 WHERE xpose_sku IN ('BB-9B-10', 'BB-11B-10') AND shipping_weight_lb IS NULL;

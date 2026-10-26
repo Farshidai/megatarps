@@ -22,6 +22,7 @@ export default async function AccountSettingsPage() {
       <div className="max-w-xl mx-auto py-12 space-y-4">
         {demo && <DemoAccountSwitcher current={demoState} back="/account/settings" />}
         <div className={`${card} text-center`}>
+          <h1 className="text-xl font-black text-slate-900 mb-2">Account settings</h1>
           <p className="text-slate-500 mb-4">Sign in to manage your account.</p>
           <Link href="/account/login?redirect=/account/settings" className="text-orange-600 font-semibold hover:underline">Sign in →</Link>
         </div>

@@ -129,11 +129,35 @@ export async function getProductBySku(sku: string): Promise<Product | null> {
   return (await withPriceFloors([data as unknown as Product]))[0]
 }
 
-export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
-  if (isDemoMode()) {
-    return withPriceFloors([...demoProducts].filter((p) => p.active && p.in_stock)
-      .sort((a, b) => b.coverage_sqft - a.coverage_sqft).slice(0, limit))
+// Contractor best sellers (CONFIRM with real sales data): most-ordered sizes first.
+const FEATURED_SIZES = ['20x30', '30x40', '20x20', '16x20', '30x50', '40x60', '15x30', '12x16', '10x12', '20x40']
+
+/**
+ * Home "featured": products a visitor can actually BUY online — priced, active, in stock —
+ * preferring pallet-priced 7- and 10-mil best-selling sizes, one per size + mil, single
+ * tarps before pallet-pack SKUs. Never the big quote-only listings.
+ */
+export function rankFeatured(products: Product[], limit = 8): Product[] {
+  const size = (p: Product) => `${Math.min(p.width_ft, p.length_ft)}x${Math.max(p.width_ft, p.length_ft)}`
+  const pack = (p: Product) => Number((p as Product & { pack_quantity?: number | null }).pack_quantity ?? 1) > 1
+  const score = (p: Product) => {
+    const s = FEATURED_SIZES.indexOf(size(p))
+    return (p.units_per_full_pallet ? 0 : 1000) + ([7, 10].includes(p.thickness_mil ?? 0) ? 0 : 500) + (pack(p) ? 200 : 0) + (p.image_urls?.length ? 0 : 50) + (s >= 0 ? s : 100)
   }
+  const out: Product[] = []
+  const seen = new Set<string>()
+  for (const p of products.filter((x) => x.active && x.in_stock && x.retail_price_cents > 0).sort((a, b) => score(a) - score(b) || a.retail_price_cents - b.retail_price_cents)) {
+    const key = `${size(p)}-${p.thickness_mil}-${pack(p)}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(p)
+    if (out.length === limit) break
+  }
+  return out
+}
+
+export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
+  if (isDemoMode()) return withPriceFloors(rankFeatured(demoProducts, limit))
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -141,11 +165,10 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
     .select(PRODUCT_SELECT)
     .eq('active', true)
     .eq('in_stock', true)
-    .in('product_line_id', ['16mil-super', '10mil-heavy'])
-    .order('coverage_sqft', { ascending: false })
-    .limit(limit)
+    .gt('retail_price_cents', 0)
+    .limit(500)
 
-  return withPriceFloors((data as unknown as Product[]) ?? [])
+  return withPriceFloors(rankFeatured((data as unknown as Product[]) ?? [], limit))
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {

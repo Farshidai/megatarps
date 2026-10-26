@@ -224,7 +224,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10 gap-4">
               <div>
-                <p className="text-xs font-bold text-orange-600 uppercase tracking-[0.18em] mb-2">In stock</p>
+                <p className="text-xs font-bold text-orange-600 uppercase tracking-[0.18em] mb-2">{featured.every((p) => p.in_stock) ? 'In stock · priced online' : 'Priced online'}</p>
                 <h2 id="featured-heading" className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Contractor staples</h2>
                 <p className="text-slate-500 mt-2">Heavy-duty sizes crews reorder by the case.</p>
               </div>

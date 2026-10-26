@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -23,8 +24,8 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <a href="/" className="text-2xl font-black text-orange-500">MegaTarps</a>
-          <p className="text-slate-500 mt-2 text-sm">Reset your password</p>
+          <Link href="/" className="text-2xl font-black text-orange-500">MegaTarps</Link>
+          <h1 className="text-slate-900 font-bold mt-2 text-lg">Reset your password</h1>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">

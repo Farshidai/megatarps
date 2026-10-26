@@ -3,6 +3,7 @@ import './globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ChatWidget } from '@/components/chat/ChatWidget'
+import { HideOnAdmin } from '@/components/layout/HideOnAdmin'
 import { JsonLd, organizationJsonLd, websiteJsonLd } from '@/components/seo/JsonLd'
 import { site, SITE_URL } from '@/lib/site'
 
@@ -58,10 +59,10 @@ export default function RootLayout({
           Skip to content
         </a>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-        <Navbar />
+        <HideOnAdmin><Navbar /></HideOnAdmin>
         <main id="main" className="flex-1">{children}</main>
-        <Footer />
-        <ChatWidget />
+        <HideOnAdmin><Footer /></HideOnAdmin>
+        <HideOnAdmin><ChatWidget /></HideOnAdmin>
       </body>
     </html>
   )

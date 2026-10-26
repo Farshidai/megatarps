@@ -93,7 +93,7 @@ export default async function AdminRFQsPage({ searchParams }: { searchParams: Pr
                 const units = q.items.reduce((n, i) => n + (i.quantity || 0), 0)
                 return (
                   <tr key={q.id} className="relative hover:bg-orange-50/40 transition-colors">
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <Link href={`/admin/rfqs/${q.id}`} className="font-mono text-xs font-bold text-slate-900 after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-orange-400">
                         {q.quote_number}
                       </Link>

@@ -111,7 +111,7 @@ export default async function QuotePage({
                 </p>
               </div>
               <div className="sm:text-right">
-                <p className="text-3xl font-black tracking-tight text-slate-900">QUOTE</p>
+                <h1 className="text-3xl font-black tracking-tight text-slate-900">QUOTE<span className="sr-only"> {q.quote_number}</span></h1>
                 <dl className="mt-2 text-sm grid grid-cols-[auto_auto] sm:justify-end gap-x-4 gap-y-0.5">
                   <dt className="text-slate-500">Quote #</dt><dd className="font-mono font-bold text-slate-900">{q.quote_number}</dd>
                   <dt className="text-slate-500">Date</dt><dd>{fmtDate(q.sent_at ?? q.created_at, 'medium')}</dd>

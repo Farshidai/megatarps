@@ -106,7 +106,7 @@ export default async function AdminDashboard() {
       <div className="bg-white rounded-xl border border-slate-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h2 className="font-bold text-slate-900">Recent Quote Requests</h2>
-          <a href="/admin/rfqs" className="text-sm text-orange-600 hover:underline">View all →</a>
+          <Link href="/admin/rfqs" className="text-sm text-orange-600 hover:underline">View all →</Link>
         </div>
         <div className="divide-y divide-slate-100">
           {!recentQuotes?.length ? (
