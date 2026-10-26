@@ -28,16 +28,23 @@ async function checkout(body, raw = false) {
   return { status: res.status, json }
 }
 
-// Independent re-implementation of the expected price (global volume tiers, guest buyer).
+// Independent re-implementation of the expected GUEST price:
+// - products with pallet pricing (units_per_full_pallet + pallet rules) get no piece-tier discount for guests
+// - otherwise global piece tiers apply
+// - result is clamped to [min_unit_price_cents, retail]
+const hasPalletRules = catalog.pricing_rules.some((r) => r.unit === 'pallet' && r.active !== false)
 function expectedUnit(product, qty) {
   let d = 0
-  for (const r of catalog.pricing_rules) {
-    if (r.active === false) continue
+  const palletPriced = hasPalletRules && product.units_per_full_pallet > 0
+  if (!palletPriced) for (const r of catalog.pricing_rules) {
+    if (r.active === false || (r.unit && r.unit !== 'each')) continue
     if (r.tarp_type && r.tarp_type !== product.tarp_type) continue
     if (r.thickness_mil && Number(r.thickness_mil) !== product.thickness_mil) continue
     if (qty >= r.min_quantity && (r.max_quantity == null || qty <= r.max_quantity)) d = Number(r.discount_from_retail_percent)
   }
-  return Math.round(product.retail_price_cents * (1 - d / 100))
+  const raw = Math.round(product.retail_price_cents * (1 - d / 100))
+  const floor = product.min_unit_price_cents ?? 0
+  return Math.min(product.retail_price_cents, Math.max(raw, floor))
 }
 
 // Independent ship-weight + freight expectation (Xpose spec oz/sq yd by mil, placeholder parcel brackets).
@@ -53,7 +60,7 @@ function expectedFreight(totalLb) {
 
 const priced = catalog.products.filter((p) => p.active && p.in_stock && p.retail_price_cents > 0)
 // single-unit products priced only by the piece tiers (no pallet pricing, not a pallet SKU)
-const simple = priced.filter((p) => !(p.pack_quantity > 1) && !p.units_per_full_pallet && !p.min_unit_price_cents)
+const simple = priced.filter((p) => !(p.pack_quantity > 1))
 const QTY = 5
 // most expensive tarp whose QTY units still ship parcel (≤ 150 lb)
 const target = [...simple].filter((p) => weightLb(p) && weightLb(p) * QTY <= 150).sort((a, b) => b.retail_price_cents - a.retail_price_cents)[0]

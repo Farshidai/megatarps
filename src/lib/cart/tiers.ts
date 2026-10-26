@@ -1,7 +1,7 @@
 // Display helpers built on the shared pricing engine (src/lib/pricing.ts). Client-safe.
-import { priceTiers, discountForQuantity, type PricingRule, type PriceOptions } from '@/lib/pricing'
+import { priceTiers, unitPriceCents, type PricingRule, type PriceOptions } from '@/lib/pricing'
 
-type Priceable = { retail_price_cents: number; tarp_type: string; thickness_mil: number | null }
+type Priceable = { retail_price_cents: number; tarp_type: string; thickness_mil: number | null } & Parameters<typeof unitPriceCents>[0]
 
 export interface NextTierNudge {
   addQty: number
@@ -9,12 +9,23 @@ export interface NextTierNudge {
   discountPercent: number
 }
 
-/** The next volume tier above `qty` that gives a deeper discount, if any. */
+/**
+ * The next volume tier above `qty` whose ACTUAL unit price (after the price floor and any
+ * account pricing) is lower than today's. Never nudges when the floor makes the "discount" zero.
+ */
 export function nextTier(product: Priceable, qty: number, rules: PricingRule[], opts: PriceOptions = {}): NextTierNudge | null {
-  const current = discountForQuantity(product, qty, rules)
-  const next = priceTiers(product, rules, opts).find((t) => t.min_quantity > qty && t.discount_percent > current)
-  if (!next) return null
-  return { addQty: next.min_quantity - qty, atQty: next.min_quantity, discountPercent: next.discount_percent }
+  const currentUnit = unitPriceCents(product, qty, rules, opts)
+  if (!currentUnit) return null
+  for (const t of priceTiers(product, rules, opts)) {
+    if (t.min_quantity <= qty) continue
+    const unit = unitPriceCents(product, t.min_quantity, rules, opts)
+    if (unit < currentUnit) {
+      const pct = Math.round(((currentUnit - unit) / currentUnit) * 100)
+      if (pct < 1) continue
+      return { addQty: t.min_quantity - qty, atQty: t.min_quantity, discountPercent: pct }
+    }
+  }
+  return null
 }
 
 export interface PackPreset {
@@ -36,8 +47,11 @@ export function packPresets(
   if (product.units_per_half_pallet) presets.push({ label: `½ pallet (${product.units_per_half_pallet})`, qty: product.units_per_half_pallet })
   if (product.units_per_full_pallet) presets.push({ label: `Pallet (${product.units_per_full_pallet})`, qty: product.units_per_full_pallet })
   if (presets.length === 1) {
+    const base = unitPriceCents(product, 1, rules)
     for (const t of priceTiers(product, rules)) {
-      if (t.min_quantity > 1 && t.discount_percent > 0) presets.push({ label: `${t.min_quantity} · −${t.discount_percent}%`, qty: t.min_quantity })
+      const unit = unitPriceCents(product, t.min_quantity, rules)
+      const pct = base ? Math.round(((base - unit) / base) * 100) : 0
+      if (t.min_quantity > 1 && pct >= 1) presets.push({ label: `${t.min_quantity} · −${pct}%`, qty: t.min_quantity })
     }
   }
   return presets.slice(0, 5)
