@@ -16,7 +16,7 @@ export function CartPageClient() {
   const { data, loading } = usePricingData(cart.items.map((i) => i.sku), cart.items.length > 0)
   const { checkout, loading: checkingOut, error } = useCheckout()
   const rules = data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true }
+  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true, contractPrices: data?.contractPrices ?? [] }
   const t = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
   const freightQuote = t.freight?.method === 'quote'
   const freightCents = t.freight?.freightCents ?? 0

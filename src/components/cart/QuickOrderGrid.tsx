@@ -4,7 +4,8 @@ import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Trash2, ClipboardPaste, ShoppingCart, CheckCircle2, AlertTriangle, X } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
-import { unitPriceCents, type PricingRule } from '@/lib/pricing'
+import { unitPriceCents, isContractPriced, type PricingRule, type ContractPrice } from '@/lib/pricing'
+import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import type { CatalogEntry } from '@/lib/cart/catalog-types'
 import { cartItemFromEntry } from '@/lib/cart/catalog-types'
 import { parsePastedList, resolveEntry } from '@/lib/cart/quick-order'
@@ -27,6 +28,8 @@ interface Props {
   rules: PricingRule[]
   wholesaleDiscountPercent: number
   accountApproved?: boolean
+  /** The signed-in approved account's own contract prices (display only; checkout re-prices). */
+  contractPrices?: ContractPrice[]
   freight: FreightConfig
 }
 
@@ -38,9 +41,9 @@ function rowQty(r: Row): number | null {
   return Number.isInteger(n) && n >= 1 && n <= MAX_LINE_QUANTITY ? n : null
 }
 
-export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accountApproved = false, freight: freightConfig }: Props) {
+export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accountApproved = false, contractPrices = [], freight: freightConfig }: Props) {
   const cart = useCart()
-  const opts = { wholesaleDiscountPercent, accountApproved }
+  const opts = { wholesaleDiscountPercent, accountApproved, contractPrices }
   const [rows, setRows] = useState<Row[]>(() => [blank(), blank(), blank(), blank(), blank()])
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
@@ -149,7 +152,9 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accou
             const q = rowQty(r)
             const e = r.entry
             const unit = e && q && !e.quote_only ? unitPriceCents(e, q, rules, opts) : 0
-            const nudge = e && q && !e.quote_only ? nextTier(e, q, rules, opts) : null
+            const contract = e && q && !e.quote_only ? isContractPriced(e, q, rules, opts) : false
+            const tierNudge = e && q && !e.quote_only ? nextTier(e, q, rules, opts) : null
+            const nudge = tierNudge && e && unitPriceCents(e, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
             const rowError = r.error ?? (e && !e.quote_only && !e.in_stock ? 'Out of stock' : r.qty !== '' && !q ? `Qty 1–${MAX_LINE_QUANTITY}` : undefined)
             return (
               <li key={r.id} className="grid grid-cols-[1fr_auto] md:grid-cols-[2rem_minmax(14rem,1.2fr)_1.5fr_7rem_7rem_7rem_2.5rem] gap-x-3 gap-y-2 px-4 md:px-5 py-3 items-start" data-testid="qo-row">
@@ -210,6 +215,7 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accou
                 <p className="text-right text-sm text-slate-600 md:pt-2">
                   <span className="md:hidden text-xs text-slate-400 mr-1">Unit</span>
                   {e ? (e.quote_only ? <span className="text-orange-700 font-semibold">Quote</span> : unit ? formatPrice(unit) : '—') : '—'}
+                  {contract && <span className="block mt-1"><ContractPriceBadge size="sm" label="Contract price" /></span>}
                 </p>
                 <p className="hidden md:block text-right text-sm font-bold text-slate-900 pt-2">{unit && q ? formatPrice(unit * q) : '—'}</p>
                 <button type="button" onClick={() => setRows((rs) => (rs.length > 1 ? rs.filter((x) => x.id !== r.id) : [blank()]))} aria-label={`Remove row ${idx + 1}`} className="hidden md:flex p-2 text-slate-400 hover:text-red-600 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400">

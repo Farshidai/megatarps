@@ -7,6 +7,8 @@ import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo'
 import { demoApplicationByStatus } from '@/lib/accounts-demo'
 import type { WholesaleProfile } from '@/lib/wholesale'
+import type { ContractPrice } from '@/lib/pricing'
+import { loadOwnContractPrices } from '@/lib/contract-prices'
 
 export type AccountStatus = 'guest' | 'pending' | 'approved' | 'rejected'
 
@@ -19,6 +21,12 @@ export interface AccountPricing {
   paymentTerms: string
   userId: string | null
   email: string | null
+  /**
+   * The signed-in APPROVED account's own active, unexpired contract prices (Team F).
+   * Empty / undefined for guests and pending / rejected accounts. Pass to the pricing
+   * engine as opts.contractPrices.
+   */
+  contractPrices?: ContractPrice[]
 }
 
 export const GUEST_PRICING: AccountPricing = {
@@ -91,5 +99,7 @@ export function pricingFromProfile(
 /** Server-only. Safe to call from server components, route handlers and server actions. */
 export async function getAccountPricing(): Promise<AccountPricing> {
   const { user, profile } = await getCurrentAccount()
-  return pricingFromProfile(user, profile)
+  const pricing = pricingFromProfile(user, profile)
+  if (pricing.status !== 'approved' || !pricing.userId) return pricing
+  return { ...pricing, contractPrices: await loadOwnContractPrices(pricing.userId) }
 }

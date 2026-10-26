@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { requireAdmin } from '@/lib/admin'
-import { addEvent, getQuoteById, setAdminNotes, updateQuote } from '@/lib/quotes/store'
+import { addEvent, getQuoteById, isContractorApproved, setAdminNotes, updateQuote } from '@/lib/quotes/store'
 import { emailQuoteSent } from '@/lib/quotes/emails'
 import { computeTotals, type QuoteLine, type QuoteStatus } from '@/lib/quotes/types'
 
@@ -91,7 +91,8 @@ async function persist(input: BuilderInput, mode: 'draft' | 'send'): Promise<Bui
   if (mode === 'send') {
     await addEvent(quote.id, 'sent', `Emailed to ${updated.guest_email} by ${admin.email}`)
     try {
-      await emailQuoteSent(updated)
+      const approved = updated.contractor_id ? await isContractorApproved(updated.contractor_id) : false
+      await emailQuoteSent(updated, { accountState: approved ? 'approved' : updated.contractor_id ? 'unapproved' : 'guest' })
     } catch (e) {
       console.error('quote email failed', e)
       revalidatePath(`/admin/rfqs/${quote.id}`)

@@ -217,7 +217,7 @@ export default async function ProductPage({ params }: PageProps) {
             )}
 
             <div className="grid gap-5 xl:grid-cols-1">
-              <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} />
+              <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
               <div className="rounded-2xl ring-1 ring-slate-200 p-4 sm:p-5">
                 <AddToCartOrRFQ product={product} rules={rules} />
               </div>

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getCurrentAccount, DEMO_ACCOUNT_COOKIE } from '@/lib/accounts'
 import { StatusBanner } from './_components/StatusBanner'
 import { DemoAccountSwitcher } from './_components/DemoAccountSwitcher'
+import { ContractPricesList } from './_components/ContractPricesList'
 
 export const metadata: Metadata = { title: 'My Account' }
 
@@ -80,6 +81,8 @@ export default async function AccountPage() {
       </div>
 
       <StatusBanner profile={profile} />
+
+      <ContractPricesList />
 
       {/* Quick stats */}
       <div className="grid grid-cols-2 gap-4">

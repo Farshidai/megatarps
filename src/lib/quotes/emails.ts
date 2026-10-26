@@ -82,9 +82,28 @@ export async function emailNewRequest(q: QuoteRecord) {
   ])
 }
 
-export async function emailQuoteSent(q: QuoteRecord) {
+/**
+ * Quote → contract → reorder copy (Team F). Honest by account state:
+ *  approved: Farshid saves accepted prices as contract prices (admin "Save as client's contract prices").
+ *  pending/rejected: only once the account is approved.  guest: invite to apply.
+ */
+export type QuoteAccountState = 'approved' | 'unapproved' | 'guest'
+
+export function contractReorderNote(state: QuoteAccountState, app: string): string {
+  const box = (html: string) => `<p style="background:#ecfdf5;border:1px solid #a7f3d0;padding:10px 12px;border-radius:6px;font-size:14px">${html}</p>`
+  if (state === 'approved') {
+    return box(`<b>Reorder at the same price.</b> When you accept this quote, we'll save these agreed unit prices to your MegaTarps wholesale account as your contract prices. You'll see them, with their end date, under <a href="${esc(`${app}/account`)}">Your contract prices</a>, and they apply automatically when you reorder online (if your normal volume price is ever lower, you get that instead).`)
+  }
+  if (state === 'unapproved') {
+    return box(`<b>Want to reorder at these prices?</b> Once your wholesale account is approved, we can save the prices you accept as contract prices on your account, so online reorders are priced the same way.`)
+  }
+  return `<p style="color:#64748b;font-size:13px">Ordering again later? <a href="${esc(`${app}/apply`)}">Apply for a free wholesale account</a>. Once approved, we can save the prices you accept to your account for online reorders.</p>`
+}
+
+export async function emailQuoteSent(q: QuoteRecord, opts: { accountState?: QuoteAccountState } = {}) {
   if (!q.guest_email) return
   const app = await getAppUrl()
+  const accountState: QuoteAccountState = opts.accountState ?? (q.contractor_id ? 'unapproved' : 'guest')
   await sendEmail({
     to: q.guest_email,
     subject: `Your MegaTarps quote ${q.quote_number} — ${formatPrice(q.total_cents ?? 0)}`,
@@ -96,7 +115,8 @@ export async function emailQuoteSent(q: QuoteRecord) {
       <p style="text-align:right;font-size:14px;margin:8px 0 0">Freight: ${formatPrice(q.freight_cents)}${q.discount_cents ? ` · Discount: −${formatPrice(q.discount_cents)}` : ''}${q.tax_cents ? ` · Tax: ${formatPrice(q.tax_cents)}` : ''}</p>
       <p style="text-align:right;font-size:20px;font-weight:900;margin:4px 0">Total ${formatPrice(q.total_cents ?? 0)}</p>
       ${q.valid_until ? `<p style="color:#64748b;font-size:13px">Valid until ${esc(new Date(q.valid_until).toLocaleDateString('en-US', { dateStyle: 'long' }))}.</p>` : ''}
-      ${button(`${app}/quote/${q.public_token}`, 'Review & accept quote →')}`),
+      ${button(`${app}/quote/${q.public_token}`, 'Review & accept quote →')}
+      ${contractReorderNote(accountState, app)}`),
   })
 }
 

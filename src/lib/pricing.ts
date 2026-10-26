@@ -12,6 +12,12 @@
 // buying 100 pieces can't undercut an approved account's pallet price.
 // Every price is clamped to the product's min_unit_price_cents (cost floor) when set,
 // and never above retail.
+//
+// Client contract prices (table contract_prices, migration 0008): for an APPROVED account,
+// the unit price is the LOWER of the normal tier price and the contract price whose
+// min_quantity is the highest one ≤ qty. The contract price deliberately ignores
+// min_unit_price_cents (Farshid negotiated it), but is never ≤ 0 and never applies to
+// quote-only products. Pass them via opts.contractPrices (server: getAccountPricing()).
 import type { Product } from '@/types'
 
 export type RuleUnit = 'each' | 'pallet'
@@ -55,11 +61,28 @@ export interface PalletTier {
   label: string // "1 pallet", "2+ pallets"
 }
 
+/** A client's negotiated unit price for one product (row of contract_prices, storefront columns only). */
+export interface ContractPrice {
+  id?: string
+  product_id: string | null
+  sku: string
+  unit_price_cents: number
+  /** applies when qty ≥ min_quantity (default 1) */
+  min_quantity: number
+  /** YYYY-MM-DD, valid through the end of that day; null = no end date */
+  valid_until: string | null
+  source_quote_id?: string | null
+}
+
 export interface PriceOptions {
   /** Extra % off for approved wholesale accounts, applied on top of the tier. */
   wholesaleDiscountPercent?: number
   /** Approved wholesale account: unlocks rules with requires_account = true (pallet tiers). */
   accountApproved?: boolean
+  /** The signed-in approved account's contract prices. Ignored unless accountApproved. */
+  contractPrices?: ContractPrice[] | null
+  /** "Today" as YYYY-MM-DD for contract expiry (tests); defaults to the current UTC date. */
+  today?: string
 }
 
 /** Fields the engine reads. Pallet/floor fields are optional so existing callers keep working. */
@@ -67,6 +90,10 @@ export type PricedProduct = Pick<Product, 'retail_price_cents' | 'tarp_type' | '
   units_per_full_pallet?: number | null
   /** Hard floor per unit (e.g. cost × 1.15). Ignored when null/0. */
   min_unit_price_cents?: number | null
+  /** Identity, used only to match contract prices (Product: id + xpose_sku; cart entries: id + sku). */
+  id?: string | null
+  xpose_sku?: string | null
+  sku?: string | null
 }
 
 /** A product with no retail price can only be quoted, never bought online. */
@@ -141,14 +168,62 @@ function clamp(product: PricedProduct, cents: number): number {
   return Math.min(out, product.retail_price_cents)
 }
 
-/** Unit price in cents for a quantity. Returns 0 for quote-only products. */
-export function unitPriceCents(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions = {}): number {
-  if (isQuoteOnly(product)) return 0
+/** Normal (non-contract) unit price: tiers + pallet + wholesale %, clamped to floor and retail. */
+function tierUnitPriceCents(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions): number {
   const volume = discountForQuantity(product, qty, rules)
   const pallet = palletMultiplier(product, qty, rules, opts)
   const wholesale = opts.wholesaleDiscountPercent ?? 0
   const price = product.retail_price_cents * (1 - volume / 100) * pallet * (1 - wholesale / 100)
   return clamp(product, Math.round(price))
+}
+
+const todayUtc = () => new Date().toISOString().slice(0, 10)
+
+/** True when the contract row has not expired (valid through the end of valid_until). */
+export function isContractActive(c: Pick<ContractPrice, 'valid_until'>, today = todayUtc()): boolean {
+  return !c.valid_until || String(c.valid_until).slice(0, 10) >= today
+}
+
+function matchesProduct(c: ContractPrice, product: PricedProduct): boolean {
+  if (c.product_id && product.id && c.product_id === product.id) return true
+  const sku = (product.xpose_sku ?? product.sku ?? '').toLowerCase()
+  return !!sku && !!c.sku && c.sku.toLowerCase() === sku
+}
+
+/** Active contract rows for this product, sorted by min_quantity. */
+export function contractPricesFor(product: PricedProduct, contractPrices: ContractPrice[] | null | undefined, today = todayUtc()): ContractPrice[] {
+  if (!contractPrices?.length) return []
+  return contractPrices
+    .filter((c) => matchesProduct(c, product) && isContractActive(c, today) && Number.isInteger(c.unit_price_cents) && c.unit_price_cents > 0)
+    .sort((a, b) => (a.min_quantity || 1) - (b.min_quantity || 1))
+}
+
+/**
+ * The contract unit price for qty: the row with the highest min_quantity ≤ qty.
+ * Null when there is none (or the product is quote-only). Never returns ≤ 0.
+ * Does NOT compare with the tier price; unitPriceCents() takes the lower of the two.
+ */
+export function contractUnitPriceCents(product: PricedProduct, qty: number, contractPrices: ContractPrice[] | null | undefined, today = todayUtc()): number | null {
+  if (isQuoteOnly(product)) return null
+  let best: ContractPrice | null = null
+  for (const c of contractPricesFor(product, contractPrices, today)) if (qty >= (c.min_quantity || 1)) best = c
+  return best ? best.unit_price_cents : null
+}
+
+/** Unit price in cents for a quantity. Returns 0 for quote-only products. */
+export function unitPriceCents(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions = {}): number {
+  if (isQuoteOnly(product)) return 0
+  const normal = tierUnitPriceCents(product, qty, rules, opts)
+  if (!opts.accountApproved || !opts.contractPrices?.length) return normal
+  const contract = contractUnitPriceCents(product, qty, opts.contractPrices, opts.today)
+  return contract != null && contract > 0 && contract < normal ? contract : normal
+}
+
+/** True when unitPriceCents() for this qty comes from the account's contract price. */
+export function isContractPriced(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions = {}): boolean {
+  if (isQuoteOnly(product) || !opts.accountApproved || !opts.contractPrices?.length) return false
+  const contract = contractUnitPriceCents(product, qty, opts.contractPrices, opts.today)
+  return contract != null && contract < tierUnitPriceCents(product, qty, rules, opts)
 }
 
 export function lineTotalCents(product: PricedProduct, qty: number, rules: PricingRule[], opts: PriceOptions = {}): number {
@@ -189,7 +264,7 @@ export function palletTiers(product: PricedProduct, rules: PricingRule[], opts: 
   const per = product.units_per_full_pallet ?? 0
   return applicablePalletRules(product, rules).map((r) => {
     const min = r.min_quantity * per
-    const unit = unitPriceCents(product, min, rules, { ...opts, accountApproved: true })
+    const unit = unitPriceCents(product, min, rules, { ...opts, accountApproved: true, contractPrices: null })
     return {
       pallets: r.min_quantity,
       min_quantity: min,
