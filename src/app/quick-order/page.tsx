@@ -14,23 +14,10 @@ export const metadata: Metadata = {
 
 export default async function QuickOrderPage() {
   await connection() // per-request: live catalog + the buyer's wholesale discount
-  const [catalog, rules, account, freight] = await Promise.all([getCartCatalog(), getPricingRules(), getAccountPricing(), getFreightConfig()])
+  const [rules, account, freight] = await Promise.all([getPricingRules(), getAccountPricing(), getFreightConfig()])
+  // prices arrive as per-SKU schedules computed on the server for this buyer (no floor / cost in the browser)
+  const catalog = await getCartCatalog(undefined, account, rules)
   const wholesaleDiscountPercent = account.status === 'approved' ? account.wholesaleDiscountPercent : 0
-  // only the fields the pricing engine needs reach the browser
-  const publicRules = rules.map((r) => ({
-    tarp_type: r.tarp_type,
-    thickness_mil: r.thickness_mil,
-    min_quantity: r.min_quantity,
-    max_quantity: r.max_quantity,
-    discount_from_retail_percent: r.discount_from_retail_percent,
-    priority: r.priority,
-    active: r.active,
-    // pallet-first fields: without them the browser treats pallet rules as piece tiers
-    unit: r.unit,
-    price_multiplier: r.price_multiplier,
-    requires_account: r.requires_account,
-    label: r.label,
-  }))
 
   return (
     <div className="bg-slate-50 min-h-[70vh]">
@@ -45,7 +32,7 @@ export default async function QuickOrderPage() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <QuickOrderGrid catalog={catalog} rules={publicRules} wholesaleDiscountPercent={wholesaleDiscountPercent} accountApproved={account.status === 'approved'} contractPrices={account.status === 'approved' ? account.contractPrices ?? [] : []} freight={freight} />
+        <QuickOrderGrid catalog={catalog} wholesaleDiscountPercent={wholesaleDiscountPercent} accountApproved={account.status === 'approved'} freight={freight} />
       </div>
     </div>
   )

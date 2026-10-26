@@ -282,7 +282,8 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
               const out = { ...prev }
               for (const sku of Object.keys(updated)) {
                 if (out[sku]) {
-                  const { retail_cents: _drop, ...rest } = out[sku]
+                  const rest = { ...out[sku] }
+                  delete rest.retail_cents
                   if (Object.keys(rest).length) out[sku] = rest
                   else delete out[sku]
                 }

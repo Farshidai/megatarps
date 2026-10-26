@@ -15,8 +15,12 @@ export type CatalogProduct = Product & {
   material?: string | null
 }
 
-/** Remove admin-only fields (cost, market research) before a product is passed to a client component or JSON-LD. */
-const PRIVATE_FIELDS = ['cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at']
+/**
+ * Remove admin-only fields (cost, price floor, market research) before a product is passed to
+ * a client component or JSON-LD. The floor (min_unit_price_cents ≈ cost × 1.15) is private too.
+ */
+export const PRIVATE_PRODUCT_FIELDS = ['cost_price_cents', 'min_unit_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at']
+const PRIVATE_FIELDS = PRIVATE_PRODUCT_FIELDS
 export function toPublicProduct<T extends Product>(p: T): T {
   const out = { ...p } as Record<string, unknown>
   for (const k of PRIVATE_FIELDS) delete out[k]

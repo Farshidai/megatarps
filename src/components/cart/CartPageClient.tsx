@@ -15,9 +15,8 @@ export function CartPageClient() {
   const cart = useCart()
   const { data, loading } = usePricingData(cart.items.map((i) => i.sku), cart.items.length > 0)
   const { checkout, loading: checkingOut, error } = useCheckout()
-  const rules = data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true, contractPrices: data?.contractPrices ?? [] }
-  const t = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
+  const wholesaleDiscountPercent = data?.wholesaleDiscountPercent ?? 0
+  const t = cartTotals(cart.items, data?.products, data?.freight)
   const freightQuote = t.freight?.method === 'quote'
   const freightCents = t.freight?.freightCents ?? 0
 
@@ -44,8 +43,6 @@ export function CartPageClient() {
       key={item.sku}
       item={item}
       product={data?.products[item.sku]}
-      rules={rules}
-      opts={opts}
       loading={loading}
       onQty={(q) => cart.setQuantity(item.sku, q)}
       onRemove={() => cart.removeItem(item.sku)}
@@ -112,7 +109,7 @@ export function CartPageClient() {
                 </div>
               </dl>
               {t.freeFreightThreshold && <FreeFreightBar threshold={t.freeFreightThreshold} toFreeFreight={t.toFreeFreight} progress={t.freightProgress} />}
-              {opts.wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {opts.wholesaleDiscountPercent}% wholesale discount.</p>}
+              {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale discount.</p>}
               {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
               {freightQuote && t.freight ? (
                 <FreightQuoteRequired freight={t.freight} />

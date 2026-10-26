@@ -4,7 +4,8 @@ import { cache } from 'react'
 import type { Metadata } from 'next'
 import { CheckCircle, Truck, ShieldCheck, Clock, Flame } from 'lucide-react'
 import { getProductBySlug, getRelatedProducts, getPricingRules } from '@/lib/products'
-import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents } from '@/lib/pricing'
+import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents, priceSchedule } from '@/lib/pricing'
+import { priceOptionsFor } from '@/lib/cart/server'
 import { getAccountPricing } from '@/lib/accounts'
 import {
   toPublicProduct, seoTitle, seoDescription, gradeLabel, gaugeLabel, dimsLabel, isAccessory, isPalletSku, type CatalogProduct,
@@ -21,10 +22,12 @@ interface PageProps {
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://megatarps.com').replace(/\/$/, '')
 
-// generateMetadata and the page share one lookup per request
+// generateMetadata and the page share one lookup per request.
+// The product carries the price floor (server-side pricing only). Anything that crosses to a
+// client component gets toPublicProduct() (no floor / cost) or a server-computed schedule.
 const loadProduct = cache(async (slug: string) => {
   const p = await getProductBySlug(slug)
-  return p ? (toPublicProduct(p) as CatalogProduct) : null
+  return p ? (p as CatalogProduct) : null
 })
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -49,7 +52,8 @@ export default async function ProductPage({ params }: PageProps) {
   const accountApproved = account.status === 'approved'
   if (!product) notFound()
 
-  const related = (await getRelatedProducts(product)).map(toPublicProduct)
+  const related = await getRelatedProducts(product) // server-rendered cards only
+  const schedule = priceSchedule(product, rules, priceOptionsFor(account))
   const pl = product.product_line
   const quoteOnly = isQuoteOnly(product)
   const tiers = priceTiers(product, rules)
@@ -219,7 +223,12 @@ export default async function ProductPage({ params }: PageProps) {
             <div className="grid gap-5 xl:grid-cols-1">
               <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
               <div className="rounded-2xl ring-1 ring-slate-200 p-4 sm:p-5">
-                <AddToCartOrRFQ product={product} rules={rules} />
+                <AddToCartOrRFQ
+                  product={toPublicProduct(product)}
+                  schedule={schedule}
+                  wholesaleDiscountPercent={accountApproved ? account.wholesaleDiscountPercent : 0}
+                  contractPrices={accountApproved ? account.contractPrices ?? [] : []}
+                />
               </div>
             </div>
 

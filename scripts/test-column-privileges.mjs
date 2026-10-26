@@ -24,6 +24,13 @@ const check = async (label, sql, shouldFail) => {
 await check('anon reads public product columns', 'SELECT id, name, retail_price_cents FROM products', false)
 await check('anon cannot read cost_price_cents', 'SELECT cost_price_cents FROM products', true)
 await check('anon cannot SELECT * (would include cost)', 'SELECT * FROM products', true)
+await check('anon cannot read min_unit_price_cents (floor = cost x 1.15)', 'SELECT min_unit_price_cents FROM products', true)
+await check('anon cannot read market_price_cents', 'SELECT market_price_cents FROM products', true)
+// every column the storefront selects with the anon / session client must still be readable
+const src = readFileSync('src/lib/products.ts', 'utf8')
+const pub = src.match(/PUBLIC_PRODUCT_COLUMNS = \[([\s\S]*?)\]/)[1].match(/'([a-z_]+)'/g).map((c) => c.slice(1, -1))
+await check(`anon reads all ${pub.length} PUBLIC_PRODUCT_COLUMNS`, `SELECT ${pub.join(', ')} FROM products`, false)
+if (pub.includes('min_unit_price_cents') || pub.includes('cost_price_cents')) { fail++; console.log('FAIL PUBLIC_PRODUCT_COLUMNS lists a private column') }
 await check('anon reads public rule columns', 'SELECT min_quantity, discount_from_retail_percent FROM pricing_rules', false)
 await check('anon cannot read margin_percent', 'SELECT margin_percent FROM pricing_rules', true)
 console.log(`${pass} passed, ${fail} failed`); process.exit(fail ? 1 : 0)

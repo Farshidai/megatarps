@@ -283,3 +283,58 @@ export function lowestUnitPriceCents(product: PricedProduct, rules: PricingRule[
   const t = priceTiers(product, rules, opts)
   return t.length ? Math.min(...t.map((x) => x.unit_price_cents)) : 0
 }
+
+// ---------------------------------------------------------------- price schedules
+// The browser never receives min_unit_price_cents (it would reveal cost ≈ floor ÷ 1.15).
+// Instead the SERVER runs this engine and sends, per SKU, the unit price at every quantity
+// where the price can change ("breakpoints"). Between breakpoints the price is constant, so
+// the browser can show the exact server price for any quantity with a table lookup
+// (src/lib/price-schedule.ts) — no floor, no engine on the client.
+
+/** Unit price from `min_quantity` up to the next point's min_quantity − 1. */
+export interface PricePoint {
+  min_quantity: number
+  unit_price_cents: number
+  /** the price at this quantity is the account's contract price */
+  contract?: boolean
+}
+
+/** Every quantity at which unitPriceCents() can change for this product + account. */
+export function priceBreakpoints(product: PricedProduct, rules: PricingRule[], opts: PriceOptions = {}): number[] {
+  const qs = new Set<number>([1])
+  const add = (n: number | null | undefined) => {
+    if (n != null && Number.isFinite(n) && n >= 1) qs.add(Math.floor(n))
+  }
+  if (!hasPalletPricing(product, rules)) {
+    for (const r of applicableRules(product, rules)) {
+      add(r.min_quantity)
+      if (r.max_quantity != null) add(r.max_quantity + 1)
+    }
+  }
+  const per = product.units_per_full_pallet ?? 0
+  if (per > 0) {
+    for (const r of applicablePalletRules(product, rules)) {
+      add(r.min_quantity * per)
+      if (r.max_quantity != null) add((r.max_quantity + 1) * per)
+    }
+  }
+  if (opts.accountApproved) for (const c of contractPricesFor(product, opts.contractPrices, opts.today)) add(c.min_quantity || 1)
+  return [...qs].sort((a, b) => a - b)
+}
+
+/**
+ * Server-side: the exact unit price at each breakpoint for this buyer (rules + account +
+ * contract prices + floor). Consecutive identical points are merged. Empty for quote-only.
+ */
+export function priceSchedule(product: PricedProduct, rules: PricingRule[], opts: PriceOptions = {}): PricePoint[] {
+  if (isQuoteOnly(product)) return []
+  const out: PricePoint[] = []
+  for (const q of priceBreakpoints(product, rules, opts)) {
+    const unit = unitPriceCents(product, q, rules, opts)
+    const contract = isContractPriced(product, q, rules, opts)
+    const prev = out[out.length - 1]
+    if (prev && prev.unit_price_cents === unit && !!prev.contract === contract) continue
+    out.push(contract ? { min_quantity: q, unit_price_cents: unit, contract: true } : { min_quantity: q, unit_price_cents: unit })
+  }
+  return out
+}

@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { ShoppingCart, FileText, Check, TrendingDown, Package, Scale, Truck } from 'lucide-react'
 import { productWeightLb, formatLb } from '@/lib/freight'
 import { formatPrice, cn } from '@/lib/utils'
-import { unitPriceCents, lineTotalCents, isQuoteOnly, isContractPriced, contractPricesFor, type PricingRule } from '@/lib/pricing'
+import { isQuoteOnly, contractPricesFor, type ContractPrice, type PricePoint } from '@/lib/pricing'
+import { scheduleUnitPrice, scheduleIsContract } from '@/lib/price-schedule'
 import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import { useCart } from '@/lib/cart/useCart'
 import { usePricingData } from '@/lib/cart/usePricingData'
@@ -14,39 +15,40 @@ import { QuantityStepper } from '@/components/cart/QuantityStepper'
 import type { Product } from '@/types'
 
 interface Props {
+  /** Public product (no cost / floor: pass toPublicProduct(product)). */
   product: Product
-  /** Active volume pricing rules (Team A passes these from the product page). */
-  rules?: PricingRule[]
+  /**
+   * Unit price by quantity for THIS buyer, computed on the server by priceSchedule()
+   * (tiers, pallets, account + contract pricing and the floor already applied).
+   */
+  schedule: PricePoint[]
+  /** Extra account % shown in the note (only applies to products without pallet pricing). */
+  wholesaleDiscountPercent?: number
+  /** The signed-in approved account's own contract prices (for the "applies at N+" hint). */
+  contractPrices?: ContractPrice[]
 }
 
-export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
+export function AddToCartOrRFQ({ product, schedule, wholesaleDiscountPercent = 0, contractPrices = [] }: Props) {
   const cart = useCart()
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
 
-  // Rules come from the page; the wholesale % (approved accounts) comes from the server.
+  // Freight settings only (prices come from the server-computed schedule)
   const { data } = usePricingData([], true)
-  const rules = rulesProp ?? data?.rules ?? []
-  const opts = {
-    wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0,
-    accountApproved: data?.accountApproved === true,
-    contractPrices: data?.contractPrices ?? [],
-  }
 
   const quoteOnly = isQuoteOnly(product)
-  const unit = unitPriceCents(product, qty, rules, opts)
-  const total = lineTotalCents(product, qty, rules, opts)
+  const unit = scheduleUnitPrice(schedule, qty)
+  const total = unit * qty
   const retailTotal = product.retail_price_cents * qty
   const savings = retailTotal - total
-  const contract = isContractPriced(product, qty, rules, opts)
-  const myContracts = opts.accountApproved && !quoteOnly ? contractPricesFor(product, opts.contractPrices) : []
+  const contract = scheduleIsContract(schedule, qty)
+  const myContracts = !quoteOnly ? contractPricesFor(product, contractPrices) : []
   const activeContract = contract ? [...myContracts].reverse().find((c) => qty >= (c.min_quantity || 1)) : undefined
   // a contract row this qty doesn't reach yet (e.g. "10+"), and that would beat today's price
   const upcomingContract = myContracts.find((c) => (c.min_quantity || 1) > qty && c.unit_price_cents < unit)
-  const tierNudge = quoteOnly ? null : nextTier(product, qty, rules, opts)
-  // only nudge toward a tier that is really cheaper than what this buyer pays now
-  const nudge = tierNudge && unitPriceCents(product, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
-  const presets = packPresets(product, rules)
+  // only nudges toward a quantity that is really cheaper than what this buyer pays now
+  const nudge = quoteOnly ? null : nextTier(schedule, qty)
+  const presets = packPresets(product, schedule)
   const inCart = cart.items.find((i) => i.sku === product.xpose_sku)
   const unitWeight = productWeightLb(product as Parameters<typeof productWeightLb>[0])
   const parcelMax = data?.freight?.settings.parcel_max_order_lb ?? 150
@@ -129,7 +131,7 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
               <TrendingDown className="w-4 h-4 flex-shrink-0" aria-hidden />
               <span>
                 Add <strong>{nudge.addQty}</strong> more to save <strong>{nudge.discountPercent}%</strong>
-                <span className="text-orange-600"> · {formatPrice(unitPriceCents(product, nudge.atQty, rules, opts))}/unit at {nudge.atQty}+</span>
+                <span className="text-orange-600"> · {formatPrice(nudge.unitPriceCents)}/unit at {nudge.atQty}+</span>
               </span>
             </button>
           )}
@@ -151,8 +153,8 @@ export function AddToCartOrRFQ({ product, rules: rulesProp }: Props) {
             <p className="mt-2 text-xs text-emerald-800" data-testid="contract-note">
               Agreed price for your account{activeContract?.valid_until ? `, valid through ${new Date(`${activeContract.valid_until}T12:00:00`).toLocaleDateString('en-US', { dateStyle: 'medium' })}` : ''}. Applied automatically at checkout.
             </p>
-          ) : opts.wholesaleDiscountPercent > 0 ? (
-            <p className="mt-2 text-xs text-slate-500">Includes your {opts.wholesaleDiscountPercent}% wholesale account discount.</p>
+          ) : wholesaleDiscountPercent > 0 && savings > 0 ? (
+            <p className="mt-2 text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale account discount.</p>
           ) : null}
         </div>
       )}

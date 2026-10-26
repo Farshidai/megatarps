@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { BulkQuoteForm } from '@/components/forms/BulkQuoteForm'
-import { getPickerCatalog } from '@/lib/quotes/catalog'
+import { getPublicPickerCatalog } from '@/lib/quotes/catalog'
+import { priceOptionsFor } from '@/lib/cart/server'
 import { getAccountPricing } from '@/lib/accounts'
 import { Clock, Truck, BadgeDollarSign } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
 }
 
 export default async function BulkQuotePage() {
-  const [{ products, rules }, account] = await Promise.all([getPickerCatalog(), getAccountPricing()])
+  const account = await getAccountPricing()
+  const { products } = await getPublicPickerCatalog(priceOptionsFor(account))
 
   return (
     <div className="bg-slate-50 min-h-screen py-10 sm:py-12">
@@ -43,7 +45,7 @@ export default async function BulkQuotePage() {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8">
           <Suspense>
-            <BulkQuoteForm products={products} rules={rules} defaultEmail={account.email} />
+            <BulkQuoteForm products={products} defaultEmail={account.email} />
           </Suspense>
         </div>
       </div>

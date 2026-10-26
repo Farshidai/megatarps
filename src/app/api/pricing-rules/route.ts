@@ -1,6 +1,8 @@
 // GET /api/pricing-rules?skus=A,B,C
-// Display-only pricing data for the mini cart: active volume rules, the buyer's wholesale
-// discount, slim product rows (with ship weight) for the requested SKUs, and freight rates. Checkout never trusts any of this;
+// Display-only pricing data for the mini cart: slim product rows (with ship weight) for the
+// requested SKUs, each with a SERVER-COMPUTED price schedule for this buyer (unit price at
+// every quantity break: piece tiers, pallets, contract rows, floor applied), plus freight
+// rates. The price floor / cost never leave the server. Checkout never trusts any of this;
 // /api/checkout re-prices everything server-side.
 // contractPrices: ONLY the signed-in approved account's own active contract prices (from its
 // session via getAccountPricing(); RLS-scoped). Guests / pending / rejected get []. Never other accounts'.
@@ -18,12 +20,8 @@ export async function GET(request: Request) {
     .slice(0, 100)
 
   try {
-    const [rules, account, products, freight] = await Promise.all([
-      getPricingRules(),
-      getAccountPricing(),
-      skus.length ? getCartCatalog(skus) : Promise.resolve([]),
-      getFreightConfig(),
-    ])
+    const [rules, account, freight] = await Promise.all([getPricingRules(), getAccountPricing(), getFreightConfig()])
+    const products = skus.length ? await getCartCatalog(skus, account, rules) : []
     return Response.json(
       {
         rules: rules.map((r) => ({
