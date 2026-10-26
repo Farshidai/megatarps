@@ -16,4 +16,6 @@ Run each file in the Supabase SQL editor, in this exact order (all are safe to r
 4. Keep existing customers approved after 0003 (all existing profiles become `pending`):
    `UPDATE contractor_profiles SET account_status='approved', approved_at=now(), approved_by='mfirooz@megatarps.com' WHERE id IN (...);`
 
+Easiest: paste `supabase/launch/1-structure.sql`, then `2-catalog.sql`, then `3-prices.sql` (bundles of everything above, tested by `node scripts/test-launch-bundle.mjs`).
+
 Local check of the whole chain: `node scripts/build-demo-data.mjs supabase/seed.sql supabase/seed-catalog.sql supabase/seed-weights.sql supabase/seed-prices-2026-10-25.sql supabase/seed-market-amazon-2026-10-25.sql`
