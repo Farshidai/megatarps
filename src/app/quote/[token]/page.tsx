@@ -4,6 +4,7 @@ import { getQuoteByToken, logViewOnce } from '@/lib/quotes/store'
 import { netTermsFor, termsLabel } from '@/lib/quotes/auth'
 import { DELIVERY_LABELS, STATUS_LABELS, STATUS_STYLES, effectiveStatus } from '@/lib/quotes/types'
 import { formatPrice } from '@/lib/utils'
+import { site } from '@/lib/site'
 import { QuoteActions } from './QuoteActions'
 import type { Metadata } from 'next'
 
@@ -38,6 +39,10 @@ export default async function QuotePage({
   const net = status === 'quoted' ? await netTermsFor(q) : { allowed: false, terms: 'prepaid' }
   const addr = q.shipping_address
   const units = q.items.reduce((n, i) => n + i.quantity, 0)
+  // ?paid=1 is only Stripe's redirect hint, never proof. "Paid" = the webhook confirmed the money
+  // (the quote is 'ordered' and wasn't accepted on Net terms, which is invoiced, not paid).
+  const isPaid = status === 'ordered' && !!q.payment_method && !/^net/i.test(q.payment_method)
+  const paymentSubmitted = !!sp.paid && status === 'accepted'
 
   return (
     <div className="bg-slate-100 min-h-screen py-6 sm:py-10 print:bg-white print:p-0 print:min-h-0">
@@ -55,9 +60,14 @@ export default async function QuotePage({
       <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 print:max-w-none print:px-0">
         {/* status banners */}
         <div className="print:hidden space-y-3 mb-5">
-          {sp.paid && (status === 'ordered' || status === 'accepted') && (
+          {sp.paid && isPaid && (
             <Banner tone="green" icon={<CheckCircle2 className="w-5 h-5" aria-hidden />} title="Payment received — thank you!">
-              {status === 'ordered' ? 'Your order is confirmed. We’ll email tracking and the freight PRO number when it ships.' : 'We’re confirming your payment with Stripe. Your order confirmation will arrive by email shortly.'}
+              Your order is confirmed. We’ll email tracking and the freight PRO number when it ships.
+            </Banner>
+          )}
+          {paymentSubmitted && (
+            <Banner tone="amber" icon={<Clock className="w-5 h-5" aria-hidden />} title="Payment submitted — waiting for it to clear">
+              Card payments confirm within a few minutes; bank (ACH) payments take {site.claims.achClearing}. We’ll email your order confirmation as soon as the payment clears.
             </Banner>
           )}
           {sp.canceled && status === 'accepted' && (
@@ -80,7 +90,7 @@ export default async function QuotePage({
               {q.declined_reason ? `Reason: “${q.declined_reason}”. ` : ''}Need a revised quote? Call (913) 313-2691.
             </Banner>
           )}
-          {status === 'ordered' && !sp.paid && (
+          {status === 'ordered' && !(sp.paid && isPaid) && (
             <Banner tone="green" icon={<Package className="w-5 h-5" aria-hidden />} title="This quote is now an order">
               Accepted {fmtDate(q.accepted_at)}. We’ll email tracking when it ships.
             </Banner>
@@ -209,7 +219,7 @@ export default async function QuotePage({
               totalCents={q.total_cents ?? 0}
               validUntil={q.valid_until}
               netTerms={net.allowed ? termsLabel(net.terms) : null}
-              paid={!!sp.paid}
+              paid={isPaid || paymentSubmitted}
             />
           </aside>
         </div>

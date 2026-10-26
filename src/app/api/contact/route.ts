@@ -1,3 +1,4 @@
+import { rateLimit } from '@/lib/rate-limit'
 import { redirect } from 'next/navigation'
 import { sendEmail, adminNotificationEmail } from '@/lib/email/send'
 import { escapeHtml as h } from '@/lib/wholesale'
@@ -12,6 +13,8 @@ const SUBJECT_LABELS: Record<string, string> = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, 'contact')
+  if (limited) return limited
   const form = await request.formData()
   const field = (k: string, max: number) => String(form.get(k) ?? '').trim().slice(0, max)
   const name = field('name', 120)

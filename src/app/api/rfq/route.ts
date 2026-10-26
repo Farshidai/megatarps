@@ -1,3 +1,4 @@
+import { rateLimit } from '@/lib/rate-limit'
 import { getProducts } from '@/lib/products'
 import { isQuoteOnly } from '@/lib/pricing'
 import { getAccountPricing } from '@/lib/accounts'
@@ -11,6 +12,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const ZIP_RE = /^\d{5}(-\d{4})?$/
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, 'rfq')
+  if (limited) return limited
   let body: Record<string, unknown>
   try {
     body = await request.json()

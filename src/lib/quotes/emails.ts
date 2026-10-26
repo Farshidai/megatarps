@@ -1,4 +1,5 @@
 // Quote email templates (HTML-escaped) + small server helpers.
+import { isDemoMode } from '@/lib/demo'
 import { headers } from 'next/headers'
 import { formatPrice } from '@/lib/utils'
 import { adminEmails } from '@/lib/admin'
@@ -9,9 +10,17 @@ export function esc(s: unknown): string {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 }
 
+/**
+ * Base URL for links in emails and Stripe redirects. In production NEXT_PUBLIC_APP_URL is
+ * REQUIRED: guessing from x-forwarded-host / host lets a spoofed Host header put an attacker's
+ * domain into quote emails (host-header poisoning). Dev / preview may fall back to the request.
+ */
 export async function getAppUrl(): Promise<string> {
   const env = process.env.NEXT_PUBLIC_APP_URL
-  if (env && !env.includes('placeholder')) return env.replace(/\/$/, '')
+  if (env && !env.includes('placeholder') && /^https?:\/\//.test(env)) return env.replace(/\/$/, '')
+  if (process.env.NODE_ENV === 'production' && process.env.DEMO_MODE !== '1' && !isDemoMode()) {
+    throw new Error('NEXT_PUBLIC_APP_URL must be set in production (e.g. https://megatarps.com)')
+  }
   const h = await headers()
   const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000'
   const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')

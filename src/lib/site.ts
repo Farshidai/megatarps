@@ -12,6 +12,17 @@ const env = (value: string | undefined, fallback: string) => (value && value.tri
 
 export const SITE_URL = 'https://megatarps.com'
 
+// ── Operational promises ─────────────────────────────────────────────────────────
+// Every promise the site makes about timing lives here. Use these constants (or site.claims)
+// instead of typing the text, so one change updates every page, email and the chat prompt.
+// CONFIRM each value with Farshid before launch.
+export const QUOTE_RESPONSE_TIME = 'one business day' // CONFIRM: "we aim to reply within …"
+export const SHIP_WITHIN = '2 business days' // CONFIRM: in-stock / accepted orders usually ship within …
+export const ACH_CLEARING = 'up to 4 business days' // CONFIRM: bank (ACH) payments clear in …
+export const RETURN_WINDOW_DAYS = 30 // CONFIRM: unused, unopened product returnable within N days of delivery
+export const DAMAGE_REPORT_WINDOW = '5 business days of delivery' // CONFIRM: report freight damage within …
+export const REFUND_TIME = '5–10 business days' // CONFIRM: refunds reach the original payment method within …
+
 export const site = {
   name: 'MegaTarps',
   legalName: 'Mega Innovation Group LLC',
@@ -30,7 +41,16 @@ export const site = {
   hours: 'Mon–Fri, 8:00 AM – 5:00 PM Central',
   hoursSchema: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '17:00' }],
   // CONFIRM: quote/email response-time promise (stated as a goal, not a guarantee).
-  responseTime: 'We aim to reply within one business day.',
+  responseTime: `We aim to reply within ${QUOTE_RESPONSE_TIME}.`,
+  // CONFIRM: see the constants above
+  claims: {
+    quoteResponse: QUOTE_RESPONSE_TIME,
+    shipWithin: SHIP_WITHIN,
+    achClearing: ACH_CLEARING,
+    returnWindowDays: RETURN_WINDOW_DAYS,
+    damageReportWindow: DAMAGE_REPORT_WINDOW,
+    refundTime: REFUND_TIME,
+  },
 
   city: 'Kansas City metro',
   region: 'MO',

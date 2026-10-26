@@ -29,7 +29,9 @@ function newOrderNumber() {
 
 function appOrigin(request: Request) {
   const env = process.env.NEXT_PUBLIC_APP_URL
-  if (env && /^https?:\/\//.test(env)) return env.replace(/\/$/, '')
+  if (env && /^https?:\/\//.test(env) && !env.includes('placeholder')) return env.replace(/\/$/, '')
+  // production must not build Stripe redirect URLs from the request's Host header
+  if (process.env.NODE_ENV === 'production' && !isDemoMode()) throw new Error('NEXT_PUBLIC_APP_URL must be set in production')
   return new URL(request.url).origin
 }
 
@@ -140,7 +142,13 @@ export async function POST(request: Request) {
 
   // 2) Stripe Checkout Session with server prices only.
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-  const origin = appOrigin(request)
+  let origin: string
+  try {
+    origin = appOrigin(request)
+  } catch (e) {
+    console.error('checkout:', (e as Error).message)
+    return Response.json({ error: 'Checkout is not configured. Please call us to order.' }, { status: 503 })
+  }
   const params: SessionCreateParams = {
     mode: 'payment',
     payment_method_types: ['card', 'us_bank_account'],

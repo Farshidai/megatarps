@@ -35,7 +35,7 @@ export default async function AdminQuoteDetail({ params }: { params: Promise<{ i
     getAdminNotes(quote.id),
     getPickerCatalog(),
     getContractorDiscountPercent(quote.contractor_id),
-    getAppUrl(),
+    getAppUrl().catch(() => ''), // NEXT_PUBLIC_APP_URL missing in production → relative link
     isContractorApproved(quote.contractor_id),
     quote.contractor_id ? adminListContractPrices(quote.contractor_id) : Promise.resolve([]),
   ])

@@ -3,6 +3,7 @@
 // contractor_profiles row as `pending` with the service role, stores the optional
 // resale certificate in the private `resale-certificates` bucket, and emails
 // the applicant + admin. All validation is repeated here (never trust the browser).
+import { rateLimit } from '@/lib/rate-limit'
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/admin'
@@ -45,6 +46,8 @@ const fail = (status: number, error: string, errors?: FieldErrors) =>
   NextResponse.json({ ok: false, error, errors }, { status })
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(req, 'apply')
+  if (limited) return limited
   let form: FormData
   try {
     form = await req.formData()
