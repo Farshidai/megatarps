@@ -1,6 +1,8 @@
 // Slim product shape sent to the browser for cart / quick-order pricing display.
-// Safe to import from client components (no cost data).
+// Safe to import from client components: no cost, no price floor. Prices arrive as a
+// server-computed schedule for the signed-in buyer (see priceSchedule in src/lib/pricing.ts).
 import type { Product } from '@/types'
+import type { PricePoint } from '@/lib/pricing'
 import type { CartItem } from './types'
 import { productWeightLb } from '@/lib/freight'
 
@@ -21,14 +23,14 @@ export interface CatalogEntry {
   units_per_case: number | null
   units_per_half_pallet: number | null
   units_per_full_pallet: number | null
-  /** price floor (cost × 1.15) — engine never prices below this */
-  min_unit_price_cents: number | null
+  /** unit price by quantity for this buyer (server-computed; empty for quote-only) */
+  prices: PricePoint[]
   /** ship weight per unit in lb (null = unknown → freight quote) */
   unit_weight_lb: number | null
 }
 
-export function toCatalogEntry(p: Product): CatalogEntry {
-  const extra = p as Product & { units_per_case?: number | null; min_unit_price_cents?: number | null }
+export function toCatalogEntry(p: Product, prices: PricePoint[] = []): CatalogEntry {
+  const extra = p as Product & { units_per_case?: number | null }
   return {
     id: p.id,
     sku: p.xpose_sku,
@@ -46,7 +48,7 @@ export function toCatalogEntry(p: Product): CatalogEntry {
     units_per_case: extra.units_per_case ?? null,
     units_per_half_pallet: p.units_per_half_pallet ?? null,
     units_per_full_pallet: p.units_per_full_pallet ?? null,
-    min_unit_price_cents: extra.min_unit_price_cents ?? null,
+    prices,
     unit_weight_lb: productWeightLb(p as Parameters<typeof productWeightLb>[0]),
   }
 }

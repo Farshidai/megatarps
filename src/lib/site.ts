@@ -12,6 +12,17 @@ const env = (value: string | undefined, fallback: string) => (value && value.tri
 
 export const SITE_URL = 'https://megatarps.com'
 
+// ── Operational promises ─────────────────────────────────────────────────────────
+// Every promise the site makes about timing lives here. Use these constants (or site.claims)
+// instead of typing the text, so one change updates every page, email and the chat prompt.
+// CONFIRM each value with Farshid before launch.
+export const QUOTE_RESPONSE_TIME = 'one business day' // CONFIRM: "we aim to reply within …"
+export const SHIP_WITHIN = '2 business days' // CONFIRM: in-stock / accepted orders usually ship within …
+export const ACH_CLEARING = 'up to 4 business days' // CONFIRM: bank (ACH) payments clear in …
+export const RETURN_WINDOW_DAYS = 30 // CONFIRM: unused, unopened product returnable within N days of delivery
+export const DAMAGE_REPORT_WINDOW = '5 business days of delivery' // CONFIRM: report freight damage within …
+export const REFUND_TIME = '5–10 business days' // CONFIRM: refunds reach the original payment method within …
+
 export const site = {
   name: 'MegaTarps',
   legalName: 'Mega Innovation Group LLC',
@@ -30,7 +41,16 @@ export const site = {
   hours: 'Mon–Fri, 8:00 AM – 5:00 PM Central',
   hoursSchema: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '17:00' }],
   // CONFIRM: quote/email response-time promise (stated as a goal, not a guarantee).
-  responseTime: 'We aim to reply within one business day.',
+  responseTime: `We aim to reply within ${QUOTE_RESPONSE_TIME}.`,
+  // CONFIRM: see the constants above
+  claims: {
+    quoteResponse: QUOTE_RESPONSE_TIME,
+    shipWithin: SHIP_WITHIN,
+    achClearing: ACH_CLEARING,
+    returnWindowDays: RETURN_WINDOW_DAYS,
+    damageReportWindow: DAMAGE_REPORT_WINDOW,
+    refundTime: REFUND_TIME,
+  },
 
   city: 'Kansas City metro',
   region: 'MO',
@@ -56,9 +76,9 @@ export function mailHref(subject?: string): string {
 export const JOBS = [
   { slug: 'roofing', label: 'Roofing', blurb: 'Storm dry-in and roof cover. 12–16 mil, sewn-in rope edge.', image: '/images/hero-jobsite.webp' },
   { slug: 'construction', label: 'Construction', blurb: 'Site cover, debris, material storage. 10–16 mil.', image: '/images/category-construction.webp' },
-  { slug: 'agriculture', label: 'Agriculture', blurb: 'Hay, grain and equipment cover. UV-treated 12–20 mil.', image: '/images/category-agriculture.webp' },
-  { slug: 'warehouse', label: 'Warehouse', blurb: 'Pallet, rack and dust cover. 7–10 mil by the case.', image: '/images/category-industrial.webp' },
-  { slug: 'scaffolding', label: 'Scaffolding', blurb: 'Enclosures and wind screens. Fire-retardant, mesh, clear.', image: '/images/category-general.webp' },
+  { slug: 'agriculture', label: 'Agriculture', blurb: 'Hay, grain and equipment cover. UV-treated 12–20 mil.', image: '/images/pallet-20x20-10mil.jpg' } /* was category-agriculture.webp: baked-in "DELIVERED FAST" */,
+  { slug: 'warehouse', label: 'Warehouse', blurb: 'Pallet, rack and dust cover. 7–10 mil by the case.', image: '/images/pallet-20x30.jpg' } /* was category-industrial.webp: baked-in "ALWAYS HAVE STOCK / Fast delivery" */,
+  { slug: 'scaffolding', label: 'Scaffolding', blurb: 'Enclosures and wind screens. Fire-retardant, mesh, clear.', image: '/images/tarp-10mil-reversible.jpg' } /* was category-general.webp: baked-in "stops leaks instantly" */,
 ] as const
 
 export type JobSlug = (typeof JOBS)[number]['slug']

@@ -4,6 +4,7 @@ import { getQuoteByToken, logViewOnce } from '@/lib/quotes/store'
 import { netTermsFor, termsLabel } from '@/lib/quotes/auth'
 import { DELIVERY_LABELS, STATUS_LABELS, STATUS_STYLES, effectiveStatus } from '@/lib/quotes/types'
 import { formatPrice } from '@/lib/utils'
+import { site } from '@/lib/site'
 import { QuoteActions } from './QuoteActions'
 import type { Metadata } from 'next'
 
@@ -38,6 +39,10 @@ export default async function QuotePage({
   const net = status === 'quoted' ? await netTermsFor(q) : { allowed: false, terms: 'prepaid' }
   const addr = q.shipping_address
   const units = q.items.reduce((n, i) => n + i.quantity, 0)
+  // ?paid=1 is only Stripe's redirect hint, never proof. "Paid" = the webhook confirmed the money
+  // (the quote is 'ordered' and wasn't accepted on Net terms, which is invoiced, not paid).
+  const isPaid = status === 'ordered' && !!q.payment_method && !/^net/i.test(q.payment_method)
+  const paymentSubmitted = !!sp.paid && status === 'accepted'
 
   return (
     <div className="bg-slate-100 min-h-screen py-6 sm:py-10 print:bg-white print:p-0 print:min-h-0">
@@ -55,9 +60,14 @@ export default async function QuotePage({
       <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 print:max-w-none print:px-0">
         {/* status banners */}
         <div className="print:hidden space-y-3 mb-5">
-          {sp.paid && (status === 'ordered' || status === 'accepted') && (
+          {sp.paid && isPaid && (
             <Banner tone="green" icon={<CheckCircle2 className="w-5 h-5" aria-hidden />} title="Payment received — thank you!">
-              {status === 'ordered' ? 'Your order is confirmed. We’ll email tracking and the freight PRO number when it ships.' : 'We’re confirming your payment with Stripe. Your order confirmation will arrive by email shortly.'}
+              Your order is confirmed. We’ll email tracking and the freight PRO number when it ships.
+            </Banner>
+          )}
+          {paymentSubmitted && (
+            <Banner tone="amber" icon={<Clock className="w-5 h-5" aria-hidden />} title="Payment submitted — waiting for it to clear">
+              Card payments confirm within a few minutes; bank (ACH) payments take {site.claims.achClearing}. We’ll email your order confirmation as soon as the payment clears.
             </Banner>
           )}
           {sp.canceled && status === 'accepted' && (
@@ -67,7 +77,7 @@ export default async function QuotePage({
           )}
           {status === 'pending' && (
             <Banner tone="amber" icon={<Clock className="w-5 h-5" aria-hidden />} title="We’re pricing your request">
-              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within one business day.
+              Our team is confirming stock and LTL freight to {q.delivery_zip ?? 'your ZIP'}. You’ll get an email at {q.guest_email} as soon as your quote is ready — usually within {site.claims.quoteResponse}.
             </Banner>
           )}
           {status === 'expired' && (
@@ -80,7 +90,7 @@ export default async function QuotePage({
               {q.declined_reason ? `Reason: “${q.declined_reason}”. ` : ''}Need a revised quote? Call (913) 313-2691.
             </Banner>
           )}
-          {status === 'ordered' && !sp.paid && (
+          {status === 'ordered' && !(sp.paid && isPaid) && (
             <Banner tone="green" icon={<Package className="w-5 h-5" aria-hidden />} title="This quote is now an order">
               Accepted {fmtDate(q.accepted_at)}. We’ll email tracking when it ships.
             </Banner>
@@ -101,7 +111,7 @@ export default async function QuotePage({
                 </p>
               </div>
               <div className="sm:text-right">
-                <p className="text-3xl font-black tracking-tight text-slate-900">QUOTE</p>
+                <h1 className="text-3xl font-black tracking-tight text-slate-900">QUOTE<span className="sr-only"> {q.quote_number}</span></h1>
                 <dl className="mt-2 text-sm grid grid-cols-[auto_auto] sm:justify-end gap-x-4 gap-y-0.5">
                   <dt className="text-slate-500">Quote #</dt><dd className="font-mono font-bold text-slate-900">{q.quote_number}</dd>
                   <dt className="text-slate-500">Date</dt><dd>{fmtDate(q.sent_at ?? q.created_at, 'medium')}</dd>
@@ -194,8 +204,8 @@ export default async function QuotePage({
                 <li>Prices are in US dollars and valid until the date shown, subject to stock at time of acceptance.</li>
                 <li>Freight is LTL truck to the delivery type shown. Liftgate, residential and limited-access deliveries must be requested before shipment; reclassification fees from the carrier are billed at cost.</li>
                 <li>Inspect pallets on arrival and note any damage on the carrier’s bill of lading before signing.</li>
-                <li>Payment by card at acceptance, or on Net terms for approved wholesale accounts. Orders typically ship within 2 business days of payment or approval.</li>
-                <li>Unused, unopened product may be returned within 30 days; freight is non-refundable. Custom and pallet orders are final sale unless defective.</li>
+                <li>Payment by card at acceptance, or on Net terms for approved wholesale accounts. Orders typically ship within {site.claims.shipWithin} of payment or approval.</li>
+                <li>Unused, unopened product may be returned within {site.claims.returnWindowDays} days; freight is non-refundable. Custom and pallet orders are final sale unless defective.</li>
               </ol>
               <p className="mt-4 text-slate-400">Questions about this quote? Call (913) 313-2691 or reply to your quote email and reference {q.quote_number}.</p>
             </section>
@@ -209,7 +219,7 @@ export default async function QuotePage({
               totalCents={q.total_cents ?? 0}
               validUntil={q.valid_until}
               netTerms={net.allowed ? termsLabel(net.terms) : null}
-              paid={!!sp.paid}
+              paid={isPaid || paymentSubmitted}
             />
           </aside>
         </div>

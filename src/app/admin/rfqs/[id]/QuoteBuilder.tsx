@@ -1,5 +1,6 @@
 'use client'
 
+import { SHIP_WITHIN } from '@/lib/site'
 import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Lock, RotateCcw, Save, Send, Trash2, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
@@ -235,7 +236,7 @@ export function QuoteBuilder({ quoteId, status, products, rules, wholesalePct, a
           <div>
             <label htmlFor="customer_message" className="block text-xs font-semibold text-slate-600 mb-1">Message to customer <span className="font-normal text-slate-400">(shown on the quote and in the email)</span></label>
             <textarea id="customer_message" rows={4} disabled={!editable} value={message} onChange={(e) => setMessage(e.target.value)}
-              placeholder="Thanks for the opportunity — freight is LTL with liftgate, ships within 2 business days of acceptance."
+              placeholder={`Thanks for the opportunity — freight is LTL with liftgate, ships within ${SHIP_WITHIN} of acceptance.`}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 disabled:bg-slate-50" />
           </div>
           <div>

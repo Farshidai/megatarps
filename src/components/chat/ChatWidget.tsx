@@ -1,4 +1,5 @@
 'use client'
+import { parseChatMarkdown } from '@/lib/chat-markdown'
 import { site } from '@/lib/site'
 
 import { useState, useRef, useEffect, useId } from 'react'
@@ -36,17 +37,7 @@ export function splitQuoteBlock(content: string): { text: string; items: QuoteIt
   return { text, items }
 }
 
-const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
-
-function parseMarkdown(text: string): string {
-  // escape first, then apply a tiny safe subset of markdown; links only to site paths or https
-  return escapeHtml(text)
-    .replace(/\[([^\]]+)\]\(((?:\/|https:\/\/)[^)\s]*)\)/g, '<a href="$2" class="text-orange-600 underline hover:text-orange-700">$1</a>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
-    .replace(/(^|\s)_([^_\n]+)_/g, '$1<em class="text-slate-500">$2</em>')
-    .replace(/\n/g, '<br>')
-}
+const parseMarkdown = parseChatMarkdown // safe subset: same-site paths or https only (src/lib/chat-markdown.ts)
 
 export function quoteHref(items: QuoteItem[]) {
   const p = new URLSearchParams({ from: 'chat', items: items.map((i) => `${i.sku}:${i.qty}`).join(',') })

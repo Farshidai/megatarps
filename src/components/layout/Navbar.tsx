@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { site, telHref } from '@/lib/site'
 import { useState } from 'react'
-import { Menu, X, Phone, ChevronDown, FileText, Search, Zap, BadgeCheck } from 'lucide-react'
+import { Menu, X, Phone, ChevronDown, FileText, Search, Zap, BadgeCheck, UserRound } from 'lucide-react'
+import { useAccountState } from './useAccountState'
 import { CartButton } from '@/components/cart/CartButton'
 import { CartDrawer } from '@/components/cart/CartDrawer'
 
@@ -25,6 +26,8 @@ const productTypes = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
+  const account = useAccountState()
+  const signedIn = account?.signedIn === true
 
   return (
     <header className="bg-white/85 backdrop-blur-lg border-b border-slate-200/70 sticky top-0 z-50">
@@ -129,9 +132,19 @@ export function Navbar() {
             <button className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors" aria-label="Search">
               <Search className="w-4 h-4" />
             </button>
-            <Link href="/account" className="hidden lg:flex items-center px-3 h-9 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-sm font-semibold">
-              Login
-            </Link>
+            {signedIn ? (
+              <Link href="/account" data-testid="nav-account" className="hidden lg:flex items-center gap-1.5 px-2.5 h-9 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors whitespace-nowrap" title={account?.name ? `Signed in as ${account.name}` : 'Your account'}>
+                <UserRound className="w-4 h-4 text-orange-500 shrink-0" aria-hidden />
+                <span className="flex flex-col leading-tight text-left">
+                  {account?.name && <span className="text-[10px] text-slate-500 font-medium max-w-[6rem] truncate">Hi, {account.name}</span>}
+                  <span className="text-sm font-semibold">Account</span>
+                </span>
+              </Link>
+            ) : (
+              <Link href="/account/login" data-testid="nav-login" className="hidden lg:flex items-center px-3 h-9 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-sm font-semibold">
+                Login
+              </Link>
+            )}
             <Link
               href="/bulk-quote"
               className="hidden lg:inline-flex items-center gap-1.5 whitespace-nowrap bg-gradient-to-b from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-sm px-4 h-9 rounded-lg transition-all shadow-md shadow-orange-500/25 hover:shadow-orange-500/40"
@@ -181,8 +194,9 @@ export function Navbar() {
             <Link href="/contact" className="flex items-center gap-2 px-3 py-2.5 text-slate-800 font-semibold hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
               Contact
             </Link>
-            <Link href="/account" className="flex items-center gap-2 px-3 py-2.5 text-slate-600 hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
-              Contractor Login
+            <Link href={signedIn ? '/account' : '/account/login'} className="flex items-center gap-2 px-3 py-2.5 text-slate-600 hover:bg-orange-50 rounded-lg" onClick={() => setMobileOpen(false)}>
+              <UserRound className="w-4 h-4 text-orange-500" aria-hidden />
+              {signedIn ? `Account${account?.name ? ` (${account.name})` : ''}` : 'Contractor Login'}
             </Link>
             <Link
               href="/bulk-quote"

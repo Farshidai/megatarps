@@ -41,6 +41,9 @@ const out = {
   product_lines: await q('select * from product_lines order by id'),
   products: await q('select * from products order by width_ft, length_ft'),
   pricing_rules: await q('select * from pricing_rules where active order by min_quantity'),
+  // admin-only reference prices (Reprice from market, market panel); server-side only in demo mode
+  market_observations: await q(`select sku, source, kind, units, price_cents, per_unit_cents, url, note, checked_at::text as checked_at
+    from market_observations order by sku, checked_at desc, kind, units`).catch(() => []),
 }
 writeFileSync('src/data/demo-catalog.json', JSON.stringify(out, null, 1))
-console.log(`demo-catalog.json: ${out.products.length} products, ${out.product_lines.length} lines, ${out.pricing_rules.length} rules`)
+console.log(`demo-catalog.json: ${out.products.length} products, ${out.product_lines.length} lines, ${out.pricing_rules.length} rules, ${out.market_observations.length} market observations`)

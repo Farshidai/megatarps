@@ -1,4 +1,5 @@
 'use client'
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import { site } from '@/lib/site'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -6,7 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Plus, Trash2, Send, Truck, CalendarDays, MapPin, CheckCircle2, ShoppingCart, Bot, Loader2, Package } from 'lucide-react'
 import { CART_STORAGE_KEY, type CartItem } from '@/lib/cart/types'
-import { unitPriceCents, type PricingRule } from '@/lib/pricing'
+import { scheduleUnitPrice } from '@/lib/price-schedule'
 import { formatPrice } from '@/lib/utils'
 import { ProductPicker } from '@/components/quotes/ProductPicker'
 import { DELIVERY_LABELS, DELIVERY_TYPES, type DeliveryType, type PickerProduct } from '@/lib/quotes/types'
@@ -27,14 +28,14 @@ const inputCls =
   'w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 aria-[invalid=true]:border-red-400'
 
 interface Props {
+  /** each with a server-computed price schedule (no floor / cost in the browser) */
   products: PickerProduct[]
-  rules: PricingRule[]
   defaultEmail?: string | null
 }
 
 type Source = 'form' | 'cart' | 'chat' | 'product'
 
-export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
+export function BulkQuoteForm({ products, defaultEmail }: Props) {
   const searchParams = useSearchParams()
   const bySku = useMemo(() => new Map(products.map((p) => [p.sku.toLowerCase(), p])), [products])
   const byId = useMemo(() => new Map(products.map((p) => [p.id, p])), [products])
@@ -117,10 +118,10 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
       if (!l.product_id && !l.description.trim()) continue
       units += l.quantity
       if (!p || p.quote_only) quoteOnly++
-      else cents += unitPriceCents(p, l.quantity, rules) * l.quantity
+      else cents += scheduleUnitPrice(p.prices, l.quantity) * l.quantity
     }
     return { cents, quoteOnly, units }
-  }, [lines, byId, rules])
+  }, [lines, byId])
 
   const filledLines = lines.filter((l) => l.product_id || l.description.trim())
   const today = new Date().toISOString().slice(0, 10)
@@ -171,7 +172,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
           Request <span className="font-mono font-bold text-slate-900">{result.quote_number}</span> is with our team.
         </p>
         <p className="text-slate-600 mb-6">
-          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong> within one business day.
+          We&apos;ll email a priced quote with LTL freight to <strong>{form.email}</strong>, usually within {QUOTE_RESPONSE_TIME}.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {result.token && (
@@ -209,7 +210,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
           <div className="space-y-3">
             {lines.map((l, i) => {
               const p = l.product_id ? byId.get(l.product_id) : undefined
-              const unit = p && !p.quote_only ? unitPriceCents(p, l.quantity, rules) : 0
+              const unit = p && !p.quote_only ? scheduleUnitPrice(p.prices, l.quantity) : 0
               return (
                 <div key={l.key} className="grid grid-cols-12 gap-2 sm:gap-3 items-end bg-slate-50/60 sm:bg-transparent rounded-lg p-2 sm:p-0">
                   <div className="col-span-12 sm:col-span-7">
@@ -422,7 +423,7 @@ export function BulkQuoteForm({ products, rules, defaultEmail }: Props) {
             {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden /> : <Send className="w-5 h-5" aria-hidden />}
             {submitting ? 'Sending…' : 'Request quote'}
           </button>
-          <p className="text-center text-xs text-slate-400">Priced quote within 1 business day · No obligation</p>
+          <p className="text-center text-xs text-slate-400">Priced quote, usually within {QUOTE_RESPONSE_TIME} · No obligation</p>
         </div>
       </aside>
     </form>

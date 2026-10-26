@@ -41,7 +41,7 @@ export function demoContractPrices(): ContractPriceRow[] {
       created_at: day(-14),
       updated_at: day(-14),
     }),
-    // 20x30 10-mil: normal account price $35.88 (guest $38.30 − 8%, held at the cost floor);
+    // 20x30 10-mil: normal account price $38.30 below a pallet (no extra % on pallet-priced items);
     // contract $34.50 for 5+. Below 5 units the normal price applies.
     sample('MT-20X30-10MIL', {
       id: 'demo-cp-0002',

@@ -1,10 +1,12 @@
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 import type { Metadata } from 'next'
 import { CheckCircle, Truck, ShieldCheck, Clock, Flame } from 'lucide-react'
 import { getProductBySlug, getRelatedProducts, getPricingRules } from '@/lib/products'
-import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents } from '@/lib/pricing'
+import { isQuoteOnly, priceTiers, palletTiers, lowestUnitPriceCents, priceSchedule, accountDiscountApplies } from '@/lib/pricing'
+import { priceOptionsFor } from '@/lib/cart/server'
 import { getAccountPricing } from '@/lib/accounts'
 import {
   toPublicProduct, seoTitle, seoDescription, gradeLabel, gaugeLabel, dimsLabel, isAccessory, isPalletSku, type CatalogProduct,
@@ -21,10 +23,12 @@ interface PageProps {
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://megatarps.com').replace(/\/$/, '')
 
-// generateMetadata and the page share one lookup per request
+// generateMetadata and the page share one lookup per request.
+// The product carries the price floor (server-side pricing only). Anything that crosses to a
+// client component gets toPublicProduct() (no floor / cost) or a server-computed schedule.
 const loadProduct = cache(async (slug: string) => {
   const p = await getProductBySlug(slug)
-  return p ? (toPublicProduct(p) as CatalogProduct) : null
+  return p ? (p as CatalogProduct) : null
 })
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -49,11 +53,14 @@ export default async function ProductPage({ params }: PageProps) {
   const accountApproved = account.status === 'approved'
   if (!product) notFound()
 
-  const related = (await getRelatedProducts(product)).map(toPublicProduct)
+  const accountOpts = priceOptionsFor(account)
+  const tableOpts = { wholesaleDiscountPercent: accountOpts.wholesaleDiscountPercent ?? 0 }
+  const related = await getRelatedProducts(product) // server-rendered cards only
+  const schedule = priceSchedule(product, rules, accountOpts)
   const pl = product.product_line
   const quoteOnly = isQuoteOnly(product)
-  const tiers = priceTiers(product, rules)
-  const low = quoteOnly ? 0 : lowestUnitPriceCents(product, rules)
+  const tiers = priceTiers(product, rules, tableOpts)
+  const low = quoteOnly ? 0 : lowestUnitPriceCents(product, rules, tableOpts)
   const lowTier = tiers.find((t) => t.unit_price_cents === low)
   const acc = isAccessory(product)
   const pallets = palletTiers(product, rules)
@@ -217,9 +224,14 @@ export default async function ProductPage({ params }: PageProps) {
             )}
 
             <div className="grid gap-5 xl:grid-cols-1">
-              <TierPriceTable product={product} rules={rules} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
+              <TierPriceTable product={product} rules={rules} opts={tableOpts} accountApproved={accountApproved} contractPrices={accountApproved ? account.contractPrices : undefined} />
               <div className="rounded-2xl ring-1 ring-slate-200 p-4 sm:p-5">
-                <AddToCartOrRFQ product={product} rules={rules} />
+                <AddToCartOrRFQ
+                  product={toPublicProduct(product)}
+                  schedule={schedule}
+                  wholesaleDiscountPercent={accountApproved && accountDiscountApplies(product, rules) ? account.wholesaleDiscountPercent : 0}
+                  contractPrices={accountApproved ? account.contractPrices ?? [] : []}
+                />
               </div>
             </div>
 
@@ -236,7 +248,7 @@ export default async function ProductPage({ params }: PageProps) {
             <div className="mt-5 grid grid-cols-3 gap-2.5">
               {[
                 { icon: Truck, label: 'Kansas City based · Midwest freight' },
-                { icon: Clock, label: 'Quotes within 1 business day' },
+                { icon: Clock, label: `Quotes usually within ${QUOTE_RESPONSE_TIME}` },
                 { icon: ShieldCheck, label: 'Net terms for approved accounts' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center text-center gap-1.5 bg-slate-50 rounded-xl p-3">

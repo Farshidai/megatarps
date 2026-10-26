@@ -1,6 +1,8 @@
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
 import { Suspense } from 'react'
 import { BulkQuoteForm } from '@/components/forms/BulkQuoteForm'
-import { getPickerCatalog } from '@/lib/quotes/catalog'
+import { getPublicPickerCatalog } from '@/lib/quotes/catalog'
+import { priceOptionsFor } from '@/lib/cart/server'
 import { getAccountPricing } from '@/lib/accounts'
 import { Clock, Truck, BadgeDollarSign } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -8,11 +10,12 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Request a Wholesale Quote — Pallets & Bulk Tarps',
   description:
-    'Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote, usually within one business day.',
+    `Get wholesale pricing on bulk and pallet tarp orders, with LTL freight to your dock, jobsite or farm. Priced quote, usually within ${QUOTE_RESPONSE_TIME}.`,
 }
 
 export default async function BulkQuotePage() {
-  const [{ products, rules }, account] = await Promise.all([getPickerCatalog(), getAccountPricing()])
+  const account = await getAccountPricing()
+  const { products } = await getPublicPickerCatalog(priceOptionsFor(account))
 
   return (
     <div className="bg-slate-50 min-h-screen py-10 sm:py-12">
@@ -27,7 +30,7 @@ export default async function BulkQuotePage() {
 
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           {[
-            { icon: Clock, title: 'Fast quote turnaround', desc: 'We aim to reply within one business day' },
+            { icon: Clock, title: 'Fast quote turnaround', desc: `We aim to reply within ${QUOTE_RESPONSE_TIME}` },
             { icon: Truck, title: 'LTL freight quoted', desc: 'Dock, liftgate or jobsite delivery' },
             { icon: BadgeDollarSign, title: 'Accept & pay online', desc: 'Card, or Net terms for approved accounts' },
           ].map(({ icon: Icon, title, desc }) => (
@@ -43,7 +46,7 @@ export default async function BulkQuotePage() {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8">
           <Suspense>
-            <BulkQuoteForm products={products} rules={rules} defaultEmail={account.email} />
+            <BulkQuoteForm products={products} defaultEmail={account.email} />
           </Suspense>
         </div>
       </div>

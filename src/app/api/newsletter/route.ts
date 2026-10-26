@@ -1,3 +1,4 @@
+import { rateLimit } from '@/lib/rate-limit'
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { isDemoMode } from '@/lib/demo'
@@ -26,6 +27,8 @@ async function readBody(req: Request): Promise<Record<string, string>> {
 }
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, 'newsletter')
+  if (limited) return limited
   const body = await readBody(req)
   const email = (body.email ?? '').trim().toLowerCase()
   const source = SOURCES.has(body.source ?? '') ? body.source : 'homepage'

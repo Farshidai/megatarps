@@ -92,21 +92,28 @@ export function parsePriceCsv(text: string): CsvParseResult {
     if (!sku) { errors.push(`Line ${line}: missing SKU`); return }
     if (seen.has(sku)) { errors.push(`Line ${line}: duplicate SKU ${sku} (later row ignored)`); return }
     seen.add(sku)
+    // A row with ANY invalid cell is rejected as a whole: applying only its valid cells
+    // (e.g. a new retail with a mistyped cost) could leave the product priced below cost.
     const u: CsvUpdate = { sku }
+    const rowErrors: string[] = []
     if (iCost >= 0) {
       const v = dollarsToCents(r[iCost] ?? '')
-      if (Number.isNaN(v)) errors.push(`Line ${line} (${sku}): cost "${r[iCost]}" is not a dollar amount`)
+      if (Number.isNaN(v)) rowErrors.push(`cost "${r[iCost]}" is not a dollar amount`)
       else if (v !== undefined) u.cost_cents = v
     }
     if (iRetail >= 0) {
       const v = dollarsToCents(r[iRetail] ?? '')
-      if (Number.isNaN(v)) errors.push(`Line ${line} (${sku}): retail "${r[iRetail]}" is not a dollar amount`)
+      if (Number.isNaN(v)) rowErrors.push(`retail "${r[iRetail]}" is not a dollar amount`)
       else if (v !== undefined) u.retail_cents = v
     }
     if (iStock >= 0) {
       const v = parseBool(r[iStock] ?? '')
-      if (v === null) errors.push(`Line ${line} (${sku}): in_stock "${r[iStock]}" should be true/false`)
+      if (v === null) rowErrors.push(`in_stock "${r[iStock]}" should be true/false`)
       else if (v !== undefined) u.in_stock = v
+    }
+    if (rowErrors.length) {
+      errors.push(`Line ${line} (${sku}): ${rowErrors.join('; ')} — whole row skipped`)
+      return
     }
     if (u.cost_cents !== undefined || u.retail_cents !== undefined || u.in_stock !== undefined) updates.push(u)
   })

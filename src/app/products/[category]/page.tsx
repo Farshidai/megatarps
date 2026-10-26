@@ -16,7 +16,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const filtered = Object.keys(parseCatalogQuery(await searchParams)).length > 0
   return {
     title: `${label} Tarps — Wholesale & Bulk`,
-    description: `Heavy-duty tarps and supplies for ${label.toLowerCase()}. Poly, canvas, mesh and fire-retardant options with volume pricing from 5 units and pallet quotes.`,
+    description: `Heavy-duty tarps and supplies for ${label.toLowerCase()}. Poly, canvas, mesh and fire-retardant options with per-tarp prices online, pallet pricing for approved accounts and pallet quotes.`,
     alternates: { canonical: `/products/${category}` },
     robots: filtered ? { index: false, follow: true } : undefined,
   }

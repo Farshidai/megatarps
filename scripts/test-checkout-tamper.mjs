@@ -35,7 +35,7 @@ async function checkout(body, raw = false) {
 const hasPalletRules = catalog.pricing_rules.some((r) => r.unit === 'pallet' && r.active !== false)
 function expectedUnit(product, qty) {
   let d = 0
-  const palletPriced = hasPalletRules && product.units_per_full_pallet > 0
+  const palletPriced = (hasPalletRules && product.units_per_full_pallet > 0) || product.pack_quantity > 1 // pack / pallet SKUs: no piece tiers
   if (!palletPriced) for (const r of catalog.pricing_rules) {
     if (r.active === false || (r.unit && r.unit !== 'each')) continue
     if (r.tarp_type && r.tarp_type !== product.tarp_type) continue
@@ -49,7 +49,7 @@ function expectedUnit(product, qty) {
 
 // Independent ship-weight + freight expectation (Xpose spec oz/sq yd by mil, placeholder parcel brackets).
 const SPEC = { 5: 3.6, 7: 3.65, 10: 4.25, 12: 6, 16: 8, 20: 11 }
-const weightLb = (p) => (Number(p.shipping_weight_lb) > 0 ? Number(p.shipping_weight_lb) * (p.pack_quantity || 1) : SPEC[p.thickness_mil] && p.width_ft ? (p.width_ft * p.length_ft) / 9 * SPEC[p.thickness_mil] / 16 * (p.pack_quantity || 1) : null)
+const weightLb = (p) => (Number(p.shipping_weight_lb) > 0 ? Number(p.shipping_weight_lb) /* per sellable unit, like productWeightLb */ : SPEC[p.thickness_mil] && p.width_ft ? (p.width_ft * p.length_ft) / 9 * SPEC[p.thickness_mil] / 16 * (p.pack_quantity || 1) : null)
 function expectedFreight(totalLb) {
   const lb = Math.ceil(Math.round(totalLb * 100) / 100)
   if (totalLb <= 20) return 1200 + 40 * lb

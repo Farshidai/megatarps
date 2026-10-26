@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Handshake, FileText } from 'lucide-react'
 import { getAccountPricing } from '@/lib/accounts'
-import { getCartCatalog } from '@/lib/cart/server'
+import { getCartCatalog, getProductsBySkus } from '@/lib/cart/server'
 import { cartItemFromEntry } from '@/lib/cart/catalog-types'
 import { getPricingRules } from '@/lib/products'
 import { unitPriceCents } from '@/lib/pricing'
@@ -15,8 +15,12 @@ export async function ContractPricesList() {
   const account = await getAccountPricing()
   const contracts = account.status === 'approved' ? account.contractPrices ?? [] : []
   if (!contracts.length) return null
-  const [catalog, rules] = await Promise.all([getCartCatalog(contracts.map((c) => c.sku)), getPricingRules()])
+  const skus = contracts.map((c) => c.sku)
+  const rules = await getPricingRules()
+  const [catalog, products] = await Promise.all([getCartCatalog(skus, account, rules), getProductsBySkus(skus)])
   const bySku = new Map(catalog.map((e) => [e.sku.toLowerCase(), e]))
+  // server-side engine (products carry the floor); only the resulting numbers are rendered
+  const productBySku = new Map(products.map((p) => [p.xpose_sku.toLowerCase(), p]))
   const opts = { wholesaleDiscountPercent: account.wholesaleDiscountPercent, accountApproved: true }
 
   return (
@@ -32,7 +36,8 @@ export async function ContractPricesList() {
       <ul className="divide-y divide-slate-100">
         {contracts.map((c) => {
           const e = bySku.get(c.sku.toLowerCase())
-          const normal = e && !e.quote_only ? unitPriceCents(e, c.min_quantity || 1, rules, opts) : null
+          const prod = productBySku.get(c.sku.toLowerCase())
+          const normal = e && prod && !e.quote_only ? unitPriceCents(prod, c.min_quantity || 1, rules, opts) : null
           const savePct = normal && normal > c.unit_price_cents ? Math.round((1 - c.unit_price_cents / normal) * 1000) / 10 : null
           return (
             <li key={`${c.sku}-${c.min_quantity}`} className="px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between" data-testid="account-contract-row">

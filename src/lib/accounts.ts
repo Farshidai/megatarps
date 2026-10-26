@@ -14,7 +14,7 @@ export type AccountStatus = 'guest' | 'pending' | 'approved' | 'rejected'
 
 export interface AccountPricing {
   status: AccountStatus
-  /** extra % off on top of volume tiers — only when status === 'approved' */
+  /** extra % off for products WITHOUT pallet pricing (never stacks on pallet tiers / contract prices) — only when approved */
   wholesaleDiscountPercent: number
   taxExempt: boolean
   /** e.g. 'prepaid' | 'net30' */

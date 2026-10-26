@@ -136,14 +136,14 @@ export default async function AdminAccountDetailPage(props: {
             <h2 id="approve-h" className="font-bold text-slate-900 mb-1 flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-600" aria-hidden /> {isApproved ? 'Update terms' : 'Approve'}
             </h2>
-            <p className="text-xs text-slate-500 mb-4">The discount stacks on top of volume tier pricing.</p>
+            <p className="text-xs text-slate-500 mb-4">Extra discount for items WITHOUT pallet pricing only (it never stacks on pallet tiers or contract prices; the cost floor still applies).</p>
             <form action={approveAccount} className="space-y-4">
               <input type="hidden" name="id" value={a.id} />
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="ap-discount" className="block text-xs font-semibold text-slate-600 mb-1">Discount %</label>
                   <input id="ap-discount" name="wholesale_discount_percent" type="number" min={0} max={50} step={0.5}
-                    defaultValue={isApproved ? Number(a.wholesale_discount_percent) : 5} required className={inputCls} />
+                    defaultValue={isApproved ? Number(a.wholesale_discount_percent) : 0} required className={inputCls} />
                 </div>
                 <div>
                   <label htmlFor="ap-terms" className="block text-xs font-semibold text-slate-600 mb-1">Payment terms</label>

@@ -23,9 +23,7 @@ export function CartDrawer() {
   const { data, loading } = usePricingData(cart.items.map((i) => i.sku), isOpen && cart.items.length > 0)
   const { checkout, loading: checkingOut, error } = useCheckout()
 
-  const rules = data?.rules ?? []
-  const opts = { wholesaleDiscountPercent: data?.wholesaleDiscountPercent ?? 0, accountApproved: data?.accountApproved === true, contractPrices: data?.contractPrices ?? [] }
-  const totals = cartTotals(cart.items, data?.products, rules, opts, data?.freight)
+  const totals = cartTotals(cart.items, data?.products, data?.freight)
   const freightQuote = totals.freight?.method === 'quote'
 
   // close on route change
@@ -116,8 +114,6 @@ export function CartDrawer() {
                     compact
                     item={item}
                     product={data?.products[item.sku]}
-                    rules={rules}
-                    opts={opts}
                     loading={loading}
                     onQty={(q) => cart.setQuantity(item.sku, q)}
                     onRemove={() => cart.removeItem(item.sku)}

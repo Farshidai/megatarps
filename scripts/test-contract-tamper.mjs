@@ -16,7 +16,7 @@ const bySku = (s) => catalog.products.find((p) => p.xpose_sku === s)
 const C1 = { sku: 'MT-30X40-10MIL', cents: 6990, min: 1 }
 const C2 = { sku: 'MT-20X30-10MIL', cents: 3450, min: 5 }
 const OTHER = 'MT-16X20-12MIL' // no contract price
-const WHOLESALE_PCT = 8 // approved demo account
+const WHOLESALE_PCT = 0 // approved demo account (extra % no longer stacks on pallet pricing; demo uses 0%)
 
 let failures = 0
 const ok = (cond, msg, extra = '') => {

@@ -53,16 +53,16 @@ INSERT INTO product_lines VALUES
  '10oz cotton canvas tarp. Water-resistant (not waterproof). Double stitched hem. Breathable — ideal for covering items that need air circulation. Perfect for machinery, vehicles, and materials that should not trap moisture.'),
 
 ('clear-20mil',  'Clear Vinyl Tarps (20 Mil)',      20, 'PVC Vinyl',    NULL,  NULL,  'brass',    24, true, true, true, false, false, false,
- 'Heavy duty 20 mil clear vinyl tarp. Optically super clear for visibility. 100% waterproof. Cold resistant to -30°F. Ideal for enclosures, windbreaks, restaurant patios, and any application where see-through weatherproofing is needed.'),
+ 'Heavy duty 20-mil clear PVC vinyl tarp with brass grommets. See-through, for enclosures, windbreaks and patios where visibility matters.'),
 
 ('clear-30mil',  'Clear Vinyl Tarps (30 Mil)',      30, 'PVC Vinyl',    NULL,  NULL,  'brass',    24, true, true, true, false, false, false,
- 'Super heavy duty 30 mil clear vinyl tarp. Maximum clarity and thickness for permanent installations. 100% waterproof. Cold resistant. Best for commercial enclosures and high-wind environments.'),
+ 'Super heavy duty 30-mil clear PVC vinyl tarp with brass grommets, the thickest clear vinyl we carry. For enclosures and longer-term installations.'),
 
 ('mesh',         'Mesh Tarps',                      NULL, 'Polypropylene', NULL, NULL, 'brass',    24, true, false, true, false, false, false,
- 'Black mesh polypropylene tarp. Double-stitched hems, tear resistant. Provides 60% shade while allowing airflow. Perfect for shade structures, privacy screens, debris containment, dump trucks, and fence covers.'),
+ 'Black polypropylene mesh tarp with double-stitched hems and grommets. About 60% shade while letting air through. Used for shade, privacy screens, debris containment, dump trucks and fence covers.'),
 
 ('fr-clear',     'Fire Retardant Clear Vinyl Tarps', 20, 'PVC Vinyl',   NULL,  NULL,  'brass',    24, true, true, true, true, false, false,
- 'Fire retardant 20 mil clear vinyl tarp. Meets fire code requirements. 100% waterproof. Optically clear. Required for commercial construction in many jurisdictions. Ideal for welding curtains and fire-rated enclosures.'),
+ 'Fire-retardant 20-mil clear PVC vinyl tarp for welding curtains and enclosures. Ask us for the supplier''s fire-test certification before relying on it for a code requirement.'),
 
 ('fr-poly',      'Fire Retardant Poly Tarps',       12, 'Polyethylene', NULL,  NULL,  'aluminum', 18, true, true, true, true, true, true,
  'Fire retardant extra heavy duty white polyethylene tarp. Meets fire retardant specifications. Required for certain commercial and institutional projects. Higher fabric weave count with reinforced construction.');

@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useRef, useState, useTransition } from 'react'
-import { Download, Upload, Save, Undo2, Search, Percent, ImageOff, X, ExternalLink, TrendingDown } from 'lucide-react'
+import { Fragment, useMemo, useRef, useState, useTransition } from 'react'
+import { Download, Upload, Save, Undo2, Search, Percent, ImageOff, X, ExternalLink, TrendingDown, BarChart3 } from 'lucide-react'
+import { RepriceFromMarket, MarketPanel } from './RepriceFromMarket'
 import { saveProductPrices, type ProductPatch, type SaveResult } from './actions'
 import { parsePriceCsv, toPriceCsv, dollarsToCents, resolveSku, type CsvUpdate, type CsvParseResult } from './_lib/csv'
 
@@ -60,6 +61,7 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [belowMarket, setBelowMarket] = useState('10')
   const [charm, setCharm] = useState(false)
+  const [openMarket, setOpenMarket] = useState<Set<string>>(new Set())
   const [pending, start] = useTransition()
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -271,6 +273,25 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
             Set retail = market − {belowMarket || 0}% ({selected.size ? `${selected.size} selected` : `${visible.length} shown`})
           </button>
         </div>
+        <RepriceFromMarket
+          skus={selected.size ? visible.filter((r) => selected.has(r.sku)).map((r) => r.sku) : visible.map((r) => r.sku)}
+          scopeLabel={selected.size ? `${selected.size} selected` : `${visible.length} shown`}
+          onSaved={(updated) => {
+            setRows((prev) => prev.map((r) => (updated[r.sku] != null ? { ...r, retail_cents: updated[r.sku] } : r)))
+            setEdits((prev) => {
+              const out = { ...prev }
+              for (const sku of Object.keys(updated)) {
+                if (out[sku]) {
+                  const rest = { ...out[sku] }
+                  delete rest.retail_cents
+                  if (Object.keys(rest).length) out[sku] = rest
+                  else delete out[sku]
+                }
+              }
+              return out
+            })
+          }}
+        />
         <div className="flex items-center gap-1.5 ml-auto">
           <button type="button" onClick={exportCsv} className="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded-lg ring-1 ring-slate-300 hover:bg-slate-50">
             <Download className="w-4 h-4" aria-hidden /> Export CSV
@@ -348,11 +369,25 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
               const e = edits[r.sku] ?? {}
               const m = marginPct(r.cost_cents, r.retail_cents)
               return (
-                <tr key={r.sku} className={e && Object.keys(e).length ? 'bg-orange-50/40' : 'hover:bg-slate-50'}>
+                <Fragment key={r.sku}>
+                <tr className={e && Object.keys(e).length ? 'bg-orange-50/40' : 'hover:bg-slate-50'}>
                   <td className="pl-3 py-1.5">
                     <input type="checkbox" checked={selected.has(r.sku)} onChange={(ev) => toggleSelect(r.sku, ev.target.checked)} aria-label={`Select ${r.sku}`} className="w-4 h-4 accent-orange-500" />
                   </td>
-                  <td className="px-3 py-1.5 font-mono text-xs text-slate-600 whitespace-nowrap">{r.sku}</td>
+                  <td className="px-3 py-1.5 font-mono text-xs text-slate-600 whitespace-nowrap">
+                    {r.sku}
+                    <button
+                      type="button"
+                      onClick={() => setOpenMarket((prev) => { const n = new Set(prev); if (n.has(r.sku)) n.delete(r.sku); else n.add(r.sku); return n })}
+                      aria-expanded={openMarket.has(r.sku)}
+                      aria-label={`Market prices for ${r.sku}`}
+                      title="Market prices (all sources)"
+                      data-testid="market-toggle"
+                      className={`ml-1.5 inline-flex align-middle p-1 rounded hover:bg-slate-200 ${openMarket.has(r.sku) ? 'bg-slate-200 text-slate-900' : 'text-slate-400'}`}
+                    >
+                      <BarChart3 className="w-3.5 h-3.5" aria-hidden />
+                    </button>
+                  </td>
                   <td className="px-3 py-1.5">
                     <a href={`/product/${r.slug}`} target="_blank" rel="noreferrer" className="font-semibold text-slate-900 hover:text-orange-600 text-xs leading-snug line-clamp-1 max-w-[22rem]">
                       {r.name}
@@ -402,6 +437,10 @@ export function PriceEditor({ initialRows, demo }: { initialRows: EditorRow[]; d
                     <input type="checkbox" checked={r.active} onChange={(ev) => setField(r.sku, 'active', ev.target.checked)} aria-label={`${r.sku} active`} className="w-4 h-4 accent-orange-500" />
                   </td>
                 </tr>
+                {openMarket.has(r.sku) && (
+                  <tr><td colSpan={9} className="p-0"><MarketPanel sku={r.sku} /></td></tr>
+                )}
+                </Fragment>
               )
             })}
           </tbody>

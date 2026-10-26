@@ -9,6 +9,7 @@ import { getAccountPricing } from '@/lib/accounts'
 import { isDemoMode } from '@/lib/demo'
 import { createAdminClient } from '@/lib/supabase/server'
 import { getProductsBySkus, stripeConfigured } from '@/lib/cart/server'
+import { taxSessionParams } from '@/lib/stripe-tax'
 import {
   buildStripeLineItems,
   CheckoutError,
@@ -28,7 +29,9 @@ function newOrderNumber() {
 
 function appOrigin(request: Request) {
   const env = process.env.NEXT_PUBLIC_APP_URL
-  if (env && /^https?:\/\//.test(env)) return env.replace(/\/$/, '')
+  if (env && /^https?:\/\//.test(env) && !env.includes('placeholder')) return env.replace(/\/$/, '')
+  // production must not build Stripe redirect URLs from the request's Host header
+  if (process.env.NODE_ENV === 'production' && !isDemoMode()) throw new Error('NEXT_PUBLIC_APP_URL must be set in production')
   return new URL(request.url).origin
 }
 
@@ -139,7 +142,13 @@ export async function POST(request: Request) {
 
   // 2) Stripe Checkout Session with server prices only.
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-  const origin = appOrigin(request)
+  let origin: string
+  try {
+    origin = appOrigin(request)
+  } catch (e) {
+    console.error('checkout:', (e as Error).message)
+    return Response.json({ error: 'Checkout is not configured. Please call us to order.' }, { status: 503 })
+  }
   const params: SessionCreateParams = {
     mode: 'payment',
     payment_method_types: ['card', 'us_bank_account'],
@@ -158,6 +167,16 @@ export async function POST(request: Request) {
     phone_number_collection: { enabled: true },
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancel?order=${orderNumber}`,
+  }
+
+  // Sales tax: Stripe automatic tax behind STRIPE_AUTOMATIC_TAX=1; tax-exempt approved accounts → exempt customer
+  try {
+    const tax = await taxSessionParams(stripe, account)
+    if (tax.customer) delete params.customer_email // Stripe accepts customer OR customer_email
+    Object.assign(params, tax)
+  } catch (e) {
+    console.error('checkout: tax setup failed', e)
+    return Response.json({ error: 'Could not calculate sales tax. Please try again.' }, { status: 502 })
   }
 
   let session: Stripe.Checkout.Session

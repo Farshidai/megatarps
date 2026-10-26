@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Trash2, TrendingDown, ImageOff } from 'lucide-react'
 import { formatPrice, cn } from '@/lib/utils'
-import { unitPriceCents, isContractPriced, type PricingRule, type PriceOptions } from '@/lib/pricing'
+import { scheduleUnitPrice, scheduleIsContract } from '@/lib/price-schedule'
 import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import type { CartItem } from '@/lib/cart/types'
 import type { CatalogEntry } from '@/lib/cart/catalog-types'
@@ -13,22 +13,20 @@ import { QuantityStepper } from './QuantityStepper'
 
 interface Props {
   item: CartItem
+  /** carries the server-computed price schedule for this buyer */
   product?: CatalogEntry
-  rules: PricingRule[]
-  opts: PriceOptions
   onQty: (qty: number) => void
   onRemove: () => void
   compact?: boolean
   loading?: boolean
 }
 
-export function CartLineRow({ item, product, rules, opts, onQty, onRemove, compact, loading }: Props) {
+export function CartLineRow({ item, product, onQty, onRemove, compact, loading }: Props) {
   const priced = product && !item.quote_only && !product.quote_only
-  const unit = priced ? unitPriceCents(product, item.quantity, rules, opts) : 0
-  const contract = priced ? isContractPriced(product, item.quantity, rules, opts) : false
-  const tierNudge = priced ? nextTier(product, item.quantity, rules, opts) : null
-  // never nudge toward a tier that is not actually cheaper than the price paid now (e.g. a contract price)
-  const nudge = tierNudge && priced && unitPriceCents(product, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
+  const unit = priced ? scheduleUnitPrice(product.prices, item.quantity) : 0
+  const contract = priced ? scheduleIsContract(product.prices, item.quantity) : false
+  // only nudges toward a quantity whose real (server) price is lower than the price paid now
+  const nudge = priced ? nextTier(product.prices, item.quantity) : null
   const href = item.slug ? `/product/${item.slug}` : '#'
   const [imgFailed, setImgFailed] = useState(false)
 

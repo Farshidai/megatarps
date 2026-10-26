@@ -23,7 +23,7 @@ export function StatusBanner({ profile }: { profile: WholesaleProfile | null }) 
 
   if (profile.account_status === 'approved') {
     const items = [
-      { label: 'Wholesale discount', value: `${Number(profile.wholesale_discount_percent)}%`, note: 'on top of volume tiers' },
+      { label: 'Wholesale discount', value: `${Number(profile.wholesale_discount_percent)}%`, note: 'on items without pallet pricing' },
       { label: 'Payment terms', value: paymentTermsLabel(profile.payment_terms).replace(/ \(.*\)/, '') },
       { label: 'Credit limit', value: profile.credit_limit_cents ? formatCents(profile.credit_limit_cents) : '—' },
       { label: 'Tax exempt', value: profile.tax_exempt ? `Yes${profile.resale_cert_state ? ` (${profile.resale_cert_state})` : ''}` : 'No' },

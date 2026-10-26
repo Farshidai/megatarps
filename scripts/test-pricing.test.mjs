@@ -64,7 +64,25 @@ test('approved account below one full pallet pays guest price', () => {
 test('floor: never below min_unit_price_cents (cost × 1.15), even with an extra wholesale %', () => {
   const thin = { ...tarp, retail_price_cents: 3101, min_unit_price_cents: 2691 } // 15x30 10-mil: cost 23.40
   assert.equal(unitPriceCents(thin, 126, RULES, { accountApproved: true }), 2691) // 3101×0.81/0.95 = 2644 → clamped
-  assert.equal(unitPriceCents(tarp, 126, RULES, { accountApproved: true, wholesaleDiscountPercent: 20 }), 7176)
+  // the extra account % applies only to products without pallet pricing; the floor still wins
+  assert.equal(unitPriceCents({ ...plain, min_unit_price_cents: 9000 }, 1, RULES, { accountApproved: true, wholesaleDiscountPercent: 20 }), 9000)
+})
+
+test('account wholesale % never stacks on pallet pricing (pallet-priced products and pack SKUs)', () => {
+  // pallet-priced tarp: 1 pallet = 8709 × 0.9/0.95 = 8251 with or without an extra %
+  assert.equal(unitPriceCents(tarp, 42, RULES, { accountApproved: true, wholesaleDiscountPercent: 10 }), unitPriceCents(tarp, 42, RULES, { accountApproved: true }))
+  assert.equal(unitPriceCents(tarp, 1, RULES, { accountApproved: true, wholesaleDiscountPercent: 10 }), 8709)
+  // plain product: the extra % applies on top of the piece tier
+  assert.equal(unitPriceCents(plain, 1, RULES, { accountApproved: true, wholesaleDiscountPercent: 10 }), 9000)
+  assert.equal(unitPriceCents(plain, 5, RULES, { accountApproved: true, wholesaleDiscountPercent: 10 }), 8280)
+})
+
+test('bulk-pallet / multi-pack SKUs (pack_quantity > 1) get no piece tiers and no extra account %', () => {
+  const hp = { retail_price_cents: 175248, tarp_type: 'poly', thickness_mil: 7, pack_quantity: 72 }
+  assert.equal(unitPriceCents(hp, 5, RULES), 175248)
+  assert.equal(unitPriceCents(hp, 100, RULES), 175248)
+  assert.equal(unitPriceCents(hp, 5, RULES, { accountApproved: true, wholesaleDiscountPercent: 10 }), 175248)
+  assert.equal(priceTiers(hp, RULES).length, 1)
 })
 
 test('ceiling: never above retail', () => {
@@ -86,4 +104,28 @@ test('pallet rules scoped by mil only hit that mil', () => {
   const scoped = [...EACH, ...PALLET.map((r) => ({ ...r, thickness_mil: 7 }))]
   assert.equal(hasPalletPricing(tarp, scoped), false)
   assert.equal(unitPriceCents(tarp, 100, scoped, { accountApproved: true }), Math.round(8709 * 0.75) < 7176 ? 7176 : Math.round(8709 * 0.75))
+})
+
+// ---- server price schedules (what the browser gets instead of the floor) ----
+import { priceSchedule } from '../src/lib/pricing.ts'
+import { scheduleUnitPrice, scheduleIsContract } from '../src/lib/price-schedule.ts'
+import { isContractPriced } from '../src/lib/pricing.ts'
+
+test('priceSchedule: table lookup equals unitPriceCents for every qty 1..500 (guest, approved, contract)', () => {
+  const contract = [{ product_id: null, sku: 'C-1', unit_price_cents: 7000, min_quantity: 10, valid_until: null }]
+  const products = [tarp, plain, { ...tarp, id: 'x', sku: 'C-1' }, { ...tarp, min_unit_price_cents: 8500 }, { ...plain, min_unit_price_cents: 9500 }]
+  const optsList = [{}, { accountApproved: true }, { accountApproved: true, wholesaleDiscountPercent: 5 }, { accountApproved: true, contractPrices: contract }]
+  for (const p of products) for (const opts of optsList) {
+    const s = priceSchedule(p, RULES, opts)
+    for (let q = 1; q <= 500; q++) {
+      assert.equal(scheduleUnitPrice(s, q), unitPriceCents(p, q, RULES, opts), `qty ${q}`)
+      assert.equal(scheduleIsContract(s, q), isContractPriced(p, q, RULES, opts), `contract qty ${q}`)
+    }
+  }
+})
+
+test('priceSchedule: quote-only products have no schedule; the schedule never carries the floor', () => {
+  assert.deepEqual(priceSchedule({ ...plain, retail_price_cents: 0 }, RULES), [])
+  const s = priceSchedule(tarp, RULES, { accountApproved: true })
+  assert.ok(s.every((p) => Object.keys(p).every((k) => ['min_quantity', 'unit_price_cents', 'contract'].includes(k))))
 })

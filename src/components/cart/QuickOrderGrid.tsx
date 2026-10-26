@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Trash2, ClipboardPaste, ShoppingCart, CheckCircle2, AlertTriangle, X } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
-import { unitPriceCents, isContractPriced, type PricingRule, type ContractPrice } from '@/lib/pricing'
+import { scheduleUnitPrice, scheduleIsContract } from '@/lib/price-schedule'
 import { ContractPriceBadge } from '@/components/pricing/ContractPriceBadge'
 import type { CatalogEntry } from '@/lib/cart/catalog-types'
 import { cartItemFromEntry } from '@/lib/cart/catalog-types'
@@ -24,12 +24,10 @@ interface Row {
 }
 
 interface Props {
+  /** Each entry carries its server-computed price schedule for this buyer (display only; checkout re-prices). */
   catalog: CatalogEntry[]
-  rules: PricingRule[]
   wholesaleDiscountPercent: number
   accountApproved?: boolean
-  /** The signed-in approved account's own contract prices (display only; checkout re-prices). */
-  contractPrices?: ContractPrice[]
   freight: FreightConfig
 }
 
@@ -41,9 +39,8 @@ function rowQty(r: Row): number | null {
   return Number.isInteger(n) && n >= 1 && n <= MAX_LINE_QUANTITY ? n : null
 }
 
-export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accountApproved = false, contractPrices = [], freight: freightConfig }: Props) {
+export function QuickOrderGrid({ catalog, wholesaleDiscountPercent, freight: freightConfig }: Props) {
   const cart = useCart()
-  const opts = { wholesaleDiscountPercent, accountApproved, contractPrices }
   const [rows, setRows] = useState<Row[]>(() => [blank(), blank(), blank(), blank(), blank()])
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
@@ -83,7 +80,7 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accou
   }
 
   const ready = rows.filter((r) => r.entry && rowQty(r) && (r.entry.quote_only || r.entry.in_stock))
-  const subtotal = ready.reduce((s, r) => (r.entry!.quote_only ? s : s + unitPriceCents(r.entry!, rowQty(r)!, rules, opts) * rowQty(r)!), 0)
+  const subtotal = ready.reduce((s, r) => (r.entry!.quote_only ? s : s + scheduleUnitPrice(r.entry!.prices, rowQty(r)!) * rowQty(r)!), 0)
   const quoteCount = ready.filter((r) => r.entry!.quote_only).length
   const pricedReady = ready.filter((r) => !r.entry!.quote_only)
   const freight = pricedReady.length
@@ -151,10 +148,9 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accou
           {rows.map((r, idx) => {
             const q = rowQty(r)
             const e = r.entry
-            const unit = e && q && !e.quote_only ? unitPriceCents(e, q, rules, opts) : 0
-            const contract = e && q && !e.quote_only ? isContractPriced(e, q, rules, opts) : false
-            const tierNudge = e && q && !e.quote_only ? nextTier(e, q, rules, opts) : null
-            const nudge = tierNudge && e && unitPriceCents(e, tierNudge.atQty, rules, opts) < unit ? tierNudge : null
+            const unit = e && q && !e.quote_only ? scheduleUnitPrice(e.prices, q) : 0
+            const contract = e && q && !e.quote_only ? scheduleIsContract(e.prices, q) : false
+            const nudge = e && q && !e.quote_only ? nextTier(e.prices, q) : null
             const rowError = r.error ?? (e && !e.quote_only && !e.in_stock ? 'Out of stock' : r.qty !== '' && !q ? `Qty 1–${MAX_LINE_QUANTITY}` : undefined)
             return (
               <li key={r.id} className="grid grid-cols-[1fr_auto] md:grid-cols-[2rem_minmax(14rem,1.2fr)_1.5fr_7rem_7rem_7rem_2.5rem] gap-x-3 gap-y-2 px-4 md:px-5 py-3 items-start" data-testid="qo-row">
@@ -245,7 +241,7 @@ export function QuickOrderGrid({ catalog, rules, wholesaleDiscountPercent, accou
               {freight.method === 'quote' ? ' (freight quoted separately)' : freight.free ? ' · free' : ` · ${formatPrice(freight.freightCents ?? 0)} freight`}
             </p>
           )}
-          {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Includes your {wholesaleDiscountPercent}% wholesale discount</p>}
+          {wholesaleDiscountPercent > 0 && <p className="text-xs text-slate-500">Your {wholesaleDiscountPercent}% account discount is included on items without pallet pricing</p>}
         </div>
         <button
           type="button"

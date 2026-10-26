@@ -224,7 +224,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10 gap-4">
               <div>
-                <p className="text-xs font-bold text-orange-600 uppercase tracking-[0.18em] mb-2">In stock</p>
+                <p className="text-xs font-bold text-orange-600 uppercase tracking-[0.18em] mb-2">{featured.every((p) => p.in_stock) ? 'In stock · priced online' : 'Priced online'}</p>
                 <h2 id="featured-heading" className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Contractor staples</h2>
                 <p className="text-slate-500 mt-2">Heavy-duty sizes crews reorder by the case.</p>
               </div>
@@ -289,7 +289,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="group/promo relative rounded-3xl overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 p-8 lg:p-10 text-white min-h-[280px]">
             <div className="absolute inset-0 opacity-25">
-              <Image src="/images/bulk-cta.webp" alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+              <Image src="/images/pallet-30x40.jpg" alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-tr from-orange-700/80 via-orange-600/40 to-transparent" />
             <div className="relative h-full flex flex-col">

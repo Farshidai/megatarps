@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:pricing": "node --experimental-strip-types --no-warnings --test scripts/test-pricing.test.mjs scripts/test-contract-pricing.test.mjs"
+    "test:pricing": "node --experimental-strip-types --no-warnings --test scripts/test-pricing.test.mjs scripts/test-contract-pricing.test.mjs scripts/test-reprice.test.mjs scripts/test-orders-payments.test.mjs scripts/test-safety.test.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

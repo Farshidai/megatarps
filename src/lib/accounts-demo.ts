@@ -48,7 +48,7 @@ export const DEMO_APPLICATIONS: WholesaleProfile[] = [
     notes: null,
     created_at: daysAgo(18),
     account_status: 'approved',
-    wholesale_discount_percent: 8,
+    wholesale_discount_percent: 0, // extra % no longer stacks on pallet pricing; demo approved account uses 0%
     payment_terms: 'net30',
     credit_limit_cents: 2_500_000,
     resale_certificate_path: 'demo-0000-0000-0000-000000000002/mo-resale.pdf',

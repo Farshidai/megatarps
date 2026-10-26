@@ -1,4 +1,6 @@
 // Quote email templates (HTML-escaped) + small server helpers.
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
+import { isDemoMode } from '@/lib/demo'
 import { headers } from 'next/headers'
 import { formatPrice } from '@/lib/utils'
 import { adminEmails } from '@/lib/admin'
@@ -9,9 +11,17 @@ export function esc(s: unknown): string {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 }
 
+/**
+ * Base URL for links in emails and Stripe redirects. In production NEXT_PUBLIC_APP_URL is
+ * REQUIRED: guessing from x-forwarded-host / host lets a spoofed Host header put an attacker's
+ * domain into quote emails (host-header poisoning). Dev / preview may fall back to the request.
+ */
 export async function getAppUrl(): Promise<string> {
   const env = process.env.NEXT_PUBLIC_APP_URL
-  if (env && !env.includes('placeholder')) return env.replace(/\/$/, '')
+  if (env && !env.includes('placeholder') && /^https?:\/\//.test(env)) return env.replace(/\/$/, '')
+  if (process.env.NODE_ENV === 'production' && process.env.DEMO_MODE !== '1' && !isDemoMode()) {
+    throw new Error('NEXT_PUBLIC_APP_URL must be set in production (e.g. https://megatarps.com)')
+  }
   const h = await headers()
   const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000'
   const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')
@@ -73,7 +83,7 @@ export async function emailNewRequest(q: QuoteRecord) {
           subject: `We received your quote request ${q.quote_number}`,
           html: shell(`
             <h2 style="margin:0 0 8px">Thanks, ${esc(q.guest_name?.split(' ')[0] || 'there')} — we're on it.</h2>
-            <p>Your request <b>${esc(q.quote_number)}</b> is with our team. You'll get a priced quote, including LTL freight to ${esc(q.delivery_zip || 'your ZIP')}, usually within <b>one business day</b> (Mon–Fri).</p>
+            <p>Your request <b>${esc(q.quote_number)}</b> is with our team. You'll get a priced quote, including LTL freight to ${esc(q.delivery_zip || 'your ZIP')}, usually within <b>${QUOTE_RESPONSE_TIME}</b> (Mon–Fri).</p>
             ${itemsTable(q, false)}
             ${button(`${app}/quote/${q.public_token}`, 'Track your request')}
             <p style="color:#64748b;font-size:13px">Questions? Reply to this email or call (913) 313-2691.</p>`),

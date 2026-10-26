@@ -3,9 +3,8 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import type { Metadata } from 'next'
+import Link from 'next/link'
 
-// Note: metadata must be in a server component wrapper — put it in layout or use title tag
 export default function LoginPage() {
   const router = useRouter()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -42,15 +41,17 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <a href="/" className="text-2xl font-black text-orange-500">MegaTarps</a>
-          <p className="text-slate-500 mt-2 text-sm">Sign in to your account</p>
+          <Link href="/" className="text-2xl font-black text-orange-500">MegaTarps</Link>
+          <h1 className="text-slate-900 font-bold mt-2 text-lg">Sign in to your account</h1>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+              <label htmlFor="login-email" className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
               <input
+                id="login-email"
+                autoComplete="email"
                 required
                 type="email"
                 value={form.email}
@@ -61,10 +62,12 @@ export default function LoginPage() {
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-semibold text-slate-700">Password</label>
-                <a href="/account/forgot-password" className="text-xs text-orange-600 hover:underline">Forgot password?</a>
+                <label htmlFor="login-password" className="text-sm font-semibold text-slate-700">Password</label>
+                <Link href="/account/forgot-password" className="text-xs text-orange-600 hover:underline">Forgot password?</Link>
               </div>
               <input
+                id="login-password"
+                autoComplete="current-password"
                 required
                 type="password"
                 value={form.password}

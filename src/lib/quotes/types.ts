@@ -165,8 +165,10 @@ export interface PickerProduct {
   thickness_mil: number | null
   retail_price_cents: number
   units_per_full_pallet: number | null
-  /** price floor (cost × 1.15); the pricing engine never suggests less */
-  min_unit_price_cents: number | null
+  /** price floor (cost × 1.15). ADMIN ONLY — never set on the storefront picker. */
+  min_unit_price_cents?: number | null
+  /** storefront: server-computed unit price by quantity for this buyer */
+  prices?: import('@/lib/pricing').PricePoint[]
   quote_only: boolean
 }
 

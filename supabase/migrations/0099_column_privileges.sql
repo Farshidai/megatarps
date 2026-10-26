@@ -15,11 +15,13 @@ DO $$
 DECLARE
   cols text;
 BEGIN
-  -- products: everything except cost / market reference data
+  -- products: everything except cost / market reference data / the price floor
+  -- (min_unit_price_cents = cost x 1.15, so floor / 1.15 reveals cost; server code reads it
+  -- with the service role — src/lib/price-floors.ts)
   SELECT string_agg(quote_ident(column_name), ', ' ORDER BY ordinal_position) INTO cols
   FROM information_schema.columns
   WHERE table_schema = 'public' AND table_name = 'products'
-    AND column_name NOT IN ('cost_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at');
+    AND column_name NOT IN ('cost_price_cents', 'min_unit_price_cents', 'market_price_cents', 'market_price_source', 'market_price_url', 'market_price_checked_at');
   EXECUTE 'REVOKE SELECT ON public.products FROM anon, authenticated';
   EXECUTE format('GRANT SELECT (%s) ON public.products TO anon, authenticated', cols);
 

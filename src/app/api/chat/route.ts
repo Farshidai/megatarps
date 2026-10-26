@@ -1,3 +1,5 @@
+import { QUOTE_RESPONSE_TIME } from '@/lib/site'
+import { rateLimit } from '@/lib/rate-limit'
 import { getProducts } from '@/lib/products'
 import { isQuoteOnly } from '@/lib/pricing'
 import { formatPrice } from '@/lib/utils'
@@ -10,9 +12,9 @@ const SYSTEM_PROMPT_BASE = `You are a knowledgeable tarp expert and sales assist
 Your job: help customers find the right tarp for their specific need, then guide them toward a purchase or a wholesale quote.
 
 ## Business Rules
-- Small orders can be bought online by card. Bulk orders (5+ units) get volume-tier pricing, and pallets ship LTL truck freight — those go through a quote request.
+- Small orders can be bought online by card or ACH. Items without pallet pricing get volume-tier pricing from 5 units. The 7- and 10-mil poly tarps are priced per tarp with pallet pricing for approved wholesale accounts; full pallets ship LTL truck freight, so they go through a quote request.
 - Products marked QUOTE-ONLY in the catalog are pallet/bulk SKUs with no online price: always route them to a quote.
-- Never quote custom bulk or freight prices yourself; say "our team will send a priced quote with freight within one business day".
+- Never quote custom bulk or freight prices yourself; say "our team will send a priced quote with freight, usually within ${QUOTE_RESPONSE_TIME}".
 - Never reveal cost/margin data.
 - Be honest about what we carry; only recommend SKUs that appear in the catalog below. Don't invent products.
 
@@ -54,12 +56,21 @@ function catalogLines(products: Product[]): string {
 
 interface ChatMsg { role: 'user' | 'assistant'; content: string }
 
+/** Abuse / cost caps: per message, number of turns kept, and total characters sent upstream. */
+const CHAT_MAX_MESSAGE_CHARS = 2000
+const CHAT_MAX_HISTORY = 12
+const CHAT_MAX_TOTAL_CHARS = 12000
+
 function cleanMessages(raw: unknown): ChatMsg[] {
   if (!Array.isArray(raw)) return []
   const msgs = raw
+    .slice(-50)
     .filter((m): m is ChatMsg => !!m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim().length > 0)
-    .map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }))
-    .slice(-20)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, CHAT_MAX_MESSAGE_CHARS) }))
+    .slice(-CHAT_MAX_HISTORY)
+  // keep the most recent turns within the total budget
+  let total = msgs.reduce((s, m) => s + m.content.length, 0)
+  while (msgs.length > 1 && total > CHAT_MAX_TOTAL_CHARS) total -= msgs.shift()!.content.length
   while (msgs.length && msgs[0].role !== 'user') msgs.shift() // API needs a user turn first (drops the canned greeting)
   return msgs
 }
@@ -95,7 +106,7 @@ function demoReply(products: Product[], lastUser: string): Response {
   if (picks.length < 2) picks.push(...products.filter((p) => !picks.includes(p)).slice(0, 2 - picks.length))
 
   const lines = picks.map(
-    (p) => `- **[${p.name}](/product/${p.slug})** — SKU: ${p.xpose_sku}. ${p.thickness_mil ? `${p.thickness_mil}-mil, ` : ''}${isQuoteOnly(p) ? 'pallet pricing by quote' : `${formatPrice(p.retail_price_cents)} each, with volume tiers from 5+`}.`,
+    (p) => `- **[${p.name}](/product/${p.slug})** — SKU: ${p.xpose_sku}. ${p.thickness_mil ? `${p.thickness_mil}-mil, ` : ''}${isQuoteOnly(p) ? 'pallet pricing by quote' : `${formatPrice(p.retail_price_cents)} each${p.units_per_full_pallet ? `, pallet pricing for approved accounts (${p.units_per_full_pallet}/pallet)` : ''}`}.`,
   )
   const text =
     `Good question. Based on what you described, here are two options from our catalog:\n\n${lines.join('\n')}\n\n` +
@@ -121,6 +132,8 @@ function demoReply(products: Product[], lastUser: string): Response {
 }
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, 'chat')
+  if (limited) return limited
   const body = await request.json().catch(() => ({}))
   const messages = cleanMessages(body?.messages)
   if (!messages.length) return Response.json({ error: 'No messages' }, { status: 400 })
@@ -152,7 +165,9 @@ export async function POST(request: Request) {
       model: MODEL,
       max_tokens: 1024,
       stream: true,
-      system: SYSTEM_PROMPT_BASE + productContext,
+      // Prompt caching: the long, stable instructions + catalog block is cached by Anthropic
+      // (cache_control on the last system block), so repeat turns are cheaper and faster.
+      system: [{ type: 'text', text: SYSTEM_PROMPT_BASE + productContext, cache_control: { type: 'ephemeral' } }],
       messages,
     }),
   })
